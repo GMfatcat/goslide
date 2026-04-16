@@ -3,6 +3,7 @@ title: GoSlide Demo
 theme: default
 accent: teal
 transition: slide
+slide-number: auto
 ---
 
 # GoSlide
