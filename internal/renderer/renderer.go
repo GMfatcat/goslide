@@ -11,11 +11,12 @@ import (
 )
 
 type templateData struct {
-	Title      string
-	Theme      string
-	Accent     string
-	Transition string
-	Slides     []ir.Slide
+	Title       string
+	Theme       string
+	Accent      string
+	Transition  string
+	SlideNumber string
+	Slides      []ir.Slide
 }
 
 func Render(pres *ir.Presentation) (string, error) {
@@ -30,11 +31,12 @@ func Render(pres *ir.Presentation) (string, error) {
 	}
 
 	data := templateData{
-		Title:      pres.Meta.Title,
-		Theme:      theme.ResolveTheme(pres.Meta.Theme),
-		Accent:     theme.ResolveAccent(pres.Meta.Accent),
-		Transition: resolveTransition(pres.Meta.Transition),
-		Slides:     pres.Slides,
+		Title:       pres.Meta.Title,
+		Theme:       theme.ResolveTheme(pres.Meta.Theme),
+		Accent:      theme.ResolveAccent(pres.Meta.Accent),
+		Transition:  resolveTransition(pres.Meta.Transition),
+		SlideNumber: pres.Meta.SlideNumber,
+		Slides:      pres.Slides,
 	}
 
 	if data.Title == "" {

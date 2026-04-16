@@ -180,3 +180,26 @@ func TestValidate_EmptyThemeAndAccent_NoError(t *testing.T) {
 		require.NotEqual(t, "error", e.Severity, "unexpected error: %s %s", e.Code, e.Message)
 	}
 }
+
+func TestValidate_UnknownSlideNumber(t *testing.T) {
+	p := &Presentation{
+		Meta:   Frontmatter{SlideNumber: "maybe"},
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "unknown-slide-number")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+}
+
+func TestValidate_ValidSlideNumber(t *testing.T) {
+	for _, v := range []string{"auto", "true", "false"} {
+		p := &Presentation{
+			Meta:   Frontmatter{SlideNumber: v},
+			Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+		}
+		errs := p.Validate()
+		e := findError(errs, "unknown-slide-number")
+		require.Nil(t, e, "should accept slide-number=%q", v)
+	}
+}

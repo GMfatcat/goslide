@@ -51,4 +51,32 @@
       }
     }, 200);
   });
+
+  // Page number indicator
+  var pageNumEl = document.getElementById('goslide-page-num');
+  var slideNumberMode = document.body.getAttribute('data-slide-number') || '';
+  var autoHideLayouts = ['title', 'section'];
+
+  function updatePageNum() {
+    if (!pageNumEl || !slideNumberMode || slideNumberMode === 'false') {
+      if (pageNumEl) pageNumEl.hidden = true;
+      return;
+    }
+    var indices = Reveal.getIndices();
+    var total = Reveal.getTotalSlides();
+    pageNumEl.textContent = (indices.h + 1) + ' / ' + total;
+
+    var slide = Reveal.getCurrentSlide();
+    var isHidden = slide && slide.getAttribute('data-slide-number-hidden') === 'true';
+
+    if (slideNumberMode === 'auto') {
+      var layout = slide ? (slide.getAttribute('data-layout') || '') : '';
+      pageNumEl.hidden = isHidden || autoHideLayouts.indexOf(layout) !== -1;
+    } else {
+      pageNumEl.hidden = isHidden;
+    }
+  }
+
+  Reveal.on('ready', updatePageNum);
+  Reveal.on('slidechanged', updatePageNum);
 })();

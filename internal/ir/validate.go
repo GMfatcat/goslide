@@ -49,6 +49,14 @@ func (p *Presentation) Validate() []Error {
 		})
 	}
 
+	validSlideNumbers := map[string]bool{"auto": true, "true": true, "false": true}
+	if p.Meta.SlideNumber != "" && !validSlideNumbers[p.Meta.SlideNumber] {
+		errs = append(errs, Error{
+			Slide: 0, Severity: "error", Code: "unknown-slide-number",
+			Message: fmt.Sprintf("frontmatter: slide-number %q not recognized (use auto, true, or false)", p.Meta.SlideNumber),
+		})
+	}
+
 	for _, slide := range p.Slides {
 		errs = append(errs, validateSlide(slide)...)
 	}

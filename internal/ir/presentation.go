@@ -26,8 +26,9 @@ type SlideMeta struct {
 	Title         string
 	Layout        string
 	Transition    string
-	Fragments     bool
-	FragmentStyle string
+	Fragments         bool
+	FragmentStyle     string
+	SlideNumberHidden bool
 }
 
 type Frontmatter struct {
@@ -40,6 +41,7 @@ type Frontmatter struct {
 	Transition    string   `yaml:"transition"`
 	Fragments     bool     `yaml:"fragments"`
 	FragmentStyle string   `yaml:"fragment-style"`
+	SlideNumber   string   `yaml:"slide-number"`
 }
 
 type Error struct {

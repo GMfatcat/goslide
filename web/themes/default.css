@@ -50,3 +50,5 @@
 .reveal .controls { color: var(--slide-accent); }
 .reveal .progress { color: var(--slide-accent); }
 .reveal .slide-number { color: var(--slide-muted); }
+
+#goslide-page-num { color: var(--slide-muted); }

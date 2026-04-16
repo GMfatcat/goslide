@@ -59,3 +59,17 @@ func TestParseFrontmatter_Empty(t *testing.T) {
 	require.NoError(t, err)
 	require.Empty(t, fm.Title)
 }
+
+func TestParseFrontmatter_SlideNumber(t *testing.T) {
+	raw := "title: T\nslide-number: auto\n"
+	fm, err := parseFrontmatter(raw)
+	require.NoError(t, err)
+	require.Equal(t, "auto", fm.SlideNumber)
+}
+
+func TestParseFrontmatter_SlideNumberCaseNormalize(t *testing.T) {
+	raw := "slide-number: Auto\n"
+	fm, err := parseFrontmatter(raw)
+	require.NoError(t, err)
+	require.Equal(t, "auto", fm.SlideNumber)
+}

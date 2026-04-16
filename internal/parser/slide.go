@@ -116,6 +116,9 @@ func buildSlideMeta(metaMap map[string]string, defaults ir.Frontmatter) ir.Slide
 	if v, ok := metaMap["fragment-style"]; ok {
 		meta.FragmentStyle = normalizeEnum(v)
 	}
+	if v, ok := metaMap["slide-number"]; ok {
+		meta.SlideNumberHidden = strings.ToLower(strings.TrimSpace(v)) == "false"
+	}
 
 	return meta
 }

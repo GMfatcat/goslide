@@ -89,3 +89,15 @@ func TestParseSlide_Index(t *testing.T) {
 	slide := parseSlide(7, raw, ir.Frontmatter{})
 	require.Equal(t, 7, slide.Index)
 }
+
+func TestParseSlide_SlideNumberHidden(t *testing.T) {
+	raw := "<!-- slide-number: false -->\n\n# Title\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.True(t, slide.Meta.SlideNumberHidden)
+}
+
+func TestParseSlide_SlideNumberNotHidden(t *testing.T) {
+	raw := "# Title\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.False(t, slide.Meta.SlideNumberHidden)
+}

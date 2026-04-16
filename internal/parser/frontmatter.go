@@ -17,5 +17,6 @@ func parseFrontmatter(raw string) (ir.Frontmatter, error) {
 	fm.Accent = normalizeEnum(fm.Accent)
 	fm.Transition = normalizeEnum(fm.Transition)
 	fm.FragmentStyle = normalizeEnum(fm.FragmentStyle)
+	fm.SlideNumber = normalizeEnum(fm.SlideNumber)
 	return fm, nil
 }
