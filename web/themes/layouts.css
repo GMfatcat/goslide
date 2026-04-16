@@ -35,7 +35,11 @@ section[data-layout="two-column"] .slide-body {
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   width: 100%;
+  font-size: 0.9em;
 }
+section[data-layout="two-column"] .slide-body h2 { font-size: 1.4em; }
+section[data-layout="two-column"] .slide-body ul { margin: 0.3em 0; }
+section[data-layout="two-column"] .slide-body li { margin-bottom: 0.25em; }
 section[data-layout="two-column"] .region-left  { grid-column: 1; text-align: left; }
 section[data-layout="two-column"] .region-right { grid-column: 2; text-align: left; }
 

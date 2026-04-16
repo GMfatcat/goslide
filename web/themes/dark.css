@@ -47,3 +47,6 @@
 .reveal table td {
   border-bottom: 1px solid var(--slide-border);
 }
+.reveal .controls { color: var(--slide-accent); }
+.reveal .progress { color: var(--slide-accent); }
+.reveal .slide-number { color: var(--slide-muted); }

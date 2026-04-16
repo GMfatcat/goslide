@@ -25,6 +25,7 @@ func TestBroadcaster_SendReload(t *testing.T) {
 	require.NoError(t, err)
 	defer conn.CloseNow()
 
+	time.Sleep(50 * time.Millisecond)
 	b.send(reloadMsg{Type: "reload"})
 
 	_, msg, err := conn.Read(ctx)
@@ -45,6 +46,7 @@ func TestBroadcaster_SendError(t *testing.T) {
 	require.NoError(t, err)
 	defer conn.CloseNow()
 
+	time.Sleep(50 * time.Millisecond)
 	b.send(reloadMsg{Type: "error", Message: "parse failed"})
 
 	_, msg, err := conn.Read(ctx)
