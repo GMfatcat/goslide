@@ -1,0 +1,61 @@
+:root {
+  --accent-blue:   #3b82f6;
+  --accent-teal:   #14b8a6;
+  --accent-purple: #a855f7;
+  --accent-coral:  #f87171;
+  --accent-amber:  #f59e0b;
+  --accent-green:  #22c55e;
+  --accent-red:    #ef4444;
+  --accent-pink:   #ec4899;
+  --slide-accent:  var(--accent-blue);
+
+  --font-sans: 'Noto Sans TC', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+@font-face {
+  font-family: 'Noto Sans TC';
+  src: url('/fonts/NotoSansTC-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans TC';
+  src: url('/fonts/NotoSansTC-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+body[data-accent="blue"]   { --slide-accent: var(--accent-blue); }
+body[data-accent="teal"]   { --slide-accent: var(--accent-teal); }
+body[data-accent="purple"] { --slide-accent: var(--accent-purple); }
+body[data-accent="coral"]  { --slide-accent: var(--accent-coral); }
+body[data-accent="amber"]  { --slide-accent: var(--accent-amber); }
+body[data-accent="green"]  { --slide-accent: var(--accent-green); }
+body[data-accent="red"]    { --slide-accent: var(--accent-red); }
+body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
+
+#goslide-toast {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: var(--accent-red);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  z-index: 9999;
+  max-width: 24rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.fragment.highlight-current.visible:not(.current-fragment) {
+  opacity: 0.4;
+}

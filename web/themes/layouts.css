@@ -1,0 +1,50 @@
+/* Layout: title */
+section[data-layout="title"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+section[data-layout="title"] h1 {
+  font-size: 2.5em;
+  margin-bottom: 0.3em;
+}
+
+/* Layout: section */
+section[data-layout="section"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+section[data-layout="section"]::after {
+  content: '';
+  display: block;
+  width: 4rem;
+  height: 4px;
+  background: var(--slide-accent);
+  margin-top: 1rem;
+  border-radius: 2px;
+}
+
+/* Layout: two-column */
+section[data-layout="two-column"] .slide-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+}
+section[data-layout="two-column"] .region-left  { grid-column: 1; text-align: left; }
+section[data-layout="two-column"] .region-right { grid-column: 2; text-align: left; }
+
+/* Layout: code-preview */
+section[data-layout="code-preview"] .slide-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+}
+section[data-layout="code-preview"] .region-code    { grid-column: 1; text-align: left; }
+section[data-layout="code-preview"] .region-preview { grid-column: 2; text-align: left; }

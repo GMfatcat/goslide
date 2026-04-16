@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{.Title}}</title>
+  <link rel="stylesheet" href="/static/reveal/reveal.css">
+  <link rel="stylesheet" href="/themes/tokens.css">
+  <link rel="stylesheet" href="/themes/{{.Theme}}.css">
+  <link rel="stylesheet" href="/themes/layouts.css">
+</head>
+<body data-accent="{{.Accent}}">
+  <div class="reveal">
+    <div class="slides">
+      {{range .Slides}}
+      <section
+        data-layout="{{.Meta.Layout}}"
+        {{- if .Meta.Transition}} data-transition="{{.Meta.Transition}}"{{end}}
+        {{- if .Meta.Fragments}} data-fragments="true"{{end}}
+        {{- if .Meta.FragmentStyle}} data-fragment-style="{{.Meta.FragmentStyle}}"{{end}}>
+        {{- if .Regions}}
+        <div class="slide-body">
+          {{range .Regions}}
+          <div class="region-{{.Name}}">{{.HTML}}</div>
+          {{end}}
+        </div>
+        {{- else}}
+        {{.BodyHTML}}
+        {{- end}}
+      </section>
+      {{end}}
+    </div>
+  </div>
+
+  <div id="goslide-toast" hidden></div>
+
+  <script src="/static/reveal/reveal.js"></script>
+  <script src="/static/runtime.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: false,
+      controls: true,
+      progress: true,
+      keyboard: true,
+      overview: true,
+      center: true,
+      slideNumber: true,
+      transition: '{{.Transition}}'
+    });
+  </script>
+</body>
+</html>
