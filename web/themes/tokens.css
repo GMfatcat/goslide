@@ -59,3 +59,13 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
 .fragment.highlight-current.visible:not(.current-fragment) {
   opacity: 0.4;
 }
+
+.reveal {
+  font-size: 36px;
+}
+.reveal h1 { font-size: 1.8em; }
+.reveal h2 { font-size: 1.4em; }
+.reveal h3 { font-size: 1.15em; }
+.reveal p, .reveal li { font-size: 0.85em; line-height: 1.6; }
+.reveal ul, .reveal ol { margin-top: 0.4em; }
+.reveal li { margin-bottom: 0.3em; }
