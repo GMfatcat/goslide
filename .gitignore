@@ -1,7 +1,8 @@
 # Binaries
-goslide
-goslide.exe
+/goslide
+/goslide.exe
 *.exe
+!cmd/**
 *.dll
 *.so
 *.dylib
