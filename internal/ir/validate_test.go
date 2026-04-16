@@ -226,3 +226,74 @@ func TestValidate_ValidSlideNumberFormat(t *testing.T) {
 		require.Nil(t, e, "should accept slide-number-format=%q", v)
 	}
 }
+
+func TestValidate_ThreeColumnLayout_Valid(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "three-column"},
+			Regions: []Region{{Name: "col1", HTML: "a"}, {Name: "col2", HTML: "b"}, {Name: "col3", HTML: "c"}}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "future-layout")
+	require.Nil(t, e)
+	e = findError(errs, "missing-region")
+	require.Nil(t, e)
+}
+
+func TestValidate_ThreeColumnMissingRegion(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "three-column"},
+			Regions: []Region{{Name: "col1", HTML: "a"}}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "missing-region")
+	require.NotNil(t, e)
+}
+
+func TestValidate_QuoteLayout_Valid(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "quote"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "future-layout")
+	require.Nil(t, e)
+}
+
+func TestValidate_BlankLayout_Valid(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "blank"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "future-layout")
+	require.Nil(t, e)
+}
+
+func TestValidate_GridCardsStillFuture(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "grid-cards"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "future-layout")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_ImageLeftRequiredRegions(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "image-left"},
+			Regions: []Region{{Name: "image", HTML: "img"}}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "missing-region")
+	require.NotNil(t, e)
+	require.Contains(t, e.Message, "text")
+}
+
+func TestValidate_TopBottomComplete(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "top-bottom"},
+			Regions: []Region{{Name: "top", HTML: "t"}, {Name: "bottom", HTML: "b"}}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "missing-region")
+	require.Nil(t, e)
+}

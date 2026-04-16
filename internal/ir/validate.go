@@ -13,12 +13,22 @@ var (
 	validAccents     = map[string]bool{"blue": true, "teal": true, "purple": true, "coral": true, "amber": true, "green": true, "red": true, "pink": true}
 	validTransitions = map[string]bool{"slide": true, "fade": true, "convex": true, "concave": true, "zoom": true, "none": true}
 
-	phase1Layouts = map[string]bool{"default": true, "title": true, "section": true, "two-column": true, "code-preview": true}
-	futureLayouts = map[string]bool{"three-column": true, "image-left": true, "image-right": true, "quote": true, "split-heading": true, "top-bottom": true, "grid-cards": true, "blank": true}
+	knownLayouts = map[string]bool{
+		"default": true, "title": true, "section": true,
+		"two-column": true, "code-preview": true,
+		"three-column": true, "image-left": true, "image-right": true,
+		"quote": true, "split-heading": true, "top-bottom": true, "blank": true,
+	}
+	futureLayouts = map[string]bool{"grid-cards": true}
 
 	requiredRegions = map[string][]string{
-		"two-column":   {"left", "right"},
-		"code-preview": {"code", "preview"},
+		"two-column":    {"left", "right"},
+		"code-preview":  {"code", "preview"},
+		"three-column":  {"col1", "col2", "col3"},
+		"image-left":    {"image", "text"},
+		"image-right":   {"text", "image"},
+		"split-heading": {"heading", "body"},
+		"top-bottom":    {"top", "bottom"},
 	}
 
 	futureComponentRe = regexp.MustCompile(`(?m)^~~~(chart(?::\w+)?|mermaid|table|tabs|panel(?::\S+)?|slider|toggle|api|embed(?::\w+)?|card)\s*$`)
@@ -77,7 +87,7 @@ func validateSlide(s Slide) []Error {
 	var errs []Error
 	layout := s.Meta.Layout
 
-	if layout != "" && layout != "default" && !phase1Layouts[layout] {
+	if layout != "" && layout != "default" && !knownLayouts[layout] {
 		if futureLayouts[layout] {
 			errs = append(errs, Error{
 				Slide: s.Index, Severity: "warning", Code: "future-layout",
@@ -97,7 +107,7 @@ func validateSlide(s Slide) []Error {
 		}
 	}
 
-	if required, ok := requiredRegions[layout]; ok && phase1Layouts[layout] {
+	if required, ok := requiredRegions[layout]; ok && knownLayouts[layout] {
 		regionSet := make(map[string]bool, len(s.Regions))
 		for _, r := range s.Regions {
 			regionSet[r.Name] = true
@@ -119,13 +129,15 @@ func validateSlide(s Slide) []Error {
 		})
 	}
 
-	if matches := futureComponentRe.FindAllString(s.RawBody, -1); len(matches) > 0 {
-		for _, m := range matches {
-			comp := strings.TrimPrefix(m, "~~~")
-			errs = append(errs, Error{
-				Slide: s.Index, Severity: "warning", Code: "future-component",
-				Message: fmt.Sprintf("slide %d: component %q not implemented in Phase 1 (rendered as code block)", s.Index, comp),
-			})
+	if len(s.Components) == 0 {
+		if matches := futureComponentRe.FindAllString(s.RawBody, -1); len(matches) > 0 {
+			for _, m := range matches {
+				comp := strings.TrimPrefix(m, "~~~")
+				errs = append(errs, Error{
+					Slide: s.Index, Severity: "warning", Code: "future-component",
+					Message: fmt.Sprintf("slide %d: component %q not implemented in Phase 1 (rendered as code block)", s.Index, comp),
+				})
+			}
 		}
 	}
 
@@ -135,7 +147,7 @@ func validateSlide(s Slide) []Error {
 func closestLayout(name string) (string, int) {
 	best := ""
 	bestDist := 999
-	for layout := range phase1Layouts {
+	for layout := range knownLayouts {
 		d := levenshtein.ComputeDistance(name, layout)
 		if d < bestDist {
 			bestDist = d
