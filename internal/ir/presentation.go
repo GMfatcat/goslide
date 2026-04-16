@@ -10,16 +10,24 @@ type Presentation struct {
 }
 
 type Slide struct {
-	Index    int
-	Meta     SlideMeta
-	RawBody  string
-	BodyHTML template.HTML
-	Regions  []Region
+	Index      int
+	Meta       SlideMeta
+	RawBody    string
+	BodyHTML   template.HTML
+	Regions    []Region
+	Components []Component
 }
 
 type Region struct {
 	Name string
 	HTML template.HTML
+}
+
+type Component struct {
+	Index  int
+	Type   string
+	Raw    string
+	Params map[string]any
 }
 
 type SlideMeta struct {
