@@ -939,16 +939,16 @@ goslide/
 
 Deliver a working `goslide serve` with basic Markdown → Reveal.js rendering.
 
-- [ ] Go HTTP server with `go:embed` static assets
-- [ ] Goldmark-based Markdown parser with `---` slide splitting
-- [ ] YAML frontmatter parsing
-- [ ] Layout system: `default`, `title`, `section`, `two-column`, `code-preview`
-- [ ] Theme system: `default`, `dark` themes with accent color support
-- [ ] Font embedding: Noto Sans TC, JetBrains Mono
-- [ ] File watcher + WebSocket live reload
-- [ ] CLI: `goslide serve` with basic flags
-- [ ] Fragment animation: slide-level `fragments: true`
-- [ ] Keyboard navigation (arrow keys, fullscreen, overview)
+- [x] Go HTTP server with `go:embed` static assets
+- [x] Goldmark-based Markdown parser with `---` slide splitting
+- [x] YAML frontmatter parsing
+- [x] Layout system: `default`, `title`, `section`, `two-column`, `code-preview`
+- [x] Theme system: `default`, `dark` themes with accent color support
+- [x] Font embedding: Noto Sans TC, JetBrains Mono
+- [x] File watcher + WebSocket live reload
+- [x] CLI: `goslide serve` with basic flags
+- [x] Fragment animation: slide-level `fragments: true`
+- [x] Keyboard navigation (arrow keys, fullscreen, overview)
 
 ### Phase 2 — Components
 

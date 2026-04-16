@@ -1,5 +1,15 @@
 # GoSlide Phase 1 (MVP) Design Spec
 
+> **Status: COMPLETED (2026-04-16)**
+>
+> All 15 implementation tasks done. Manual testing passed. Bugfixes applied:
+> - Enter/Backspace keyboard navigation added (Reveal.js 5.x doesn't bind these by default)
+> - Base font size set to 36px (browser default 16px too small for presentations)
+> - Navigation controls colored with accent for dark theme visibility
+> - WS broadcaster tests stabilized with registration wait
+>
+> Remaining discussion: page number indicator mechanism (deferred to future session)
+
 ## Decision Log
 
 | # | Question | Decision |
