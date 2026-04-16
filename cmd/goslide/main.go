@@ -1,9 +1,9 @@
 package main
 
-import "fmt"
+import "github.com/user/goslide/internal/cli"
 
 var version = "dev"
 
 func main() {
-	fmt.Println("goslide", version)
+	cli.Execute(version)
 }
