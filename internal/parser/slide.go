@@ -16,8 +16,13 @@ var (
 )
 
 var layoutRegions = map[string][]string{
-	"two-column":   {"left", "right"},
-	"code-preview": {"code", "preview"},
+	"two-column":    {"left", "right"},
+	"code-preview":  {"code", "preview"},
+	"three-column":  {"col1", "col2", "col3"},
+	"image-left":    {"image", "text"},
+	"image-right":   {"text", "image"},
+	"split-heading": {"heading", "body"},
+	"top-bottom":    {"top", "bottom"},
 }
 
 func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {

@@ -48,3 +48,92 @@ section[data-layout="code-preview"] .slide-body {
 }
 section[data-layout="code-preview"] .region-code    { grid-column: 1; text-align: left; }
 section[data-layout="code-preview"] .region-preview { grid-column: 2; text-align: left; }
+
+/* Layout: three-column */
+section[data-layout="three-column"] .slide-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+}
+section[data-layout="three-column"] .region-col1,
+section[data-layout="three-column"] .region-col2,
+section[data-layout="three-column"] .region-col3 { text-align: left; }
+
+/* Layout: image-left */
+section[data-layout="image-left"] .slide-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  align-items: center;
+}
+section[data-layout="image-left"] .region-image img {
+  width: 100%; height: auto; border-radius: 0.5rem;
+}
+section[data-layout="image-left"] .region-text { text-align: left; }
+
+/* Layout: image-right */
+section[data-layout="image-right"] .slide-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  align-items: center;
+}
+section[data-layout="image-right"] .region-image img {
+  width: 100%; height: auto; border-radius: 0.5rem;
+}
+section[data-layout="image-right"] .region-text { text-align: left; }
+
+/* Layout: quote */
+section[data-layout="quote"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+section[data-layout="quote"] blockquote {
+  font-size: 1.3em;
+  border-left: none;
+  font-style: italic;
+  max-width: 80%;
+}
+section[data-layout="quote"] blockquote p:last-child {
+  font-size: 0.7em;
+  font-style: normal;
+  color: var(--slide-muted);
+  margin-top: 1rem;
+}
+
+/* Layout: split-heading */
+section[data-layout="split-heading"] .slide-body {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 2rem;
+  width: 100%;
+  align-items: start;
+}
+section[data-layout="split-heading"] .region-heading h1,
+section[data-layout="split-heading"] .region-heading h2 {
+  font-size: 2em;
+  line-height: 1.2;
+}
+section[data-layout="split-heading"] .region-body { text-align: left; }
+
+/* Layout: top-bottom */
+section[data-layout="top-bottom"] .slide-body {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 1.5rem;
+  width: 100%;
+  height: 100%;
+}
+section[data-layout="top-bottom"] .region-top { text-align: center; }
+section[data-layout="top-bottom"] .region-bottom { text-align: left; }
+
+/* Layout: blank */
+section[data-layout="blank"] {
+  padding: 0;
+}
