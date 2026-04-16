@@ -31,14 +31,15 @@ func Render(pres *ir.Presentation) (string, error) {
 		return "", err
 	}
 
+	resolvedTheme := theme.ResolveTheme(pres.Meta.Theme)
 	data := templateData{
-		Title:       pres.Meta.Title,
-		Theme:       theme.ResolveTheme(pres.Meta.Theme),
-		Accent:      theme.ResolveAccent(pres.Meta.Accent),
-		Transition:  resolveTransition(pres.Meta.Transition),
+		Title:             pres.Meta.Title,
+		Theme:             resolvedTheme,
+		Accent:            theme.ResolveAccent(pres.Meta.Accent, resolvedTheme),
+		Transition:        resolveTransition(pres.Meta.Transition),
 		SlideNumber:       pres.Meta.SlideNumber,
 		SlideNumberFormat: resolveSlideNumberFormat(pres.Meta.SlideNumberFormat),
-		Slides:      pres.Slides,
+		Slides:            pres.Slides,
 	}
 
 	if data.Title == "" {

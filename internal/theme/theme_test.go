@@ -20,19 +20,48 @@ func TestResolveTheme_Unknown(t *testing.T) {
 	require.Equal(t, "default", ResolveTheme("matrix"))
 }
 
+func TestResolveTheme_Corporate(t *testing.T) {
+	require.Equal(t, "corporate", ResolveTheme("corporate"))
+}
+
+func TestResolveTheme_Minimal(t *testing.T) {
+	require.Equal(t, "minimal", ResolveTheme("minimal"))
+}
+
+func TestResolveTheme_Hacker(t *testing.T) {
+	require.Equal(t, "hacker", ResolveTheme("hacker"))
+}
+
 func TestResolveAccent_Default(t *testing.T) {
-	name := ResolveAccent("")
+	name := ResolveAccent("", "")
 	require.Equal(t, "blue", name)
 }
 
 func TestResolveAccent_AllValid(t *testing.T) {
 	accents := []string{"blue", "teal", "purple", "coral", "amber", "green", "red", "pink"}
 	for _, a := range accents {
-		require.Equal(t, a, ResolveAccent(a))
+		require.Equal(t, a, ResolveAccent(a, "default"))
 	}
+}
+
+func TestResolveAccent_DefaultForHacker(t *testing.T) {
+	require.Equal(t, "green", ResolveAccent("", "hacker"))
+}
+
+func TestResolveAccent_DefaultForCorporate(t *testing.T) {
+	require.Equal(t, "blue", ResolveAccent("", "corporate"))
+}
+
+func TestResolveAccent_ExplicitOverridesThemeDefault(t *testing.T) {
+	require.Equal(t, "coral", ResolveAccent("coral", "hacker"))
+}
+
+func TestResolveAccent_EmptyTheme(t *testing.T) {
+	require.Equal(t, "blue", ResolveAccent("", ""))
 }
 
 func TestThemeCSSPath(t *testing.T) {
 	require.Equal(t, "themes/dark.css", ThemeCSSPath("dark"))
 	require.Equal(t, "themes/default.css", ThemeCSSPath("default"))
+	require.Equal(t, "themes/hacker.css", ThemeCSSPath("hacker"))
 }

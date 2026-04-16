@@ -1,7 +1,14 @@
 package theme
 
-var validThemes = map[string]bool{"default": true, "dark": true}
-var defaultAccent = "blue"
+var validThemes = map[string]bool{
+	"default": true, "dark": true,
+	"corporate": true, "minimal": true, "hacker": true,
+}
+
+var themeDefaultAccents = map[string]string{
+	"default": "blue", "dark": "blue", "corporate": "blue",
+	"minimal": "blue", "hacker": "green",
+}
 
 func ResolveTheme(name string) string {
 	if name == "" || !validThemes[name] {
@@ -10,11 +17,14 @@ func ResolveTheme(name string) string {
 	return name
 }
 
-func ResolveAccent(name string) string {
-	if name == "" {
-		return defaultAccent
+func ResolveAccent(accent, themeName string) string {
+	if accent != "" {
+		return accent
 	}
-	return name
+	if def, ok := themeDefaultAccents[themeName]; ok {
+		return def
+	}
+	return "blue"
 }
 
 func ThemeCSSPath(name string) string {
