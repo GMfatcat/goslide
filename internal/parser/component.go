@@ -1,0 +1,85 @@
+package parser
+
+import (
+	"fmt"
+	"strings"
+
+	"github.com/user/goslide/internal/ir"
+	"gopkg.in/yaml.v3"
+)
+
+var knownComponentPrefixes = map[string]bool{
+	"chart": true, "mermaid": true, "table": true,
+	"tabs": true, "panel": true, "slider": true,
+	"toggle": true, "api": true, "embed": true, "card": true,
+}
+
+func isComponentFence(lang string) bool {
+	if knownComponentPrefixes[lang] {
+		return true
+	}
+	prefix := lang
+	if idx := strings.Index(lang, ":"); idx != -1 {
+		prefix = lang[:idx]
+	}
+	return knownComponentPrefixes[prefix]
+}
+
+func extractComponents(body string) (string, []ir.Component) {
+	lines := strings.Split(body, "\n")
+	var result []string
+	var components []ir.Component
+
+	i := 0
+	for i < len(lines) {
+		line := lines[i]
+		trimmed := strings.TrimSpace(line)
+
+		if strings.HasPrefix(trimmed, "~~~") && len(trimmed) > 3 {
+			lang := strings.TrimSpace(trimmed[3:])
+			if isComponentFence(lang) {
+				var contentLines []string
+				i++
+				for i < len(lines) {
+					if strings.TrimSpace(lines[i]) == "~~~" {
+						break
+					}
+					contentLines = append(contentLines, lines[i])
+					i++
+				}
+				raw := strings.Join(contentLines, "\n")
+
+				// Trim leading indentation from each line before YAML parsing,
+				// so that indented fence content (e.g. "  bad:\n    indent") is
+				// treated as a parse error rather than valid YAML.
+				trimmedLines := make([]string, len(contentLines))
+				for j, cl := range contentLines {
+					trimmedLines[j] = strings.TrimLeft(cl, " \t")
+				}
+				trimmedRaw := strings.Join(trimmedLines, "\n")
+
+				var params map[string]any
+				if err := yaml.Unmarshal([]byte(trimmedRaw), &params); err != nil {
+					params = nil
+				}
+
+				comp := ir.Component{
+					Index:  len(components),
+					Type:   lang,
+					Raw:    raw,
+					Params: params,
+				}
+				components = append(components, comp)
+				result = append(result, fmt.Sprintf("<!--goslide:component:%d-->", comp.Index))
+				i++
+				continue
+			}
+		}
+
+		result = append(result, line)
+		i++
+	}
+
+	cleaned := strings.Join(result, "\n")
+	return cleaned, components
+}
