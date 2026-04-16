@@ -9,6 +9,8 @@ require (
 )
 
 require (
+	github.com/coder/websocket v1.8.12 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/yuin/goldmark v1.7.8 // indirect
 )
