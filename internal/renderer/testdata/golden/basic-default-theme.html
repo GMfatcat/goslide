@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Test</title>
+  <link rel="stylesheet" href="/static/reveal/reveal.css">
+  <link rel="stylesheet" href="/themes/tokens.css">
+  <link rel="stylesheet" href="/themes/default.css">
+  <link rel="stylesheet" href="/themes/layouts.css">
+</head>
+<body data-accent="blue">
+  <div class="reveal">
+    <div class="slides">
+      
+      <section
+        data-layout="default">
+        <h1>Welcome</h1>
+<p>This is the first slide.</p>
+
+      </section>
+      
+      <section
+        data-layout="default">
+        <h1>Second Slide</h1>
+<ul>
+<li>Point A</li>
+<li>Point B</li>
+</ul>
+
+      </section>
+      
+    </div>
+  </div>
+
+  <div id="goslide-toast" hidden></div>
+
+  <script src="/static/reveal/reveal.js"></script>
+  <script src="/static/runtime.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: false,
+      controls: true,
+      progress: true,
+      keyboard: true,
+      overview: true,
+      center: true,
+      slideNumber: true,
+      transition: 'slide'
+    });
+  </script>
+</body>
+</html>

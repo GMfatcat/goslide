@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two Column</title>
+  <link rel="stylesheet" href="/static/reveal/reveal.css">
+  <link rel="stylesheet" href="/themes/tokens.css">
+  <link rel="stylesheet" href="/themes/dark.css">
+  <link rel="stylesheet" href="/themes/layouts.css">
+</head>
+<body data-accent="teal">
+  <div class="reveal">
+    <div class="slides">
+      
+      <section
+        data-layout="two-column">
+        <div class="slide-body">
+          
+          <div class="region-left"><h2>Go</h2>
+<ul>
+<li>Fast</li>
+<li>Static typing</li>
+</ul>
+</div>
+          
+          <div class="region-right"><h2>Python</h2>
+<ul>
+<li>Dynamic</li>
+<li>ML ecosystem</li>
+</ul>
+</div>
+          
+        </div>
+      </section>
+      
+    </div>
+  </div>
+
+  <div id="goslide-toast" hidden></div>
+
+  <script src="/static/reveal/reveal.js"></script>
+  <script src="/static/runtime.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: false,
+      controls: true,
+      progress: true,
+      keyboard: true,
+      overview: true,
+      center: true,
+      slideNumber: true,
+      transition: 'slide'
+    });
+  </script>
+</body>
+</html>
