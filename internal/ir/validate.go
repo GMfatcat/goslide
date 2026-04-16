@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	validThemes      = map[string]bool{"default": true, "dark": true}
+	validThemes      = map[string]bool{"default": true, "dark": true, "corporate": true, "minimal": true, "hacker": true}
 	validAccents     = map[string]bool{"blue": true, "teal": true, "purple": true, "coral": true, "amber": true, "green": true, "red": true, "pink": true}
 	validTransitions = map[string]bool{"slide": true, "fade": true, "convex": true, "concave": true, "zoom": true, "none": true}
 
