@@ -203,3 +203,26 @@ func TestValidate_ValidSlideNumber(t *testing.T) {
 		require.Nil(t, e, "should accept slide-number=%q", v)
 	}
 }
+
+func TestValidate_UnknownSlideNumberFormat(t *testing.T) {
+	p := &Presentation{
+		Meta:   Frontmatter{SlideNumberFormat: "fancy"},
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "unknown-slide-number-format")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+}
+
+func TestValidate_ValidSlideNumberFormat(t *testing.T) {
+	for _, v := range []string{"total", "current"} {
+		p := &Presentation{
+			Meta:   Frontmatter{SlideNumberFormat: v},
+			Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+		}
+		errs := p.Validate()
+		e := findError(errs, "unknown-slide-number-format")
+		require.Nil(t, e, "should accept slide-number-format=%q", v)
+	}
+}

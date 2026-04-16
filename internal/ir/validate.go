@@ -57,6 +57,14 @@ func (p *Presentation) Validate() []Error {
 		})
 	}
 
+	validSlideNumberFormats := map[string]bool{"total": true, "current": true}
+	if p.Meta.SlideNumberFormat != "" && !validSlideNumberFormats[p.Meta.SlideNumberFormat] {
+		errs = append(errs, Error{
+			Slide: 0, Severity: "error", Code: "unknown-slide-number-format",
+			Message: fmt.Sprintf("frontmatter: slide-number-format %q not recognized (use total or current)", p.Meta.SlideNumberFormat),
+		})
+	}
+
 	for _, slide := range p.Slides {
 		errs = append(errs, validateSlide(slide)...)
 	}

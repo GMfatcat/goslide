@@ -41,7 +41,8 @@ type Frontmatter struct {
 	Transition    string   `yaml:"transition"`
 	Fragments     bool     `yaml:"fragments"`
 	FragmentStyle string   `yaml:"fragment-style"`
-	SlideNumber   string   `yaml:"slide-number"`
+	SlideNumber       string `yaml:"slide-number"`
+	SlideNumberFormat string `yaml:"slide-number-format"`
 }
 
 type Error struct {

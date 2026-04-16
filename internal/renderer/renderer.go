@@ -11,12 +11,13 @@ import (
 )
 
 type templateData struct {
-	Title       string
-	Theme       string
-	Accent      string
-	Transition  string
-	SlideNumber string
-	Slides      []ir.Slide
+	Title             string
+	Theme             string
+	Accent            string
+	Transition        string
+	SlideNumber       string
+	SlideNumberFormat string
+	Slides            []ir.Slide
 }
 
 func Render(pres *ir.Presentation) (string, error) {
@@ -35,7 +36,8 @@ func Render(pres *ir.Presentation) (string, error) {
 		Theme:       theme.ResolveTheme(pres.Meta.Theme),
 		Accent:      theme.ResolveAccent(pres.Meta.Accent),
 		Transition:  resolveTransition(pres.Meta.Transition),
-		SlideNumber: pres.Meta.SlideNumber,
+		SlideNumber:       pres.Meta.SlideNumber,
+		SlideNumberFormat: resolveSlideNumberFormat(pres.Meta.SlideNumberFormat),
 		Slides:      pres.Slides,
 	}
 
@@ -48,6 +50,13 @@ func Render(pres *ir.Presentation) (string, error) {
 		return "", err
 	}
 	return buf.String(), nil
+}
+
+func resolveSlideNumberFormat(f string) string {
+	if f == "" {
+		return "total"
+	}
+	return f
 }
 
 func resolveTransition(t string) string {

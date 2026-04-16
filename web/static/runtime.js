@@ -55,6 +55,7 @@
   // Page number indicator
   var pageNumEl = document.getElementById('goslide-page-num');
   var slideNumberMode = document.body.getAttribute('data-slide-number') || '';
+  var slideNumberFormat = document.body.getAttribute('data-slide-number-format') || 'total';
   var autoHideLayouts = ['title', 'section'];
 
   function updatePageNum() {
@@ -63,8 +64,12 @@
       return;
     }
     var indices = Reveal.getIndices();
-    var total = Reveal.getTotalSlides();
-    pageNumEl.textContent = (indices.h + 1) + ' / ' + total;
+    var current = indices.h + 1;
+    if (slideNumberFormat === 'current') {
+      pageNumEl.textContent = current;
+    } else {
+      pageNumEl.textContent = current + ' / ' + Reveal.getTotalSlides();
+    }
 
     var slide = Reveal.getCurrentSlide();
     var isHidden = slide && slide.getAttribute('data-slide-number-hidden') === 'true';
