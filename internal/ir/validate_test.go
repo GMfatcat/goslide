@@ -1,0 +1,182 @@
+package ir
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+func findError(errs []Error, code string) *Error {
+	for i := range errs {
+		if errs[i].Code == code {
+			return &errs[i]
+		}
+	}
+	return nil
+}
+
+func TestValidate_ValidPresentation(t *testing.T) {
+	p := &Presentation{
+		Meta: Frontmatter{Theme: "dark", Accent: "teal", Transition: "fade"},
+		Slides: []Slide{
+			{Index: 1, Meta: SlideMeta{Layout: "default"}},
+		},
+	}
+	errs := p.Validate()
+	for _, e := range errs {
+		require.NotEqual(t, "error", e.Severity, "unexpected error: %s", e.Message)
+	}
+}
+
+func TestValidate_UnknownTheme(t *testing.T) {
+	p := &Presentation{
+		Meta:   Frontmatter{Theme: "matrix"},
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "unknown-theme")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+}
+
+func TestValidate_UnknownAccent(t *testing.T) {
+	p := &Presentation{
+		Meta:   Frontmatter{Accent: "neon"},
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "unknown-accent")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+}
+
+func TestValidate_UnknownTransition(t *testing.T) {
+	p := &Presentation{
+		Meta:   Frontmatter{Transition: "swirl"},
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "unknown-transition")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_TypoLayout_Distance1(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 3, Meta: SlideMeta{Layout: "two-colum"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "typo-suggestion")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+	require.Equal(t, 3, e.Slide)
+	require.Contains(t, e.Hint, "two-column")
+}
+
+func TestValidate_TypoLayout_Distance2(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "two-colmn"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "typo-suggestion")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+}
+
+func TestValidate_TypoLayout_Distance3_NotTypo(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "two-xyz"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "typo-suggestion")
+	require.Nil(t, e)
+	e = findError(errs, "unknown-layout")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_FutureLayout(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 4, Meta: SlideMeta{Layout: "grid-cards"}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "future-layout")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+	require.Equal(t, 4, e.Slide)
+}
+
+func TestValidate_FutureComponent(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 2, Meta: SlideMeta{Layout: "default"}, RawBody: "# Title\n\n~~~chart:bar\ntitle: Test\n~~~\n"}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "future-component")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_FragmentsNoop(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default", Fragments: true}, RawBody: "# Title\n\nJust a paragraph.\n"}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "fragments-noop")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_FragmentsWithList_NoWarning(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default", Fragments: true}, RawBody: "# Title\n\n- A\n- B\n"}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "fragments-noop")
+	require.Nil(t, e)
+}
+
+func TestValidate_MissingRegion(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{Index: 5, Meta: SlideMeta{Layout: "two-column"}, Regions: []Region{{Name: "left", HTML: "content"}}}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "missing-region")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+	require.Contains(t, e.Message, "right")
+}
+
+func TestValidate_TwoColumnComplete_NoError(t *testing.T) {
+	p := &Presentation{
+		Slides: []Slide{{
+			Index: 1, Meta: SlideMeta{Layout: "two-column"},
+			Regions: []Region{{Name: "left", HTML: "L"}, {Name: "right", HTML: "R"}},
+		}},
+	}
+	errs := p.Validate()
+	e := findError(errs, "missing-region")
+	require.Nil(t, e)
+}
+
+func TestValidate_BatchesAllErrors(t *testing.T) {
+	p := &Presentation{
+		Meta: Frontmatter{Theme: "invalid", Accent: "neon"},
+		Slides: []Slide{
+			{Index: 1, Meta: SlideMeta{Layout: "two-colum"}},
+			{Index: 2, Meta: SlideMeta{Layout: "grid-cards"}},
+		},
+	}
+	errs := p.Validate()
+	require.GreaterOrEqual(t, len(errs), 3)
+}
+
+func TestValidate_EmptyThemeAndAccent_NoError(t *testing.T) {
+	p := &Presentation{
+		Meta:   Frontmatter{},
+		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "default"}}},
+	}
+	errs := p.Validate()
+	for _, e := range errs {
+		require.NotEqual(t, "error", e.Severity, "unexpected error: %s %s", e.Code, e.Message)
+	}
+}
