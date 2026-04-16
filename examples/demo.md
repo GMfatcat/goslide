@@ -4,6 +4,7 @@ theme: default
 accent: teal
 transition: slide
 slide-number: auto
+slide-number-format: total
 ---
 
 # GoSlide
@@ -99,6 +100,62 @@ GoSlide 內建 Noto Sans TC 字型。
 支援繁體中文、日文漢字等 CJK 字元。
 
 **粗體**、*斜體*、`程式碼` 都沒問題。
+
+---
+
+<!-- layout: quote -->
+
+> The best way to predict the future is to invent it.
+>
+> — Alan Kay
+
+---
+
+<!-- layout: split-heading -->
+
+<!-- heading -->
+
+## System Design
+
+<!-- body -->
+
+GoSlide uses a pipeline architecture:
+
+1. **Parse** — Markdown to IR
+2. **Validate** — Check whitelists
+3. **Render** — IR to HTML
+
+Each stage is independently testable.
+
+---
+
+<!-- layout: three-column -->
+
+# Three Options
+
+<!-- col1 -->
+
+## Plan A
+
+- Low cost
+- Quick start
+- Limited scale
+
+<!-- col2 -->
+
+## Plan B
+
+- Medium cost
+- Balanced approach
+- Good scale
+
+<!-- col3 -->
+
+## Plan C
+
+- High investment
+- Full features
+- Enterprise scale
 
 ---
 

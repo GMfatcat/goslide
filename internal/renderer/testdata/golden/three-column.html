@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three Column</title>
+  <link rel="stylesheet" href="/static/reveal/reveal.css">
+  <link rel="stylesheet" href="/themes/tokens.css">
+  <link rel="stylesheet" href="/themes/corporate.css">
+  <link rel="stylesheet" href="/themes/layouts.css">
+</head>
+<body data-accent="teal" data-slide-number="" data-slide-number-format="total">
+  <div class="reveal">
+    <div class="slides">
+      
+      <section
+        data-layout="three-column">
+        <div class="slide-body">
+          
+          <div class="region-col1"><h2>Option A</h2>
+<ul>
+<li>Fast</li>
+<li>Simple</li>
+</ul>
+</div>
+          
+          <div class="region-col2"><h2>Option B</h2>
+<ul>
+<li>Flexible</li>
+<li>Popular</li>
+</ul>
+</div>
+          
+          <div class="region-col3"><h2>Option C</h2>
+<ul>
+<li>Robust</li>
+<li>Scalable</li>
+</ul>
+</div>
+          
+        </div>
+      </section>
+      
+    </div>
+  </div>
+
+  <div id="goslide-page-num"></div>
+  <div id="goslide-toast" hidden></div>
+
+  <script src="/static/reveal/reveal.js"></script>
+  <script src="/static/runtime.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: false,
+      controls: true,
+      progress: true,
+      keyboard: {
+        13: 'next',
+        8: 'prev'
+      },
+      overview: true,
+      center: true,
+      transition: 'slide'
+    });
+  </script>
+</body>
+</html>
