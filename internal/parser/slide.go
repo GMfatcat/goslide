@@ -8,6 +8,7 @@ import (
 
 	"github.com/user/goslide/internal/ir"
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
 var (
@@ -48,6 +49,8 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 
 	bodyLines := lines[bodyStart:]
 	bodyText := strings.Join(bodyLines, "\n")
+	cleanedBody, components := extractComponents(bodyText)
+	bodyLines = strings.Split(cleanedBody, "\n")
 
 	validRegions := layoutRegions[meta.Layout]
 	validSet := make(map[string]bool, len(validRegions))
@@ -93,11 +96,12 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 	}
 
 	return ir.Slide{
-		Index:    index,
-		Meta:     meta,
-		RawBody:  bodyText,
-		BodyHTML: bodyHTML,
-		Regions:  regions,
+		Index:      index,
+		Meta:       meta,
+		RawBody:    bodyText,
+		BodyHTML:   bodyHTML,
+		Regions:    regions,
+		Components: components,
 	}
 }
 
@@ -129,7 +133,7 @@ func buildSlideMeta(metaMap map[string]string, defaults ir.Frontmatter) ir.Slide
 }
 
 func renderMarkdown(src string) template.HTML {
-	md := goldmark.New()
+	md := goldmark.New(goldmark.WithRendererOptions(html.WithUnsafe()))
 	var buf bytes.Buffer
 	if err := md.Convert([]byte(src), &buf); err != nil {
 		return template.HTML("<p>Markdown render error: " + err.Error() + "</p>")

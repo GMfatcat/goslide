@@ -101,3 +101,28 @@ func TestParseSlide_SlideNumberNotHidden(t *testing.T) {
 	slide := parseSlide(1, raw, ir.Frontmatter{})
 	require.False(t, slide.Meta.SlideNumberHidden)
 }
+
+func TestParseSlide_WithComponent(t *testing.T) {
+	raw := "# Title\n\n~~~chart:bar\ntitle: Yield\ndata: [96, 93]\n~~~\n\nAfter chart.\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.Len(t, slide.Components, 1)
+	require.Equal(t, "chart:bar", slide.Components[0].Type)
+	require.Contains(t, string(slide.BodyHTML), "<!--goslide:component:0-->")
+	require.Contains(t, string(slide.BodyHTML), "After chart.")
+	require.NotContains(t, string(slide.BodyHTML), "~~~chart:bar")
+}
+
+func TestParseSlide_ComponentInRegion(t *testing.T) {
+	raw := "<!-- layout: two-column -->\n\n<!-- left -->\n\nText left.\n\n<!-- right -->\n\n~~~chart:pie\ntitle: Share\n~~~\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.Len(t, slide.Components, 1)
+	require.Len(t, slide.Regions, 2)
+	require.Contains(t, string(slide.Regions[1].HTML), "<!--goslide:component:0-->")
+}
+
+func TestParseSlide_NonComponentFenceUntouched(t *testing.T) {
+	raw := "# Code\n\n~~~go\nfmt.Println()\n~~~\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.Len(t, slide.Components, 0)
+	require.Contains(t, string(slide.BodyHTML), "<code")
+}
