@@ -28,6 +28,18 @@ download "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-
 download "https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.woff2" \
          "$VENDOR_DIR/fonts/JetBrainsMono-Regular.woff2"
 
+CHARTJS_VER="4.4.7"
+MERMAID_VER="11.4.1"
+
+mkdir -p "$VENDOR_DIR/chartjs"
+mkdir -p "$VENDOR_DIR/mermaid"
+
+download "https://cdn.jsdelivr.net/npm/chart.js@${CHARTJS_VER}/dist/chart.umd.min.js" \
+         "$VENDOR_DIR/chartjs/chart.min.js"
+
+download "https://cdn.jsdelivr.net/npm/mermaid@${MERMAID_VER}/dist/mermaid.min.js" \
+         "$VENDOR_DIR/mermaid/mermaid.min.js"
+
 if [ "${1:-}" = "--update-checksums" ]; then
     cd "$VENDOR_DIR"
     find . -type f ! -name CHECKSUMS.sha256 ! -name VERSIONS.md | sort | xargs sha256sum > CHECKSUMS.sha256
