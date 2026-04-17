@@ -60,6 +60,38 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
   opacity: 0.4;
 }
 
+.goslide-component {
+  margin: 1rem 0;
+}
+.goslide-component canvas {
+  max-width: 100%;
+}
+.goslide-component table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75em;
+}
+.goslide-component table th {
+  padding: 0.5em 0.75em;
+  border-bottom: 2px solid var(--slide-accent);
+  user-select: none;
+}
+.goslide-component table td {
+  padding: 0.4em 0.75em;
+  border-bottom: 1px solid var(--slide-border, rgba(0,0,0,0.1));
+}
+.goslide-component table th[data-sort] {
+  color: var(--slide-accent);
+}
+.goslide-component .mermaid {
+  display: flex;
+  justify-content: center;
+}
+.goslide-component .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .reveal {
   font-size: 36px;
 }
