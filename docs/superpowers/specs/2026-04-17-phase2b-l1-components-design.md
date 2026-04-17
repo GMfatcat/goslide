@@ -1,6 +1,11 @@
 # GoSlide Phase 2b — L1 Component Rendering Design Spec
 
-> **Status: DRAFT**
+> **Status: COMPLETED (2026-04-18)**
+>
+> All 7 tasks done. Key learnings:
+> - Chart.js lazy init fights with Reveal.js CSS transforms — init all at page load, let Chart.js ResizeObserver handle visibility
+> - Mermaid must use `mermaid.render(id, text)` API (returns SVG string) instead of `mermaid.run()` (needs visible DOM)
+> - Chart theme adaptation: read `--slide-text/border/muted` CSS vars for axes, grid, labels
 
 ## Decision Log
 
