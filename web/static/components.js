@@ -113,13 +113,20 @@
     var fullType = el.getAttribute('data-type');
     var chartType = fullType.split(':')[1] || 'bar';
     var params = JSON.parse(decodeAttr(el.getAttribute('data-params')));
+
+    var wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
+    wrapper.style.width = '100%';
+    wrapper.style.height = chartType === 'sparkline' ? '60px' : '350px';
+
     var canvas = document.createElement('canvas');
-    if (chartType === 'sparkline') {
-      canvas.style.height = '60px';
-    }
-    el.appendChild(canvas);
+    wrapper.appendChild(canvas);
+    el.appendChild(wrapper);
+
     var config = buildChartConfig(chartType, params);
-    new Chart(canvas, config);
+    var chart = new Chart(canvas, config);
+
+    setTimeout(function () { chart.resize(); }, 100);
   }
 
   function initTable(el) {
@@ -206,7 +213,10 @@
 
     els.forEach(function (el) {
       var raw = decodeAttr(el.getAttribute('data-raw'));
-      el.innerHTML = '<div class="mermaid">' + raw + '</div>';
+      var div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = raw;
+      el.appendChild(div);
     });
 
     var bg = getComputedStyle(document.querySelector('.reveal')).backgroundColor;
@@ -226,5 +236,13 @@
   });
   Reveal.on('slidechanged', function (ev) {
     initSlideComponents(ev.currentSlide);
+  });
+  Reveal.on('slidetransitionend', function (ev) {
+    var slide = Reveal.getCurrentSlide();
+    if (!slide) return;
+    slide.querySelectorAll('.goslide-component canvas').forEach(function (c) {
+      var chart = Chart.getChart(c);
+      if (chart) chart.resize();
+    });
   });
 })();
