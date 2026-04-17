@@ -46,6 +46,14 @@ func Render(pres *ir.Presentation) (string, error) {
 		data.Title = "GoSlide"
 	}
 
+	for i := range data.Slides {
+		s := &data.Slides[i]
+		s.BodyHTML = template.HTML(renderComponents(string(s.BodyHTML), *s))
+		for j := range s.Regions {
+			s.Regions[j].HTML = template.HTML(renderComponents(string(s.Regions[j].HTML), *s))
+		}
+	}
+
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, data); err != nil {
 		return "", err

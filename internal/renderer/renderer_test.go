@@ -95,3 +95,67 @@ func TestRender_DefaultValues(t *testing.T) {
 	require.Contains(t, html, `data-accent="blue"`)
 	require.Contains(t, html, `transition: 'slide'`)
 }
+
+func TestRender_WithChartComponent(t *testing.T) {
+	pres := &ir.Presentation{
+		Meta: ir.Frontmatter{Title: "Chart", Theme: "default"},
+		Slides: []ir.Slide{
+			{
+				Index:    1,
+				Meta:     ir.SlideMeta{Layout: "default"},
+				BodyHTML: "<h1>Dashboard</h1>\n<!--goslide:component:0-->\n",
+				Components: []ir.Component{
+					{Index: 0, Type: "chart:bar", Params: map[string]any{"title": "Yield"}},
+				},
+			},
+		},
+	}
+	html, err := Render(pres)
+	require.NoError(t, err)
+	require.Contains(t, html, `data-type="chart:bar"`)
+	require.Contains(t, html, `data-comp-id="s1-c0"`)
+	require.NotContains(t, html, "<!--goslide:component:0-->")
+}
+
+func TestRender_WithMermaidComponent(t *testing.T) {
+	pres := &ir.Presentation{
+		Meta: ir.Frontmatter{Title: "Mermaid", Theme: "default"},
+		Slides: []ir.Slide{
+			{
+				Index:    1,
+				Meta:     ir.SlideMeta{Layout: "default"},
+				BodyHTML: "<!--goslide:component:0-->",
+				Components: []ir.Component{
+					{Index: 0, Type: "mermaid", Raw: "graph TD\n    A --> B"},
+				},
+			},
+		},
+	}
+	html, err := Render(pres)
+	require.NoError(t, err)
+	require.Contains(t, html, `data-type="mermaid"`)
+	require.Contains(t, html, "graph TD")
+}
+
+func TestRender_ComponentInRegion(t *testing.T) {
+	pres := &ir.Presentation{
+		Meta: ir.Frontmatter{Title: "Region", Theme: "default"},
+		Slides: []ir.Slide{
+			{
+				Index: 1,
+				Meta:  ir.SlideMeta{Layout: "two-column"},
+				Regions: []ir.Region{
+					{Name: "left", HTML: "<p>text</p>"},
+					{Name: "right", HTML: "<!--goslide:component:0-->"},
+				},
+				Components: []ir.Component{
+					{Index: 0, Type: "chart:pie", Params: map[string]any{"title": "Share"}},
+				},
+			},
+		},
+	}
+	html, err := Render(pres)
+	require.NoError(t, err)
+	require.Contains(t, html, `data-type="chart:pie"`)
+	require.NotContains(t, html, "<!--goslide:component:0-->")
+}
