@@ -159,6 +159,66 @@ Each stage is independently testable.
 
 ---
 
+# Chart Demo
+
+~~~chart:bar
+title: Yield by Production Line
+labels: ["Line A", "Line B", "Line C", "Line D"]
+data: [96.2, 93.8, 97.1, 91.5]
+unit: "%"
+color: teal
+~~~
+
+---
+
+# Line Chart
+
+~~~chart:line
+title: Monthly Trend
+labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+data: [65, 72, 68, 85, 79, 92]
+color: blue
+~~~
+
+---
+
+# Pie Chart
+
+~~~chart:pie
+title: Market Share
+labels: ["Product A", "Product B", "Product C"]
+data: [45, 35, 20]
+~~~
+
+---
+
+# Mermaid Diagram
+
+~~~mermaid
+graph TD
+    A[Image Capture] --> B[Preprocessing]
+    B --> C[Model Inference]
+    C --> D{Pass?}
+    D -->|Yes| E[OK]
+    D -->|No| F[NG]
+~~~
+
+---
+
+# Sortable Table
+
+~~~table
+columns: [Name, Role, Score]
+rows:
+  - ["Alice", "Engineer", 95]
+  - ["Bob", "PM", 87]
+  - ["Carol", "Lead", 92]
+  - ["Dave", "Designer", 78]
+sortable: true
+~~~
+
+---
+
 <!-- layout: title -->
 
 # Thank You

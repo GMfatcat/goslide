@@ -42,3 +42,18 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 ## Cross-Platform
 - [ ] Windows: CRLF line endings in .md parse correctly
 - [ ] Build produces working binary: `go build -o goslide.exe ./cmd/goslide`
+
+## Components (Phase 2b)
+- [ ] chart:bar — bar chart displays, hover shows tooltip with unit
+- [ ] chart:line — line chart with data points
+- [ ] chart:pie — pie chart with legend
+- [ ] chart:radar — radar chart (test by changing demo type to radar)
+- [ ] chart:sparkline — mini line chart, no axes, no legend (test by changing demo type to sparkline)
+- [ ] chart accent color — chart colors match specified or default accent
+- [ ] mermaid — flowchart renders as SVG, not raw text
+- [ ] mermaid dark theme — switch to `--theme dark`, mermaid auto-uses dark palette
+- [ ] table sortable — click header to sort, arrow indicator appears
+- [ ] table number sort — numeric column sorts by value not string
+- [ ] table non-sortable — remove `sortable: true`, headers not clickable
+- [ ] component lazy init — navigate to chart slide, verify canvas appears on arrival
+- [ ] live reload — edit chart YAML, save, chart re-renders after reload
