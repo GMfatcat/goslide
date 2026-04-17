@@ -27,7 +27,6 @@
     var chartType = type;
     var opts = {
       responsive: true,
-      maintainAspectRatio: true,
       plugins: {
         title: { display: false },
         legend: { display: true }
@@ -114,20 +113,10 @@
     var chartType = fullType.split(':')[1] || 'bar';
     var params = JSON.parse(decodeAttr(el.getAttribute('data-params')));
 
-    var wrapper = document.createElement('div');
-    wrapper.style.position = 'relative';
-    wrapper.style.width = '100%';
-    wrapper.style.height = chartType === 'sparkline' ? '60px' : '350px';
-
     var canvas = document.createElement('canvas');
-    wrapper.appendChild(canvas);
-    el.appendChild(wrapper);
+    el.appendChild(canvas);
 
     var config = buildChartConfig(chartType, params);
-    config.options.responsive = true;
-    config.options.maintainAspectRatio = false;
-    config.options.animation = { duration: 300 };
-
     var chart = new Chart(canvas, config);
     el._chart = chart;
   }

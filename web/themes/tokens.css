@@ -61,10 +61,12 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
 }
 
 .goslide-component {
-  margin: 1rem 0;
+  margin: 0.5rem auto;
+  max-width: 90%;
 }
 .goslide-component canvas {
   max-width: 100%;
+  max-height: 400px;
 }
 .goslide-component table {
   width: 100%;
