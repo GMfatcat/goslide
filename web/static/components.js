@@ -124,9 +124,12 @@
     el.appendChild(wrapper);
 
     var config = buildChartConfig(chartType, params);
-    var chart = new Chart(canvas, config);
+    config.options.responsive = true;
+    config.options.maintainAspectRatio = false;
+    config.options.animation = { duration: 300 };
 
-    setTimeout(function () { chart.resize(); }, 100);
+    var chart = new Chart(canvas, config);
+    el._chart = chart;
   }
 
   function initTable(el) {
@@ -211,23 +214,32 @@
     var els = document.querySelectorAll('.goslide-component[data-type="mermaid"]');
     if (els.length === 0) return;
 
-    els.forEach(function (el) {
-      var raw = decodeAttr(el.getAttribute('data-raw'));
-      var div = document.createElement('div');
-      div.className = 'mermaid';
-      div.textContent = raw;
-      el.appendChild(div);
-    });
-
     var bg = getComputedStyle(document.querySelector('.reveal')).backgroundColor;
     var isDark = parseBrightness(bg) < 128;
     mermaid.initialize({ startOnLoad: false, theme: isDark ? 'dark' : 'default' });
-    mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+
+    els.forEach(function (el, idx) {
+      var raw = decodeAttr(el.getAttribute('data-raw'));
+      var id = 'goslide-mermaid-' + idx;
+      mermaid.render(id, raw).then(function (result) {
+        el.innerHTML = '<div class="mermaid">' + result.svg + '</div>';
+      }).catch(function (err) {
+        el.innerHTML = '<pre style="color:red;">Mermaid error: ' + err.message + '</pre>';
+        console.error('Mermaid render error:', err);
+      });
+    });
   }
 
   function decodeAttr(s) {
     if (!s) return '';
     return s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  }
+
+  function resizeSlideCharts(slide) {
+    if (!slide) return;
+    slide.querySelectorAll('.goslide-component').forEach(function (el) {
+      if (el._chart) el._chart.resize();
+    });
   }
 
   Reveal.on('ready', function () {
@@ -236,13 +248,9 @@
   });
   Reveal.on('slidechanged', function (ev) {
     initSlideComponents(ev.currentSlide);
+    setTimeout(function () { resizeSlideCharts(ev.currentSlide); }, 50);
   });
-  Reveal.on('slidetransitionend', function (ev) {
-    var slide = Reveal.getCurrentSlide();
-    if (!slide) return;
-    slide.querySelectorAll('.goslide-component canvas').forEach(function (c) {
-      var chart = Chart.getChart(c);
-      if (chart) chart.resize();
-    });
+  Reveal.on('slidetransitionend', function () {
+    resizeSlideCharts(Reveal.getCurrentSlide());
   });
 })();
