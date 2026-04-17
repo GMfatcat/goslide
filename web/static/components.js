@@ -180,10 +180,8 @@
     th.textContent += asc ? ' ▲' : ' ▼';
   }
 
-  function initSlideComponents(slide) {
-    if (!slide) return;
-    var comps = slide.querySelectorAll('.goslide-component');
-    comps.forEach(function (el) {
+  function initAllComponents() {
+    document.querySelectorAll('.goslide-component').forEach(function (el) {
       var id = el.getAttribute('data-comp-id');
       if (initialized[id]) return;
       var type = el.getAttribute('data-type');
@@ -224,20 +222,8 @@
     return s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   }
 
-  function resizeSlideCharts(slide) {
-    if (!slide) return;
-    slide.querySelectorAll('.goslide-component').forEach(function (el) {
-      if (el._chart) el._chart.resize();
-    });
-  }
-
   Reveal.on('ready', function () {
     initAllMermaid();
-    initSlideComponents(Reveal.getCurrentSlide());
-  });
-  Reveal.on('slidetransitionend', function () {
-    var slide = Reveal.getCurrentSlide();
-    initSlideComponents(slide);
-    resizeSlideCharts(slide);
+    initAllComponents();
   });
 })();
