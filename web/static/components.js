@@ -246,11 +246,9 @@
     initAllMermaid();
     initSlideComponents(Reveal.getCurrentSlide());
   });
-  Reveal.on('slidechanged', function (ev) {
-    initSlideComponents(ev.currentSlide);
-    setTimeout(function () { resizeSlideCharts(ev.currentSlide); }, 50);
-  });
   Reveal.on('slidetransitionend', function () {
-    resizeSlideCharts(Reveal.getCurrentSlide());
+    var slide = Reveal.getCurrentSlide();
+    initSlideComponents(slide);
+    resizeSlideCharts(slide);
   });
 })();
