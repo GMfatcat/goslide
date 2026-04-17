@@ -23,19 +23,35 @@
     return colors;
   }
 
+  function getThemeColors() {
+    var style = getComputedStyle(document.documentElement);
+    return {
+      text: style.getPropertyValue('--slide-text').trim() || '#666666',
+      border: style.getPropertyValue('--slide-border').trim() || 'rgba(0,0,0,0.1)',
+      muted: style.getPropertyValue('--slide-muted').trim() || '#999999'
+    };
+  }
+
   function buildChartConfig(type, params) {
     var chartType = type;
+    var tc = getThemeColors();
     var opts = {
       responsive: true,
+      color: tc.text,
       plugins: {
-        title: { display: false },
-        legend: { display: true }
+        title: { display: false, color: tc.text },
+        legend: { display: true, labels: { color: tc.text } }
+      },
+      scales: {
+        x: { ticks: { color: tc.muted }, grid: { color: tc.border } },
+        y: { ticks: { color: tc.muted }, grid: { color: tc.border } }
       }
     };
 
     if (chartType === 'sparkline') {
       chartType = 'line';
-      opts.scales = { x: { display: false }, y: { display: false } };
+      opts.scales.x.display = false;
+      opts.scales.y.display = false;
       opts.plugins.legend = { display: false };
       opts.plugins.title = { display: false };
       opts.elements = { point: { radius: 0 }, line: { borderWidth: 2 } };
@@ -43,7 +59,7 @@
     }
 
     if (params.title) {
-      opts.plugins.title = { display: true, text: params.title };
+      opts.plugins.title = { display: true, text: params.title, color: tc.text };
     }
 
     if (params.stacked) {
