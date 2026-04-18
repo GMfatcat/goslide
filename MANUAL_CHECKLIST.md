@@ -93,3 +93,18 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 - [ ] embed:html → custom HTML/JS executes in slide (click button works)
 - [ ] embed:iframe → iframe displays external page
 - [ ] upstream unreachable → 502 response
+
+## API Component (Phase 3b)
+- [ ] api fetch — /api/mock/metrics returns data and renders
+- [ ] render metric — large number card with value + unit
+- [ ] render chart:bar — API data rendered as bar chart
+- [ ] render table — object array auto-derives columns and rows
+- [ ] render json — formatted JSON display
+- [ ] render log — terminal style black/green text
+- [ ] render image — base64 or URL image displays
+- [ ] render markdown — plain text display
+- [ ] polling — refresh: 5s re-fetches every 5 seconds
+- [ ] polling pause — leave slide stops polling
+- [ ] polling resume — return to slide resumes polling
+- [ ] error — upstream unreachable shows red error message
+- [ ] dark theme — all render types visible on dark theme

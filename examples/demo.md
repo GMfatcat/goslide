@@ -363,6 +363,53 @@ height: 400
 
 ---
 
+# API Dashboard
+
+~~~api
+url: /api/mock/metrics
+render:
+  - type: metric
+    path: lines[0].yield
+    label: Line A Yield
+    unit: "%"
+    color: teal
+  - type: metric
+    path: lines[1].yield
+    label: Line B Yield
+    unit: "%"
+    color: coral
+  - type: chart:bar
+    path: lines
+    title: Yield by Line
+    color: blue
+~~~
+
+---
+
+# API Data Views
+
+~~~api
+url: /api/mock/metrics
+render:
+  - type: table
+    path: lines
+  - type: json
+    path: lines[0]
+~~~
+
+---
+
+# System Log
+
+~~~api
+url: /api/mock/log
+render:
+  - type: log
+    path: entries
+~~~
+
+---
+
 <!-- layout: title -->
 
 # Thank You
