@@ -70,6 +70,7 @@ func inlineAssets(html string) string {
 		fsys fs.FS
 		path string
 	}{
+		{`href="/static/reveal/reveal.css"`, web.StaticFS, "static/reveal/reveal.css"},
 		{`href="/themes/tokens.css"`, web.ThemeFS, "themes/tokens.css"},
 		{`href="/themes/layouts.css"`, web.ThemeFS, "themes/layouts.css"},
 	}
