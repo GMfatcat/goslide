@@ -102,6 +102,7 @@ func inlineAssets(html string) string {
 		{`href="/static/reveal/reveal.css"`, web.StaticFS, "static/reveal/reveal.css"},
 		{`href="/themes/tokens.css"`, web.ThemeFS, "themes/tokens.css"},
 		{`href="/themes/layouts.css"`, web.ThemeFS, "themes/layouts.css"},
+		{`href="/themes/transitions.css"`, web.ThemeFS, "themes/transitions.css"},
 	}
 
 	themeNames := []string{"default", "dark", "corporate", "minimal", "hacker", "dracula", "midnight", "gruvbox", "solarized", "catppuccin-mocha", "ink-wash", "instagram", "western", "pixel"}
