@@ -1,6 +1,11 @@
 # GoSlide Phase 2c — L2 Reactive Components Design Spec
 
-> **Status: DRAFT**
+> **Status: COMPLETED (2026-04-18)**
+>
+> Key learnings:
+> - Panel content is markdown, not YAML — needs ContentHTML field for pre-rendered HTML
+> - overflow-y: auto on slides conflicts with Reveal.js transform scaling — use Reveal.layout() instead
+> - Call Reveal.layout() after any dynamic content change (panel show/hide) to recalculate scaling
 
 ## Decision Log
 
