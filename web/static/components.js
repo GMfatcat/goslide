@@ -207,6 +207,180 @@
     el.appendChild(iframe);
   }
 
+  function extractPath(obj, path) {
+    if (!path) return obj;
+    var parts = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+    var current = obj;
+    for (var i = 0; i < parts.length; i++) {
+      if (current == null) return undefined;
+      current = current[parts[i]];
+    }
+    return current;
+  }
+
+  function parseRefresh(s) {
+    if (!s) return 0;
+    var m = String(s).match(/^(\d+)(s|ms)?$/);
+    if (!m) return 0;
+    var val = parseInt(m[1]);
+    if (m[2] === 'ms') return val;
+    return val * 1000;
+  }
+
+  function renderMetric(container, item, data) {
+    var div = document.createElement('div');
+    div.className = 'goslide-metric';
+    var value = document.createElement('div');
+    value.className = 'goslide-metric-value';
+    value.textContent = data + (item.unit || '');
+    if (item.color) value.style.color = resolveColor(item.color);
+    var label = document.createElement('div');
+    label.className = 'goslide-metric-label';
+    label.textContent = item.label || '';
+    div.appendChild(value);
+    div.appendChild(label);
+    container.appendChild(div);
+  }
+
+  function renderApiChart(container, item, data) {
+    var chartType = item.type.split(':')[1] || 'bar';
+    var params = { title: item.title, color: item.color, unit: item.unit };
+    if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object') {
+      var keys = Object.keys(data[0]);
+      var labelKey = null, dataKey = null;
+      for (var k = 0; k < keys.length; k++) {
+        if (typeof data[0][keys[k]] === 'string' && !labelKey) labelKey = keys[k];
+        if (typeof data[0][keys[k]] === 'number' && !dataKey) dataKey = keys[k];
+      }
+      params.labels = data.map(function(d) { return d[labelKey || keys[0]]; });
+      params.data = data.map(function(d) { return d[dataKey || keys[1]]; });
+    } else if (Array.isArray(data)) {
+      params.data = data;
+      params.labels = item.labels || data.map(function(_, i) { return '' + i; });
+    } else {
+      params.data = [data];
+      params.labels = [item.label || ''];
+    }
+    var canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    var config = buildChartConfig(chartType, params);
+    new Chart(canvas, config);
+  }
+
+  function renderApiTable(container, item, data) {
+    if (!Array.isArray(data) || data.length === 0) return;
+    var columns = item.columns || Object.keys(data[0]);
+    var table = document.createElement('table');
+    var thead = document.createElement('thead');
+    var headerRow = document.createElement('tr');
+    columns.forEach(function(col) {
+      var th = document.createElement('th');
+      th.textContent = col;
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    data.forEach(function(obj) {
+      var tr = document.createElement('tr');
+      columns.forEach(function(col) {
+        var td = document.createElement('td');
+        td.textContent = obj[col] != null ? String(obj[col]) : '';
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    container.appendChild(table);
+  }
+
+  function renderJSON(container, item, data) {
+    var pre = document.createElement('pre');
+    pre.className = 'goslide-json';
+    pre.textContent = JSON.stringify(data, null, 2);
+    container.appendChild(pre);
+  }
+
+  function renderLog(container, item, data) {
+    var pre = document.createElement('pre');
+    pre.className = 'goslide-log';
+    pre.textContent = Array.isArray(data) ? data.join('\n') : String(data);
+    container.appendChild(pre);
+  }
+
+  function renderApiImage(container, item, data) {
+    var img = document.createElement('img');
+    var src = String(data);
+    if (src.startsWith('data:') || src.startsWith('http')) {
+      img.src = src;
+    } else {
+      img.src = 'data:image/png;base64,' + src;
+    }
+    img.style.maxWidth = '100%';
+    img.style.borderRadius = '0.5rem';
+    container.appendChild(img);
+  }
+
+  function renderMarkdownRaw(container, item, data) {
+    var pre = document.createElement('pre');
+    pre.className = 'goslide-markdown-raw';
+    pre.textContent = String(data);
+    container.appendChild(pre);
+  }
+
+  function renderItem(container, item, data) {
+    if (data === undefined) return;
+    var type = item.type || '';
+    if (type === 'metric') renderMetric(container, item, data);
+    else if (type.indexOf('chart') === 0) renderApiChart(container, item, data);
+    else if (type === 'table') renderApiTable(container, item, data);
+    else if (type === 'json') renderJSON(container, item, data);
+    else if (type === 'log') renderLog(container, item, data);
+    else if (type === 'image') renderApiImage(container, item, data);
+    else if (type === 'markdown') renderMarkdownRaw(container, item, data);
+  }
+
+  function fetchAndRender(el, params) {
+    var url = params.url;
+    var opts = { method: (params.method || 'GET').toUpperCase() };
+    if (params.body) {
+      opts.body = JSON.stringify(params.body);
+      opts.headers = { 'Content-Type': 'application/json' };
+    }
+    fetch(url, opts)
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        el.innerHTML = '';
+        var items = document.createElement('div');
+        items.className = 'goslide-api-items';
+        var renderList = params.render;
+        if (!Array.isArray(renderList)) {
+          renderList = [renderList || { type: 'json' }];
+        }
+        renderList.forEach(function(item) {
+          var data = extractPath(json, item.path);
+          renderItem(items, item, data);
+        });
+        el.appendChild(items);
+      })
+      .catch(function(err) {
+        el.innerHTML = '<pre class="goslide-api-error">API error: ' + err.message + '</pre>';
+      });
+  }
+
+  function initApiComponent(el) {
+    var params = JSON.parse(decodeAttr(el.getAttribute('data-params')));
+    var refreshMs = parseRefresh(params.refresh);
+
+    el._fetchFn = function() { fetchAndRender(el, params); };
+    el._refreshMs = refreshMs;
+    el._fetchFn();
+
+    if (refreshMs > 0 && el.closest('section') === Reveal.getCurrentSlide()) {
+      el._pollInterval = setInterval(el._fetchFn, refreshMs);
+    }
+  }
+
   function initAllComponents() {
     document.querySelectorAll('.goslide-component').forEach(function (el) {
       var id = el.getAttribute('data-comp-id');
@@ -215,6 +389,7 @@
       if (type.indexOf('chart') === 0) initChart(el);
       else if (type === 'table') initTable(el);
       else if (type === 'embed:iframe') initIframe(el);
+      else if (type === 'api') initApiComponent(el);
       initialized[id] = true;
     });
   }
@@ -253,5 +428,17 @@
   Reveal.on('ready', function () {
     initAllMermaid();
     initAllComponents();
+  });
+  Reveal.on('slidechanged', function() {
+    document.querySelectorAll('.goslide-component[data-type="api"]').forEach(function(el) {
+      var isVisible = el.closest('section') === Reveal.getCurrentSlide();
+      if (!isVisible && el._pollInterval) {
+        clearInterval(el._pollInterval);
+        el._pollInterval = null;
+      } else if (isVisible && el._refreshMs && !el._pollInterval) {
+        el._fetchFn();
+        el._pollInterval = setInterval(el._fetchFn, el._refreshMs);
+      }
+    });
   });
 })();
