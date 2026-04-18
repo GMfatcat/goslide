@@ -10,10 +10,29 @@ GoSlide 將 `.md` 檔案轉換為 Reveal.js 簡報，支援即時圖表、流程
 
 ## ⚡ 快速開始
 
-```bash
-# 安裝
-go install github.com/GMfatcat/goslide/cmd/goslide@latest
+### 方式一：直接下載
 
+從 [GitHub Releases](https://github.com/GMfatcat/goslide/releases) 下載對應平台的執行檔：
+
+| 平台 | 檔案 |
+|------|------|
+| Windows (x64) | `goslide-windows-amd64.exe` |
+| macOS (Intel) | `goslide-darwin-amd64` |
+| macOS (Apple Silicon) | `goslide-darwin-arm64` |
+| Linux (x64) | `goslide-linux-amd64` |
+| Linux (ARM64) | `goslide-linux-arm64` |
+
+重新命名為 `goslide`（Windows 為 `goslide.exe`），放到 PATH 中即可使用。
+
+### 方式二：透過 Go 安裝
+
+```bash
+go install github.com/GMfatcat/goslide/cmd/goslide@latest
+```
+
+### 開始使用
+
+```bash
 # 建立簡報
 goslide init
 
@@ -159,6 +178,26 @@ transition: perspective  # 3D Y 軸旋轉
 ## 🌐 CJK 支援
 
 GoSlide 內建 Noto Sans TC 字型，完整支援繁體中文、日文漢字等 CJK 字元。
+
+## 🙏 致謝
+
+GoSlide 建立在這些優秀的開源專案之上：
+
+| 專案 | 用途 | 授權 |
+|------|------|------|
+| [Reveal.js](https://revealjs.com/) | 投影片渲染引擎 | MIT |
+| [Chart.js](https://www.chartjs.org/) | 圖表（長條、折線、圓餅、雷達、迷你折線） | MIT |
+| [Mermaid](https://mermaid.js.org/) | 流程圖、序列圖、ER 圖 | MIT |
+| [goldmark](https://github.com/yuin/goldmark) | Markdown 解析器 | MIT |
+| [cobra](https://github.com/spf13/cobra) | CLI 框架 | Apache-2.0 |
+| [fsnotify](https://github.com/fsnotify/fsnotify) | 檔案系統監控 | BSD-3 |
+| [coder/websocket](https://github.com/coder/websocket) | WebSocket 函式庫 | MIT |
+| [Noto Sans TC](https://fonts.google.com/noto/specimen/Noto+Sans+TC) | CJK 字型 | OFL-1.1 |
+| [JetBrains Mono](https://www.jetbrains.com/lp/mono/) | 等寬字型 | OFL-1.1 |
+| [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) | 像素字型（pixel 主題） | OFL-1.1 |
+| [Rye](https://fonts.google.com/specimen/Rye) | 西部字型（western 主題） | OFL-1.1 |
+
+主題配色靈感來自：[Dracula](https://draculatheme.com/)、[Catppuccin](https://github.com/catppuccin/catppuccin)、[Gruvbox](https://github.com/morhetz/gruvbox)、[Solarized](https://ethanschoonover.com/solarized/)、[Nord](https://www.nordtheme.com/)。
 
 ## 📄 授權
 

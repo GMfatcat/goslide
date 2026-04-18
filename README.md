@@ -10,10 +10,29 @@ GoSlide turns `.md` files into Reveal.js presentations with live charts, diagram
 
 ## ⚡ Quick Start
 
-```bash
-# Install
-go install github.com/GMfatcat/goslide/cmd/goslide@latest
+### Option 1: Download Binary
 
+Download the latest release for your platform from [GitHub Releases](https://github.com/GMfatcat/goslide/releases):
+
+| Platform | File |
+|----------|------|
+| Windows (x64) | `goslide-windows-amd64.exe` |
+| macOS (Intel) | `goslide-darwin-amd64` |
+| macOS (Apple Silicon) | `goslide-darwin-arm64` |
+| Linux (x64) | `goslide-linux-amd64` |
+| Linux (ARM64) | `goslide-linux-arm64` |
+
+Rename to `goslide` (or `goslide.exe` on Windows), place in your PATH, and you're ready.
+
+### Option 2: Install via Go
+
+```bash
+go install github.com/GMfatcat/goslide/cmd/goslide@latest
+```
+
+### Get Started
+
+```bash
 # Create a presentation
 goslide init
 
@@ -155,6 +174,26 @@ Content here.
 
 Speaker notes — visible in speaker view (press S).
 ```
+
+## 🙏 Acknowledgments
+
+GoSlide is built on the shoulders of these excellent open-source projects:
+
+| Project | Role | License |
+|---------|------|---------|
+| [Reveal.js](https://revealjs.com/) | Slide rendering engine | MIT |
+| [Chart.js](https://www.chartjs.org/) | Charts (bar, line, pie, radar, sparkline) | MIT |
+| [Mermaid](https://mermaid.js.org/) | Diagrams (flowcharts, sequence, ERD) | MIT |
+| [goldmark](https://github.com/yuin/goldmark) | Markdown parser | MIT |
+| [cobra](https://github.com/spf13/cobra) | CLI framework | Apache-2.0 |
+| [fsnotify](https://github.com/fsnotify/fsnotify) | File system watcher | BSD-3 |
+| [coder/websocket](https://github.com/coder/websocket) | WebSocket library | MIT |
+| [Noto Sans TC](https://fonts.google.com/noto/specimen/Noto+Sans+TC) | CJK font | OFL-1.1 |
+| [JetBrains Mono](https://www.jetbrains.com/lp/mono/) | Monospace font | OFL-1.1 |
+| [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) | Pixel font (pixel theme) | OFL-1.1 |
+| [Rye](https://fonts.google.com/specimen/Rye) | Western font (western theme) | OFL-1.1 |
+
+Theme color palettes inspired by: [Dracula](https://draculatheme.com/), [Catppuccin](https://github.com/catppuccin/catppuccin), [Gruvbox](https://github.com/morhetz/gruvbox), [Solarized](https://ethanschoonover.com/solarized/), [Nord](https://www.nordtheme.com/).
 
 ## 📄 License
 
