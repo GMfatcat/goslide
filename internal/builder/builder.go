@@ -161,6 +161,8 @@ func inlineFonts(css string) string {
 		{"url('/fonts/NotoSansTC-Regular.woff2')", "static/fonts/NotoSansTC-Regular.woff2"},
 		{"url('/fonts/NotoSansTC-Bold.woff2')", "static/fonts/NotoSansTC-Bold.woff2"},
 		{"url('/fonts/JetBrainsMono-Regular.woff2')", "static/fonts/JetBrainsMono-Regular.woff2"},
+		{"url('/fonts/PressStart2P-Regular.woff2')", "static/fonts/PressStart2P-Regular.woff2"},
+		{"url('/fonts/Rye-Regular.woff2')", "static/fonts/Rye-Regular.woff2"},
 	}
 
 	for _, f := range fonts {

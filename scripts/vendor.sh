@@ -30,6 +30,12 @@ download "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-
 download "https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.woff2" \
          "$VENDOR_DIR/fonts/JetBrainsMono-Regular.woff2"
 
+# Creative theme fonts
+download "https://cdn.jsdelivr.net/fontsource/fonts/press-start-2p@latest/latin-400-normal.woff2" \
+         "$VENDOR_DIR/fonts/PressStart2P-Regular.woff2"
+download "https://cdn.jsdelivr.net/fontsource/fonts/rye@latest/latin-400-normal.woff2" \
+         "$VENDOR_DIR/fonts/Rye-Regular.woff2"
+
 CHARTJS_VER="4.4.7"
 MERMAID_VER="11.4.1"
 

@@ -31,6 +31,18 @@
   font-weight: 400;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/fonts/PressStart2P-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rye';
+  src: url('/fonts/Rye-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
 
 body[data-accent="blue"]   { --slide-accent: var(--accent-blue); }
 body[data-accent="teal"]   { --slide-accent: var(--accent-teal); }

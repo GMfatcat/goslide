@@ -7,3 +7,5 @@
 | JetBrains Mono | latest (fontsource) | OFL-1.1 | https://fontsource.org/fonts/jetbrains-mono |
 | Chart.js | 4.4.7 | MIT | https://github.com/chartjs/Chart.js |
 | Mermaid | 11.4.1 | MIT | https://github.com/mermaid-js/mermaid |
+| Press Start 2P | latest (fontsource) | OFL-1.1 | https://fontsource.org/fonts/press-start-2p |
+| Rye | latest (fontsource) | OFL-1.1 | https://fontsource.org/fonts/rye |
