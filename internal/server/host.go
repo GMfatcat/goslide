@@ -198,8 +198,11 @@ func (h *hostApp) handleTalk(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	indexLink := `<a href="/" id="goslide-home" style="position:fixed;top:1.2rem;left:1.5rem;z-index:100;font-family:var(--font-sans);font-size:0.85rem;color:var(--slide-muted);text-decoration:none;opacity:0.7;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">← Index</a>`
+	html := strings.Replace(page.HTML, "</body>", indexLink+"</body>", 1)
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write([]byte(page.HTML))
+	w.Write([]byte(html))
 }
 
 func (h *hostApp) handleFileEvent(event string, path string) {
