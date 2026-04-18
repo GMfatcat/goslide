@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/user/goslide/internal/ir"
-	"github.com/user/goslide/internal/parser"
+	"github.com/GMfatcat/goslide/internal/ir"
+	"github.com/GMfatcat/goslide/internal/parser"
 )
 
 var update = flag.Bool("update", false, "update golden files")

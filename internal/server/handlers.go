@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/user/goslide/web"
+	"github.com/GMfatcat/goslide/web"
 )
 
 func setupStaticRoutes(mux *http.ServeMux) {

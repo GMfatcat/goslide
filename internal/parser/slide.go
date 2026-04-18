@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/user/goslide/internal/ir"
+	"github.com/GMfatcat/goslide/internal/ir"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/renderer/html"

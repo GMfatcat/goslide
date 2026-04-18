@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/user/goslide/internal/config"
+	"github.com/GMfatcat/goslide/internal/config"
 )
 
 func setupProxy(mux *http.ServeMux, proxies map[string]config.ProxyTarget) {

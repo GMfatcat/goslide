@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/user/goslide/templates"
+	"github.com/GMfatcat/goslide/templates"
 )
 
 var initTemplate string

@@ -2,7 +2,7 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/user/goslide/internal/builder"
+	"github.com/GMfatcat/goslide/internal/builder"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/user/goslide/internal/ir"
+	"github.com/GMfatcat/goslide/internal/ir"
 	"gopkg.in/yaml.v3"
 )
 

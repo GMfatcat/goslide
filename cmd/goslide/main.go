@@ -1,6 +1,6 @@
 package main
 
-import "github.com/user/goslide/internal/cli"
+import "github.com/GMfatcat/goslide/internal/cli"
 
 var version = "dev"
 

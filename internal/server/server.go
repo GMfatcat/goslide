@@ -16,10 +16,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/user/goslide/internal/config"
-	"github.com/user/goslide/internal/ir"
-	"github.com/user/goslide/internal/parser"
-	"github.com/user/goslide/internal/renderer"
+	"github.com/GMfatcat/goslide/internal/config"
+	"github.com/GMfatcat/goslide/internal/ir"
+	"github.com/GMfatcat/goslide/internal/parser"
+	"github.com/GMfatcat/goslide/internal/renderer"
 )
 
 type Options struct {

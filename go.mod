@@ -1,4 +1,4 @@
-module github.com/user/goslide
+module github.com/GMfatcat/goslide
 
 go 1.21.6
 

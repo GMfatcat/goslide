@@ -5,9 +5,9 @@ import (
 	"html/template"
 	"io/fs"
 
-	"github.com/user/goslide/internal/ir"
-	"github.com/user/goslide/internal/theme"
-	"github.com/user/goslide/web"
+	"github.com/GMfatcat/goslide/internal/ir"
+	"github.com/GMfatcat/goslide/internal/theme"
+	"github.com/GMfatcat/goslide/web"
 )
 
 type templateData struct {

@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/user/goslide/internal/ir"
+	"github.com/GMfatcat/goslide/internal/ir"
 )
 
 func Parse(raw []byte, source string) (*ir.Presentation, error) {
