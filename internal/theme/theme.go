@@ -3,11 +3,13 @@ package theme
 var validThemes = map[string]bool{
 	"default": true, "dark": true,
 	"corporate": true, "minimal": true, "hacker": true,
+	"dracula": true, "midnight": true, "gruvbox": true, "solarized": true, "catppuccin-mocha": true,
 }
 
 var themeDefaultAccents = map[string]string{
 	"default": "blue", "dark": "blue", "corporate": "blue",
 	"minimal": "blue", "hacker": "green",
+	"dracula": "pink", "midnight": "blue", "gruvbox": "amber", "solarized": "teal", "catppuccin-mocha": "pink",
 }
 
 func ResolveTheme(name string) string {

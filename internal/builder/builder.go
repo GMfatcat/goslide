@@ -104,7 +104,7 @@ func inlineAssets(html string) string {
 		{`href="/themes/layouts.css"`, web.ThemeFS, "themes/layouts.css"},
 	}
 
-	themeNames := []string{"default", "dark", "corporate", "minimal", "hacker"}
+	themeNames := []string{"default", "dark", "corporate", "minimal", "hacker", "dracula", "midnight", "gruvbox", "solarized", "catppuccin-mocha"}
 	for _, t := range themeNames {
 		cssReplacements = append(cssReplacements, struct {
 			href string

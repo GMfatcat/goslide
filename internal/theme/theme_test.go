@@ -65,3 +65,25 @@ func TestThemeCSSPath(t *testing.T) {
 	require.Equal(t, "themes/default.css", ThemeCSSPath("default"))
 	require.Equal(t, "themes/hacker.css", ThemeCSSPath("hacker"))
 }
+
+func TestResolveTheme_Dracula(t *testing.T) {
+	require.Equal(t, "dracula", ResolveTheme("dracula"))
+}
+
+func TestResolveTheme_AllNewThemes(t *testing.T) {
+	for _, name := range []string{"midnight", "gruvbox", "solarized", "catppuccin-mocha"} {
+		require.Equal(t, name, ResolveTheme(name))
+	}
+}
+
+func TestResolveAccent_DraculaDefault(t *testing.T) {
+	require.Equal(t, "pink", ResolveAccent("", "dracula"))
+}
+
+func TestResolveAccent_GruvboxDefault(t *testing.T) {
+	require.Equal(t, "amber", ResolveAccent("", "gruvbox"))
+}
+
+func TestResolveAccent_SolarizedDefault(t *testing.T) {
+	require.Equal(t, "teal", ResolveAccent("", "solarized"))
+}
