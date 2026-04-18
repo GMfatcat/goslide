@@ -38,6 +38,7 @@ type SlideMeta struct {
 	Fragments         bool
 	FragmentStyle     string
 	SlideNumberHidden bool
+	Columns           int
 }
 
 type Frontmatter struct {

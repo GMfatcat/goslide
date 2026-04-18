@@ -96,14 +96,13 @@ func TestValidate_TypoLayout_Distance3_NotTypo(t *testing.T) {
 }
 
 func TestValidate_FutureLayout(t *testing.T) {
+	// grid-cards is now a known layout; verify no future-layout warning is emitted
 	p := &Presentation{
 		Slides: []Slide{{Index: 4, Meta: SlideMeta{Layout: "grid-cards"}}},
 	}
 	errs := p.Validate()
 	e := findError(errs, "future-layout")
-	require.NotNil(t, e)
-	require.Equal(t, "warning", e.Severity)
-	require.Equal(t, 4, e.Slide)
+	require.Nil(t, e)
 }
 
 func TestValidate_FutureComponent(t *testing.T) {
@@ -267,14 +266,14 @@ func TestValidate_BlankLayout_Valid(t *testing.T) {
 	require.Nil(t, e)
 }
 
-func TestValidate_GridCardsStillFuture(t *testing.T) {
+func TestValidate_GridCardsIsKnown(t *testing.T) {
+	// grid-cards has been promoted to a known layout; no future-layout warning expected
 	p := &Presentation{
 		Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "grid-cards"}}},
 	}
 	errs := p.Validate()
 	e := findError(errs, "future-layout")
-	require.NotNil(t, e)
-	require.Equal(t, "warning", e.Severity)
+	require.Nil(t, e)
 }
 
 func TestValidate_ImageLeftRequiredRegions(t *testing.T) {

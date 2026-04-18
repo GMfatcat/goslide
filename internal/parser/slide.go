@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"html/template"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/user/goslide/internal/ir"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/renderer/html"
+	yaml "gopkg.in/yaml.v3"
 )
 
 var (
@@ -53,6 +55,15 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 	for i := range components {
 		if strings.HasPrefix(components[i].Type, "panel:") {
 			components[i].ContentHTML = string(renderMarkdown(components[i].Raw))
+		} else if components[i].Type == "card" {
+			parts := strings.SplitN(components[i].Raw, "\n---\n", 2)
+			if len(parts) == 2 {
+				var summaryParams map[string]any
+				if err := yaml.Unmarshal([]byte(parts[0]), &summaryParams); err == nil {
+					components[i].Params = summaryParams
+				}
+				components[i].ContentHTML = string(renderMarkdown(parts[1]))
+			}
 		}
 	}
 	bodyLines = strings.Split(cleanedBody, "\n")
@@ -132,6 +143,12 @@ func buildSlideMeta(metaMap map[string]string, defaults ir.Frontmatter) ir.Slide
 	}
 	if v, ok := metaMap["slide-number"]; ok {
 		meta.SlideNumberHidden = strings.ToLower(strings.TrimSpace(v)) == "false"
+	}
+	if v, ok := metaMap["columns"]; ok {
+		n, err := strconv.Atoi(strings.TrimSpace(v))
+		if err == nil {
+			meta.Columns = n
+		}
 	}
 
 	return meta

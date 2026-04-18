@@ -18,8 +18,9 @@ var (
 		"two-column": true, "code-preview": true,
 		"three-column": true, "image-left": true, "image-right": true,
 		"quote": true, "split-heading": true, "top-bottom": true, "blank": true,
+		"grid-cards": true,
 	}
-	futureLayouts = map[string]bool{"grid-cards": true}
+	futureLayouts = map[string]bool{}
 
 	requiredRegions = map[string][]string{
 		"two-column":    {"left", "right"},
