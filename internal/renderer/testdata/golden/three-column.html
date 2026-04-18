@@ -50,6 +50,7 @@
   <script src="/static/chartjs/chart.min.js"></script>
   <script src="/static/mermaid/mermaid.min.js"></script>
   <script src="/static/reveal/reveal.js"></script>
+  <script src="/static/reveal/plugin-notes.js"></script>
   <script src="/static/runtime.js"></script>
   <script src="/static/reactive.js"></script>
   <script src="/static/components.js"></script>
@@ -64,7 +65,8 @@
       },
       overview: true,
       center: true,
-      transition: 'slide'
+      transition: 'slide',
+      plugins: [RevealNotes]
     });
   </script>
 </body>

@@ -52,6 +52,18 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 
 	bodyLines := lines[bodyStart:]
 	bodyText := strings.Join(bodyLines, "\n")
+
+	var notesHTML template.HTML
+	if idx := strings.Index(bodyText, "\n<!-- notes -->\n"); idx != -1 {
+		notesRaw := bodyText[idx+len("\n<!-- notes -->\n"):]
+		bodyText = bodyText[:idx]
+		notesHTML = renderMarkdown(notesRaw)
+	} else if strings.HasPrefix(bodyText, "<!-- notes -->\n") {
+		notesRaw := bodyText[len("<!-- notes -->\n"):]
+		bodyText = ""
+		notesHTML = renderMarkdown(notesRaw)
+	}
+
 	cleanedBody, components := extractComponents(bodyText)
 	for i := range components {
 		if strings.HasPrefix(components[i].Type, "panel:") {
@@ -121,6 +133,7 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 		BodyHTML:   bodyHTML,
 		Regions:    regions,
 		Components: components,
+		Notes:      notesHTML,
 	}
 }
 

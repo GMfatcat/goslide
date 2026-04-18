@@ -16,6 +16,7 @@ type Slide struct {
 	BodyHTML   template.HTML
 	Regions    []Region
 	Components []Component
+	Notes      template.HTML
 }
 
 type Region struct {

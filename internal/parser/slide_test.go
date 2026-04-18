@@ -169,3 +169,19 @@ func TestParseSlide_EmbedIframe(t *testing.T) {
 	require.Equal(t, "http://example.com", slide.Components[0].Params["url"])
 	require.Empty(t, slide.Components[0].ContentHTML)
 }
+
+func TestParseSlide_Notes(t *testing.T) {
+	raw := "# Title\n\nContent here.\n\n<!-- notes -->\n\nThese are speaker notes.\n\n- Point 1\n- Point 2\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.Contains(t, string(slide.BodyHTML), "Content here")
+	require.NotContains(t, string(slide.BodyHTML), "speaker notes")
+	require.Contains(t, string(slide.Notes), "speaker notes")
+	require.Contains(t, string(slide.Notes), "<li>Point 1</li>")
+}
+
+func TestParseSlide_NoNotes(t *testing.T) {
+	raw := "# Title\n\nContent only.\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.Empty(t, slide.Notes)
+	require.Contains(t, string(slide.BodyHTML), "Content only")
+}
