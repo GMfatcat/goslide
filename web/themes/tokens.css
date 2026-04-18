@@ -298,3 +298,8 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
 .goslide-card-close:hover {
   color: var(--slide-text);
 }
+
+.goslide-component iframe {
+  max-width: 100%;
+  background: var(--slide-card-bg);
+}

@@ -65,6 +65,8 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 				}
 				components[i].ContentHTML = string(renderMarkdown(parts[1]))
 			}
+		} else if components[i].Type == "embed:html" {
+			components[i].ContentHTML = components[i].Raw
 		}
 	}
 	bodyLines = strings.Split(cleanedBody, "\n")

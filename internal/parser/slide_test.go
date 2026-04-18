@@ -151,3 +151,21 @@ func TestParseSlide_Columns(t *testing.T) {
 	require.Equal(t, "grid-cards", slide.Meta.Layout)
 	require.Equal(t, 3, slide.Meta.Columns)
 }
+
+func TestParseSlide_EmbedHTML(t *testing.T) {
+	raw := "# Custom\n\n~~~embed:html\n<div id=\"demo\">Hello</div>\n<script>document.getElementById('demo').textContent='World';</script>\n~~~\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.Len(t, slide.Components, 1)
+	require.Equal(t, "embed:html", slide.Components[0].Type)
+	require.Contains(t, slide.Components[0].ContentHTML, "<div id=\"demo\">Hello</div>")
+	require.Contains(t, slide.Components[0].ContentHTML, "<script>")
+}
+
+func TestParseSlide_EmbedIframe(t *testing.T) {
+	raw := "~~~embed:iframe\nurl: http://example.com\nheight: 500\n~~~\n"
+	slide := parseSlide(1, raw, ir.Frontmatter{})
+	require.Len(t, slide.Components, 1)
+	require.Equal(t, "embed:iframe", slide.Components[0].Type)
+	require.Equal(t, "http://example.com", slide.Components[0].Params["url"])
+	require.Empty(t, slide.Components[0].ContentHTML)
+}

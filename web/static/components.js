@@ -196,6 +196,17 @@
     th.textContent += asc ? ' ▲' : ' ▼';
   }
 
+  function initIframe(el) {
+    var params = JSON.parse(decodeAttr(el.getAttribute('data-params')));
+    var iframe = document.createElement('iframe');
+    iframe.src = params.url || '';
+    iframe.style.width = '100%';
+    iframe.style.height = (params.height || 400) + 'px';
+    iframe.style.border = 'none';
+    iframe.style.borderRadius = '0.5rem';
+    el.appendChild(iframe);
+  }
+
   function initAllComponents() {
     document.querySelectorAll('.goslide-component').forEach(function (el) {
       var id = el.getAttribute('data-comp-id');
@@ -203,6 +214,7 @@
       var type = el.getAttribute('data-type');
       if (type.indexOf('chart') === 0) initChart(el);
       else if (type === 'table') initTable(el);
+      else if (type === 'embed:iframe') initIframe(el);
       initialized[id] = true;
     });
   }
