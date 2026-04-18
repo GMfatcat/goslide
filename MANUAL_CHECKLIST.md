@@ -119,3 +119,18 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 - [ ] Delete .md → removed from index after reload
 - [ ] Modify .md → slides update after live reload
 - [ ] goslide.yaml proxy works in host mode
+
+## Static Export (Phase 5a)
+- [ ] `goslide build examples/demo.md` produces demo.html
+- [ ] demo.html opens in browser offline (no server needed)
+- [ ] All slides render correctly
+- [ ] Charts display with correct data
+- [ ] Mermaid diagrams render as SVG
+- [ ] Tables are sortable
+- [ ] Tabs/slider/toggle work
+- [ ] Card overlay works
+- [ ] Fragments work
+- [ ] Page numbers display
+- [ ] No WS connection attempt (no console errors)
+- [ ] API slides show "requires goslide serve" message
+- [ ] Keyboard navigation works

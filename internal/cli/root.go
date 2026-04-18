@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -16,22 +14,6 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "verbose logging")
-
-	stubs := []struct {
-		use, short string
-	}{
-		{"build <file.md>", "Export presentation as static HTML"},
-	}
-	for _, s := range stubs {
-		s := s
-		rootCmd.AddCommand(&cobra.Command{
-			Use:   s.use,
-			Short: s.short,
-			RunE: func(cmd *cobra.Command, args []string) error {
-				return fmt.Errorf("not implemented: available in a future release")
-			},
-		})
-	}
 }
 
 func Execute(version string) {
