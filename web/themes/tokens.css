@@ -390,3 +390,12 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
   border-radius: 0.5rem;
   white-space: pre-wrap;
 }
+
+/* Progress bar */
+.reveal .progress {
+  height: 5px;
+  color: var(--slide-accent);
+}
+.reveal .progress span {
+  transition: width 0.3s ease;
+}
