@@ -337,6 +337,16 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
   margin-top: 0.3em;
 }
 
+/* Full-width render types */
+.goslide-json,
+.goslide-log,
+.goslide-markdown-raw,
+.goslide-api-items > table,
+.goslide-api-items > img {
+  width: 100%;
+  text-align: left;
+}
+
 /* JSON viewer */
 .goslide-json {
   background: var(--slide-code-bg);
