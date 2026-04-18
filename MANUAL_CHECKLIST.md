@@ -70,3 +70,16 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 - [ ] dark theme — all L2 controls visible on dark theme
 - [ ] console debug — browser console `GoSlide.get('threshold')` returns current value
 - [ ] fragment coexistence — slide with both fragments + slider, no interference
+
+## Expandable Cards (Phase 2d)
+- [ ] grid-cards layout — cards in 2-column grid
+- [ ] card summary — icon, title, desc displayed
+- [ ] card hover — slight lift effect
+- [ ] card click → overlay with detail content
+- [ ] overlay close — click ✕ button
+- [ ] overlay close — click backdrop
+- [ ] overlay close — Esc key
+- [ ] Esc precedence — closes overlay, not Reveal.js overview
+- [ ] keyboard lock — arrows don't navigate while overlay open
+- [ ] overlay dark theme — panel bg matches theme
+- [ ] detail content — markdown rendered (headings, tables, lists)

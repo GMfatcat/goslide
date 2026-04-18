@@ -276,6 +276,68 @@ The slider value can be read via `GoSlide.get('threshold')` in the browser conso
 
 ---
 
+<!-- layout: grid-cards -->
+
+# System Overview
+
+~~~card
+icon: 📷
+color: blue
+title: Image Capture
+desc: High-speed camera acquisition
+---
+## Image Capture
+
+| Spec | Value |
+|------|-------|
+| Speed | 120 fps |
+| Resolution | 5MP |
+
+The capture module interfaces with industrial cameras.
+~~~
+
+~~~card
+icon: 🔍
+color: teal
+title: Defect Detection
+desc: SegFormer + YOLO pipeline
+---
+## Defect Detection
+
+Accuracy: 98.7% | Latency: 12ms
+
+The pipeline combines SegFormer for semantic segmentation
+with YOLO for discrete defect detection.
+~~~
+
+~~~card
+icon: 📊
+color: purple
+title: Analytics
+desc: Real-time yield monitoring
+---
+## Analytics Dashboard
+
+- Real-time yield tracking
+- Defect distribution analysis
+- Trend visualization
+- Alert thresholds
+~~~
+
+~~~card
+icon: 🔧
+color: amber
+title: Maintenance
+desc: Predictive maintenance alerts
+---
+## Maintenance System
+
+Predictive maintenance using vibration and temperature sensors.
+Mean time between failures: 2,400 hours.
+~~~
+
+---
+
 <!-- layout: title -->
 
 # Thank You
