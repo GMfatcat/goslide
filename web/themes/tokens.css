@@ -211,3 +211,90 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
 .goslide-toggle-label input:checked + .goslide-toggle-switch::after {
   transform: translateX(1.3em);
 }
+
+/* Card summary */
+.goslide-card-summary {
+  background: var(--slide-card-bg);
+  border-radius: 0.75rem;
+  padding: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 1px solid var(--slide-border, rgba(0,0,0,0.1));
+  text-align: left;
+}
+.goslide-card-summary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.goslide-card-icon {
+  font-size: 1.5em;
+  margin-bottom: 0.4em;
+}
+.goslide-card-title {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: var(--slide-heading);
+  margin-bottom: 0.3em;
+}
+.goslide-card-desc {
+  font-size: 0.7em;
+  color: var(--slide-muted);
+  line-height: 1.4;
+}
+
+/* Card overlay */
+.goslide-card-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.goslide-card-overlay.active {
+  opacity: 1;
+}
+.goslide-card-panel {
+  background: var(--slide-bg, #ffffff);
+  color: var(--slide-text, #1a1a1a);
+  border-radius: 1rem;
+  padding: 2rem 2.5rem;
+  max-width: 85%;
+  max-height: 85%;
+  overflow-y: auto;
+  position: relative;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.goslide-card-panel h1, .goslide-card-panel h2, .goslide-card-panel h3 {
+  color: var(--slide-heading);
+}
+.goslide-card-panel code {
+  font-family: var(--font-mono);
+}
+.goslide-card-panel pre {
+  background: var(--slide-code-bg);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+.goslide-card-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--slide-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2em;
+}
+.goslide-card-close:hover {
+  color: var(--slide-text);
+}

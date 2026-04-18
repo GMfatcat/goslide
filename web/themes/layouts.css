@@ -137,3 +137,28 @@ section[data-layout="top-bottom"] .region-bottom { text-align: left; }
 section[data-layout="blank"] {
   padding: 0;
 }
+
+/* Layout: grid-cards */
+section[data-layout="grid-cards"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  align-content: start;
+  padding-top: 1rem;
+}
+section[data-layout="grid-cards"] > h1,
+section[data-layout="grid-cards"] > h2 {
+  width: 100%;
+  text-align: center;
+  flex-shrink: 0;
+}
+section[data-layout="grid-cards"] .goslide-component[data-type="card"] {
+  width: calc(50% - 1rem);
+}
+section[data-layout="grid-cards"][data-columns="3"] .goslide-component[data-type="card"] {
+  width: calc(33.33% - 1rem);
+}
+section[data-layout="grid-cards"][data-columns="4"] .goslide-component[data-type="card"] {
+  width: calc(25% - 1.2rem);
+}
