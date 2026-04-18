@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -29,13 +31,14 @@ func main() {
 
 	http.HandleFunc("/log", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		now := time.Now().Format("2006-01-02 15:04:05")
+		events := []string{"Inspection OK", "Defect detected", "Camera recalibrated", "Model inference", "Yield updated"}
+		yields := []string{"95.8%", "96.2%", "97.1%", "93.4%", "96.7%"}
 		json.NewEncoder(w).Encode(map[string]any{
 			"entries": []string{
-				"[2026-04-18 10:00:01] System startup",
-				"[2026-04-18 10:00:02] Camera initialized",
-				"[2026-04-18 10:00:03] Model loaded: SegFormer v2",
-				"[2026-04-18 10:00:05] First inspection completed",
-				"[2026-04-18 10:00:08] Yield: 96.2%",
+				fmt.Sprintf("[%s] %s", now, events[rand.Intn(len(events))]),
+				fmt.Sprintf("[%s] Yield: %s", now, yields[rand.Intn(len(yields))]),
+				fmt.Sprintf("[%s] Active lines: %d/4", now, 3+rand.Intn(2)),
 			},
 		})
 	})

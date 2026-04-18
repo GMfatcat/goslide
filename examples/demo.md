@@ -403,6 +403,7 @@ render:
 
 ~~~api
 url: /api/mock/log
+refresh: 3s
 render:
   - type: log
     path: entries
