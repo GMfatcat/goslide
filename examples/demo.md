@@ -338,6 +338,31 @@ Mean time between failures: 2,400 hours.
 
 ---
 
+# Embed HTML Demo
+
+~~~embed:html
+<div style="text-align:center; padding:1rem;">
+  <button onclick="this.textContent='Clicked!'" style="padding:0.5rem 1.5rem; font-size:1rem; cursor:pointer; border-radius:0.5rem; border:1px solid #ccc;">
+    Click Me
+  </button>
+  <p id="embed-time" style="margin-top:1rem; color:gray;"></p>
+  <script>
+    document.getElementById('embed-time').textContent = 'Rendered at: ' + new Date().toLocaleTimeString();
+  </script>
+</div>
+~~~
+
+---
+
+# Embed Iframe Demo
+
+~~~embed:iframe
+url: https://example.com
+height: 400
+~~~
+
+---
+
 <!-- layout: title -->
 
 # Thank You

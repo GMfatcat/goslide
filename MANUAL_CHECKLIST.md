@@ -83,3 +83,13 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 - [ ] keyboard lock — arrows don't navigate while overlay open
 - [ ] overlay dark theme — panel bg matches theme
 - [ ] detail content — markdown rendered (headings, tables, lists)
+
+## API Proxy (Phase 3a)
+- [ ] goslide.yaml absent → starts normally without proxy
+- [ ] goslide.yaml present → proxy routes work
+- [ ] /api/mock/status → returns mock JSON (requires mock-api running)
+- [ ] Header injection → upstream receives configured headers
+- [ ] env var expansion → ${TOKEN} replaced with actual env var value
+- [ ] embed:html → custom HTML/JS executes in slide (click button works)
+- [ ] embed:iframe → iframe displays external page
+- [ ] upstream unreachable → 502 response
