@@ -108,3 +108,14 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 - [ ] polling resume — return to slide resumes polling
 - [ ] error — upstream unreachable shows red error message
 - [ ] dark theme — all render types visible on dark theme
+
+## Host Mode (Phase 4a)
+- [ ] `goslide host examples/slides --no-open` starts on port 8080
+- [ ] Index page at `/` lists both presentations with titles
+- [ ] Click presentation link → renders slides at `/talks/{name}`
+- [ ] `/talks/nonexist` → 404
+- [ ] Static assets (themes, fonts) work in host mode
+- [ ] Add new .md to directory → appears in index after reload
+- [ ] Delete .md → removed from index after reload
+- [ ] Modify .md → slides update after live reload
+- [ ] goslide.yaml proxy works in host mode

@@ -20,7 +20,6 @@ func init() {
 	stubs := []struct {
 		use, short string
 	}{
-		{"host <directory>", "Serve a directory of presentations"},
 		{"init", "Scaffold a new presentation"},
 		{"list [directory]", "List presentations in a directory"},
 		{"build <file.md>", "Export presentation as static HTML"},
