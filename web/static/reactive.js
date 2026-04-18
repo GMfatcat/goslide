@@ -140,6 +140,96 @@
     GoSlide.set(id, input.checked);
   }
 
+  // --- Card ---
+  var overlay = null;
+  var overlayEscHandler = null;
+
+  function initCard(el) {
+    var params = JSON.parse(decodeAttr(el.getAttribute('data-params')));
+    var detailHTML = el.innerHTML;
+    el.innerHTML = '';
+
+    var summary = document.createElement('div');
+    summary.className = 'goslide-card-summary';
+
+    if (params.icon) {
+      var icon = document.createElement('div');
+      icon.className = 'goslide-card-icon';
+      icon.textContent = params.icon;
+      summary.appendChild(icon);
+    }
+
+    var title = document.createElement('div');
+    title.className = 'goslide-card-title';
+    title.textContent = params.title || '';
+    summary.appendChild(title);
+
+    if (params.desc) {
+      var desc = document.createElement('div');
+      desc.className = 'goslide-card-desc';
+      desc.textContent = params.desc;
+      summary.appendChild(desc);
+    }
+
+    el.appendChild(summary);
+    el._detailHTML = detailHTML;
+
+    summary.addEventListener('click', function () {
+      openCardOverlay(el);
+    });
+  }
+
+  function openCardOverlay(cardEl) {
+    if (overlay) closeCardOverlay();
+
+    overlay = document.createElement('div');
+    overlay.className = 'goslide-card-overlay';
+
+    var panel = document.createElement('div');
+    panel.className = 'goslide-card-panel';
+    panel.innerHTML = cardEl._detailHTML;
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'goslide-card-close';
+    closeBtn.textContent = '\u2715';
+    closeBtn.addEventListener('click', closeCardOverlay);
+
+    panel.insertBefore(closeBtn, panel.firstChild);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeCardOverlay();
+    });
+
+    overlayEscHandler = function (e) {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        e.preventDefault();
+        closeCardOverlay();
+      }
+    };
+    document.addEventListener('keydown', overlayEscHandler, true);
+
+    Reveal.configure({ keyboard: false });
+
+    requestAnimationFrame(function () { overlay.classList.add('active'); });
+  }
+
+  function closeCardOverlay() {
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    if (overlayEscHandler) {
+      document.removeEventListener('keydown', overlayEscHandler, true);
+      overlayEscHandler = null;
+    }
+    Reveal.configure({ keyboard: { 13: 'next', 8: 'prev' } });
+    setTimeout(function () {
+      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      overlay = null;
+    }, 200);
+  }
+
   // --- Init all L2 components ---
   function initAllL2() {
     document.querySelectorAll('.goslide-component').forEach(function (el) {
@@ -148,6 +238,7 @@
       else if (type === 'slider') initSlider(el);
       else if (type === 'toggle') initToggle(el);
       else if (type.indexOf('panel:') === 0) initPanel(el);
+      else if (type === 'card') initCard(el);
     });
   }
 
