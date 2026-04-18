@@ -57,3 +57,16 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 - [ ] table non-sortable — remove `sortable: true`, headers not clickable
 - [ ] component lazy init — navigate to chart slide, verify canvas appears on arrival
 - [ ] live reload — edit chart YAML, save, chart re-renders after reload
+
+## Reactive Components (Phase 2c)
+- [ ] tabs — button bar displays, click switches active style
+- [ ] tabs → panel — clicking tab shows/hides corresponding panel content
+- [ ] slider — range input displays with label + live value
+- [ ] slider accent — slider color matches accent
+- [ ] slider value — dragging updates value display in real-time
+- [ ] toggle — switch style, click toggles on/off
+- [ ] toggle accent — on-state color matches accent
+- [ ] toggle → panel — toggle on shows panel, off hides it
+- [ ] dark theme — all L2 controls visible on dark theme
+- [ ] console debug — browser console `GoSlide.get('threshold')` returns current value
+- [ ] fragment coexistence — slide with both fragments + slider, no interference

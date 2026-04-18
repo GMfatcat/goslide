@@ -219,6 +219,63 @@ sortable: true
 
 ---
 
+# Tabs Demo
+
+~~~tabs
+id: compare
+labels: ["Plan A", "Plan B", "Plan C"]
+~~~
+
+~~~panel:compare-0
+## Plan A
+
+Low cost, quick start, limited scalability.
+Best for small teams and prototypes.
+~~~
+
+~~~panel:compare-1
+## Plan B
+
+Medium investment, balanced approach.
+Suitable for most production workloads.
+~~~
+
+~~~panel:compare-2
+## Plan C
+
+Full investment, enterprise features.
+Maximum scalability and support.
+~~~
+
+---
+
+# Interactive Controls
+
+~~~slider
+id: threshold
+label: Yield threshold
+min: 80
+max: 100
+value: 95
+step: 0.5
+unit: "%"
+~~~
+
+~~~toggle
+id: show_details
+label: Show details
+default: false
+~~~
+
+~~~panel:show_details
+### Detail View
+
+When the toggle is on, this panel becomes visible.
+The slider value can be read via `GoSlide.get('threshold')` in the browser console.
+~~~
+
+---
+
 <!-- layout: title -->
 
 # Thank You
