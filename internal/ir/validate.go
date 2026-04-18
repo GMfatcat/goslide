@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	validThemes      = map[string]bool{"default": true, "dark": true, "corporate": true, "minimal": true, "hacker": true, "dracula": true, "midnight": true, "gruvbox": true, "solarized": true, "catppuccin-mocha": true}
+	validThemes      = map[string]bool{"default": true, "dark": true, "corporate": true, "minimal": true, "hacker": true, "dracula": true, "midnight": true, "gruvbox": true, "solarized": true, "catppuccin-mocha": true, "ink-wash": true, "instagram": true, "western": true, "pixel": true}
 	validAccents     = map[string]bool{"blue": true, "teal": true, "purple": true, "coral": true, "amber": true, "green": true, "red": true, "pink": true}
 	validTransitions = map[string]bool{"slide": true, "fade": true, "convex": true, "concave": true, "zoom": true, "none": true}
 

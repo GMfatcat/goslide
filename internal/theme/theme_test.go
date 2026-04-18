@@ -87,3 +87,17 @@ func TestResolveAccent_GruvboxDefault(t *testing.T) {
 func TestResolveAccent_SolarizedDefault(t *testing.T) {
 	require.Equal(t, "teal", ResolveAccent("", "solarized"))
 }
+
+func TestResolveTheme_CreativeThemes(t *testing.T) {
+	for _, name := range []string{"ink-wash", "instagram", "western", "pixel"} {
+		require.Equal(t, name, ResolveTheme(name))
+	}
+}
+
+func TestResolveAccent_InkWashDefault(t *testing.T) {
+	require.Equal(t, "teal", ResolveAccent("", "ink-wash"))
+}
+
+func TestResolveAccent_PixelDefault(t *testing.T) {
+	require.Equal(t, "green", ResolveAccent("", "pixel"))
+}
