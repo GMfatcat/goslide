@@ -155,6 +155,8 @@ section[data-layout="grid-cards"] > h2 {
 }
 section[data-layout="grid-cards"] .goslide-component[data-type="card"] {
   width: calc(50% - 1rem);
+  max-width: none;
+  margin: 0;
 }
 section[data-layout="grid-cards"][data-columns="3"] .goslide-component[data-type="card"] {
   width: calc(33.33% - 1rem);

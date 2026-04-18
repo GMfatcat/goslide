@@ -9,6 +9,7 @@ import (
 
 	"github.com/user/goslide/internal/ir"
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/renderer/html"
 	yaml "gopkg.in/yaml.v3"
 )
@@ -155,7 +156,10 @@ func buildSlideMeta(metaMap map[string]string, defaults ir.Frontmatter) ir.Slide
 }
 
 func renderMarkdown(src string) template.HTML {
-	md := goldmark.New(goldmark.WithRendererOptions(html.WithUnsafe()))
+	md := goldmark.New(
+		goldmark.WithExtensions(extension.Table),
+		goldmark.WithRendererOptions(html.WithUnsafe()),
+	)
 	var buf bytes.Buffer
 	if err := md.Convert([]byte(src), &buf); err != nil {
 		return template.HTML("<p>Markdown render error: " + err.Error() + "</p>")
