@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  var isStatic = document.body.dataset.mode === 'static';
 
   var saved = sessionStorage.getItem('goslide:indices');
   if (saved && window.Reveal) {
@@ -22,35 +23,83 @@
   });
 
   var toast = document.getElementById('goslide-toast');
-  var proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-  var ws = new WebSocket(proto + '//' + location.host + '/ws');
 
-  ws.addEventListener('message', function (ev) {
-    try {
-      var msg = JSON.parse(ev.data);
-      if (msg.type === 'reload') {
-        var indices = Reveal.getIndices();
-        sessionStorage.setItem('goslide:indices', JSON.stringify(indices));
-        location.reload();
-      } else if (msg.type === 'error') {
+  if (!isStatic) {
+    var proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    var ws = new WebSocket(proto + '//' + location.host + '/ws');
+
+    ws.addEventListener('message', function (ev) {
+      try {
+        var msg = JSON.parse(ev.data);
+        if (msg.type === 'reload') {
+          var indices = Reveal.getIndices();
+          sessionStorage.setItem('goslide:indices', JSON.stringify(indices));
+          location.reload();
+        } else if (msg.type === 'error') {
+          if (toast) {
+            toast.textContent = msg.message;
+            toast.hidden = false;
+          }
+        } else if (msg.type === 'ok') {
+          if (toast) toast.hidden = true;
+        }
+      } catch (e) { /* ignore non-JSON */ }
+    });
+
+    ws.addEventListener('close', function () {
+      setTimeout(function () {
         if (toast) {
-          toast.textContent = msg.message;
+          toast.textContent = 'goslide: server disconnected';
           toast.hidden = false;
         }
-      } else if (msg.type === 'ok') {
-        if (toast) toast.hidden = true;
-      }
-    } catch (e) { /* ignore non-JSON */ }
-  });
+      }, 200);
+    });
 
-  ws.addEventListener('close', function () {
-    setTimeout(function () {
-      if (toast) {
-        toast.textContent = 'goslide: server disconnected';
-        toast.hidden = false;
+    // Presenter slide tracking
+    var isPresenter = location.search.indexOf('role=presenter') !== -1;
+
+    if (isPresenter) {
+      function broadcastSlide() {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'presenter-slide',
+            h: Reveal.getIndices().h,
+            total: Reveal.getTotalSlides()
+          }));
+        }
       }
-    }, 200);
-  });
+      Reveal.on('ready', broadcastSlide);
+      Reveal.on('slidechanged', broadcastSlide);
+    }
+
+    // Viewer: show presenter indicator
+    var presenterIndicator = null;
+
+    ws.addEventListener('message', function (ev) {
+      try {
+        var msg = JSON.parse(ev.data);
+        if (msg.type === 'presenter-slide' && !isPresenter) {
+          if (!presenterIndicator) {
+            presenterIndicator = document.createElement('div');
+            presenterIndicator.id = 'goslide-presenter-indicator';
+            var text = document.createElement('span');
+            var btn = document.createElement('button');
+            btn.textContent = 'Jump';
+            btn.addEventListener('click', function () {
+              Reveal.slide(presenterIndicator._presenterH || 0);
+            });
+            presenterIndicator.appendChild(text);
+            presenterIndicator.appendChild(btn);
+            document.body.appendChild(presenterIndicator);
+          }
+          presenterIndicator._presenterH = msg.h;
+          presenterIndicator.querySelector('span').textContent =
+            'Presenter: ' + (msg.h + 1) + '/' + msg.total + ' ';
+          presenterIndicator.hidden = false;
+        }
+      } catch (e) { /* ignore */ }
+    });
+  }
 
   // Page number indicator
   var pageNumEl = document.getElementById('goslide-page-num');
@@ -84,49 +133,4 @@
 
   Reveal.on('ready', updatePageNum);
   Reveal.on('slidechanged', updatePageNum);
-
-  // Presenter slide tracking
-  var isPresenter = location.search.indexOf('role=presenter') !== -1;
-
-  if (isPresenter) {
-    function broadcastSlide() {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({
-          type: 'presenter-slide',
-          h: Reveal.getIndices().h,
-          total: Reveal.getTotalSlides()
-        }));
-      }
-    }
-    Reveal.on('ready', broadcastSlide);
-    Reveal.on('slidechanged', broadcastSlide);
-  }
-
-  // Viewer: show presenter indicator
-  var presenterIndicator = null;
-
-  ws.addEventListener('message', function (ev) {
-    try {
-      var msg = JSON.parse(ev.data);
-      if (msg.type === 'presenter-slide' && !isPresenter) {
-        if (!presenterIndicator) {
-          presenterIndicator = document.createElement('div');
-          presenterIndicator.id = 'goslide-presenter-indicator';
-          var text = document.createElement('span');
-          var btn = document.createElement('button');
-          btn.textContent = 'Jump';
-          btn.addEventListener('click', function () {
-            Reveal.slide(presenterIndicator._presenterH || 0);
-          });
-          presenterIndicator.appendChild(text);
-          presenterIndicator.appendChild(btn);
-          document.body.appendChild(presenterIndicator);
-        }
-        presenterIndicator._presenterH = msg.h;
-        presenterIndicator.querySelector('span').textContent =
-          'Presenter: ' + (msg.h + 1) + '/' + msg.total + ' ';
-        presenterIndicator.hidden = false;
-      }
-    } catch (e) { /* ignore */ }
-  });
 })();

@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  var isStatic = document.body.dataset.mode === 'static';
 
   var initialized = {};
 
@@ -395,7 +396,15 @@
       if (type.indexOf('chart') === 0) initChart(el);
       else if (type === 'table') initTable(el);
       else if (type === 'embed:iframe') initIframe(el);
-      else if (type === 'api') initApiComponent(el);
+      else if (type === 'api') {
+        if (isStatic) {
+          el.innerHTML = '<div style="color:var(--slide-muted);font-size:0.75em;text-align:center;padding:1rem;">API data requires goslide serve</div>';
+        } else {
+          initApiComponent(el);
+        }
+        initialized[id] = true;
+        return;
+      }
       initialized[id] = true;
     });
   }
@@ -435,16 +444,18 @@
     initAllMermaid();
     initAllComponents();
   });
-  Reveal.on('slidechanged', function() {
-    document.querySelectorAll('.goslide-component[data-type="api"]').forEach(function(el) {
-      var isVisible = el.closest('section') === Reveal.getCurrentSlide();
-      if (!isVisible && el._pollInterval) {
-        clearInterval(el._pollInterval);
-        el._pollInterval = null;
-      } else if (isVisible && el._refreshMs && !el._pollInterval) {
-        el._fetchFn();
-        el._pollInterval = setInterval(el._fetchFn, el._refreshMs);
-      }
+  if (!isStatic) {
+    Reveal.on('slidechanged', function() {
+      document.querySelectorAll('.goslide-component[data-type="api"]').forEach(function(el) {
+        var isVisible = el.closest('section') === Reveal.getCurrentSlide();
+        if (!isVisible && el._pollInterval) {
+          clearInterval(el._pollInterval);
+          el._pollInterval = null;
+        } else if (isVisible && el._refreshMs && !el._pollInterval) {
+          el._fetchFn();
+          el._pollInterval = setInterval(el._fetchFn, el._refreshMs);
+        }
+      });
     });
-  });
+  }
 })();
