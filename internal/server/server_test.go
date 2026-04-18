@@ -80,3 +80,43 @@ func TestDebounce(t *testing.T) {
 	time.Sleep(100 * time.Millisecond)
 	require.Equal(t, int32(1), atomic.LoadInt32(&count))
 }
+
+func TestHandleProxy_WithConfig(t *testing.T) {
+	upstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{"status":"ok","path":"` + r.URL.Path + `"}`))
+	}))
+	defer upstream.Close()
+
+	dir := t.TempDir()
+	mdPath := filepath.Join(dir, "test.md")
+	os.WriteFile(mdPath, []byte("# Slide\n"), 0644)
+
+	configContent := "api:\n  proxy:\n    /api/test:\n      target: " + upstream.URL + "\n"
+	os.WriteFile(filepath.Join(dir, "goslide.yaml"), []byte(configContent), 0644)
+
+	a, err := newApp(Options{File: mdPath, Port: 0, NoWatch: true, NoOpen: true})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest("GET", "/api/test/hello", nil)
+	rec := httptest.NewRecorder()
+	a.mux.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	require.Contains(t, rec.Body.String(), `"status":"ok"`)
+}
+
+func TestHandleProxy_NoConfig(t *testing.T) {
+	dir := t.TempDir()
+	mdPath := filepath.Join(dir, "test.md")
+	os.WriteFile(mdPath, []byte("# Slide\n"), 0644)
+
+	a, err := newApp(Options{File: mdPath, Port: 0, NoWatch: true, NoOpen: true})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest("GET", "/api/anything", nil)
+	rec := httptest.NewRecorder()
+	a.mux.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusNotFound, rec.Code)
+}

@@ -9,11 +9,13 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"runtime"
 	"sync"
 	"syscall"
 	"time"
 
+	"github.com/user/goslide/internal/config"
 	"github.com/user/goslide/internal/ir"
 	"github.com/user/goslide/internal/parser"
 	"github.com/user/goslide/internal/renderer"
@@ -44,6 +46,14 @@ func newApp(opts Options) (*app, error) {
 		broadcast: newBroadcaster(),
 	}
 	a.setupRoutes()
+
+	cfg, err := config.Load(filepath.Dir(opts.File))
+	if err != nil {
+		return nil, fmt.Errorf("load config: %w", err)
+	}
+	if len(cfg.API.Proxy) > 0 {
+		setupProxy(a.mux, cfg.API.Proxy)
+	}
 
 	if err := a.loadAndRender(); err != nil {
 		return nil, err
