@@ -368,6 +368,7 @@ height: 400
 ~~~api
 url: /api/mock/metrics
 refresh: 5s
+layout: dashboard
 render:
   - type: metric
     path: lines[0].yield
@@ -383,6 +384,7 @@ render:
     path: lines
     title: Yield by Line
     color: blue
+    span: 2
 ~~~
 
 ---

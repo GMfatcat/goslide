@@ -352,14 +352,20 @@
       .then(function(json) {
         el.innerHTML = '';
         var items = document.createElement('div');
-        items.className = 'goslide-api-items';
+        items.className = params.layout === 'dashboard' ? 'goslide-api-dashboard' : 'goslide-api-items';
         var renderList = params.render;
         if (!Array.isArray(renderList)) {
           renderList = [renderList || { type: 'json' }];
         }
         renderList.forEach(function(item) {
           var data = extractPath(json, item.path);
-          renderItem(items, item, data);
+          var wrapper = document.createElement('div');
+          wrapper.className = 'goslide-api-item';
+          if (item.span && item.span > 1) {
+            wrapper.style.gridColumn = 'span ' + item.span;
+          }
+          renderItem(wrapper, item, data);
+          items.appendChild(wrapper);
         });
         el.appendChild(items);
       })

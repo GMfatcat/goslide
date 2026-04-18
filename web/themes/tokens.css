@@ -316,6 +316,15 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
   gap: 1rem;
   justify-content: center;
 }
+.goslide-api-dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+.goslide-api-item {
+  min-width: 0;
+}
 
 /* Metric */
 .goslide-metric {
