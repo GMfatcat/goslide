@@ -47,10 +47,31 @@ func (b *broadcaster) handleWS(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	for {
-		_, _, err := conn.Read(r.Context())
+		_, msg, err := conn.Read(r.Context())
 		if err != nil {
 			return
 		}
+		var peek struct{ Type string `json:"type"` }
+		if json.Unmarshal(msg, &peek) == nil && peek.Type == "presenter-slide" {
+			b.broadcast(msg, conn)
+		}
+	}
+}
+
+func (b *broadcaster) broadcast(data []byte, sender *websocket.Conn) {
+	b.mu.Lock()
+	clients := make([]*websocket.Conn, 0, len(b.clients))
+	for c := range b.clients {
+		if c != sender {
+			clients = append(clients, c)
+		}
+	}
+	b.mu.Unlock()
+
+	for _, c := range clients {
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		c.Write(ctx, websocket.MessageText, data)
+		cancel()
 	}
 }
 

@@ -399,3 +399,34 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
 .reveal .progress span {
   transition: width 0.3s ease;
 }
+
+/* Presenter indicator */
+#goslide-presenter-indicator {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 100;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--slide-muted);
+  background: var(--slide-card-bg);
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--slide-border, rgba(0,0,0,0.1));
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+#goslide-presenter-indicator button {
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--slide-accent);
+  background: none;
+  color: var(--slide-accent);
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+}
+#goslide-presenter-indicator button:hover {
+  background: var(--slide-accent);
+  color: white;
+}
