@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"math/rand"
 	"net/http"
 	"time"
@@ -20,11 +21,14 @@ func main() {
 
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		jitter := func(base float64) float64 {
+			return math.Round((base+rand.Float64()*4-2)*10) / 10
+		}
 		json.NewEncoder(w).Encode(map[string]any{
 			"lines": []map[string]any{
-				{"name": "Line A", "yield": 96.2},
-				{"name": "Line B", "yield": 93.8},
-				{"name": "Line C", "yield": 97.1},
+				{"name": "Line A", "yield": jitter(96.2)},
+				{"name": "Line B", "yield": jitter(93.8)},
+				{"name": "Line C", "yield": jitter(97.1)},
 			},
 		})
 	})
