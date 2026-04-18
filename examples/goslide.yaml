@@ -1,0 +1,4 @@
+api:
+  proxy:
+    /api/mock:
+      target: http://localhost:9999
