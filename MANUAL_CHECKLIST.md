@@ -134,3 +134,12 @@ Run: `go run ./cmd/goslide serve examples/demo.md`
 - [ ] No WS connection attempt (no console errors)
 - [ ] API slides show "requires goslide serve" message
 - [ ] Keyboard navigation works
+
+## Speaker View (Phase 5)
+- [ ] Press S → speaker view opens in new window
+- [ ] Speaker notes display for slides with `<!-- notes -->`
+- [ ] Slides without notes show empty notes area
+- [ ] Timer running in speaker view
+- [ ] Next slide preview visible
+- [ ] Navigation in main window syncs to speaker view
+- [ ] Speaker view works in dark theme

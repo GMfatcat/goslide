@@ -13,6 +13,11 @@ Markdown-driven interactive presentations.
 
 Built with Go + Reveal.js.
 
+<!-- notes -->
+
+Welcome everyone! This presentation demonstrates GoSlide's key features.
+Press **S** to open the speaker view with these notes.
+
 ---
 
 <!-- layout: title -->
@@ -90,6 +95,11 @@ A simple Go program rendered in a code-preview layout.
 - Themes with accent colors
 - Progressive reveal with fragments
 - Live reload keeps your slide position
+
+<!-- notes -->
+
+Walk through each point slowly. The fragments reveal one at a time.
+Emphasize the live reload feature — it's a key differentiator.
 
 ---
 
