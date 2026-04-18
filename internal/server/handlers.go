@@ -8,18 +8,21 @@ import (
 	"github.com/user/goslide/web"
 )
 
+func setupStaticRoutes(mux *http.ServeMux) {
+	themeSub, _ := fs.Sub(web.ThemeFS, "themes")
+	mux.Handle("/themes/", http.StripPrefix("/themes/", http.FileServer(http.FS(themeSub))))
+
+	staticSub, _ := fs.Sub(web.StaticFS, "static")
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticSub))))
+
+	fontsSub, _ := fs.Sub(web.StaticFS, "static/fonts")
+	mux.Handle("/fonts/", http.StripPrefix("/fonts/", addCacheHeader(http.FileServer(http.FS(fontsSub)))))
+}
+
 func (a *app) setupRoutes() {
 	a.mux.HandleFunc("/", a.handleIndex)
 	a.mux.HandleFunc("/ws", a.broadcast.handleWS)
-
-	themeSub, _ := fs.Sub(web.ThemeFS, "themes")
-	a.mux.Handle("/themes/", http.StripPrefix("/themes/", http.FileServer(http.FS(themeSub))))
-
-	staticSub, _ := fs.Sub(web.StaticFS, "static")
-	a.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticSub))))
-
-	fontsSub, _ := fs.Sub(web.StaticFS, "static/fonts")
-	a.mux.Handle("/fonts/", http.StripPrefix("/fonts/", addCacheHeader(http.FileServer(http.FS(fontsSub)))))
+	setupStaticRoutes(a.mux)
 }
 
 func (a *app) handleIndex(w http.ResponseWriter, r *http.Request) {
