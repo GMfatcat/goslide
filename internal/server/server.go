@@ -11,6 +11,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -33,6 +34,7 @@ type Options struct {
 
 type app struct {
 	opts       Options
+	cfg        *config.Config
 	mux        *http.ServeMux
 	broadcast  *broadcaster
 	mu         sync.RWMutex
@@ -51,6 +53,7 @@ func newApp(opts Options) (*app, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load config: %w", err)
 	}
+	a.cfg = cfg
 	if len(cfg.API.Proxy) > 0 {
 		setupProxy(a.mux, cfg.API.Proxy)
 	}
@@ -90,6 +93,10 @@ func (a *app) loadAndRender() error {
 	html, err := renderer.Render(pres)
 	if err != nil {
 		return fmt.Errorf("render %s: %w", a.opts.File, err)
+	}
+
+	if a.cfg != nil && len(a.cfg.Theme.Overrides) > 0 {
+		html = injectThemeOverrides(html, a.cfg.Theme.Overrides)
 	}
 
 	a.mu.Lock()
@@ -169,4 +176,18 @@ func openBrowser(url string) {
 		cmd = exec.Command("xdg-open", url)
 	}
 	cmd.Start()
+}
+
+func injectThemeOverrides(html string, overrides map[string]string) string {
+	var sb strings.Builder
+	sb.WriteString("<style>:root {")
+	for k, v := range overrides {
+		sb.WriteString(" --")
+		sb.WriteString(k)
+		sb.WriteString(": ")
+		sb.WriteString(v)
+		sb.WriteString(";")
+	}
+	sb.WriteString(" }</style>")
+	return strings.Replace(html, "</head>", sb.String()+"</head>", 1)
 }

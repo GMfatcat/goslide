@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/user/goslide/internal/config"
 	"github.com/user/goslide/internal/ir"
 	"github.com/user/goslide/internal/parser"
 	"github.com/user/goslide/internal/renderer"
@@ -52,6 +53,11 @@ func Build(opts Options) error {
 		return fmt.Errorf("render %s: %w", opts.File, err)
 	}
 
+	cfg, _ := config.Load(filepath.Dir(opts.File))
+	if cfg != nil && len(cfg.Theme.Overrides) > 0 {
+		html = injectThemeOverrides(html, cfg.Theme.Overrides)
+	}
+
 	html = inlineAssets(html)
 	html = addStaticMode(html)
 
@@ -71,6 +77,20 @@ func Build(opts Options) error {
 
 func addStaticMode(html string) string {
 	return strings.Replace(html, "<body ", "<body data-mode=\"static\" ", 1)
+}
+
+func injectThemeOverrides(html string, overrides map[string]string) string {
+	var sb strings.Builder
+	sb.WriteString("<style>:root {")
+	for k, v := range overrides {
+		sb.WriteString(" --")
+		sb.WriteString(k)
+		sb.WriteString(": ")
+		sb.WriteString(v)
+		sb.WriteString(";")
+	}
+	sb.WriteString(" }</style>")
+	return strings.Replace(html, "</head>", sb.String()+"</head>", 1)
 }
 
 func inlineAssets(html string) string {

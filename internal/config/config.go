@@ -10,7 +10,12 @@ import (
 )
 
 type Config struct {
-	API APIConfig `yaml:"api"`
+	Theme ThemeConfig `yaml:"theme"`
+	API   APIConfig   `yaml:"api"`
+}
+
+type ThemeConfig struct {
+	Overrides map[string]string `yaml:"overrides"`
 }
 
 type APIConfig struct {

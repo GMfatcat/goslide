@@ -44,6 +44,7 @@ type pageEntry struct {
 
 type hostApp struct {
 	dir       string
+	cfg       *config.Config
 	mux       *http.ServeMux
 	broadcast *broadcaster
 	mu        sync.RWMutex
@@ -69,6 +70,7 @@ func newHostApp(opts HostOptions) (*hostApp, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load config: %w", err)
 	}
+	h.cfg = cfg
 	if len(cfg.API.Proxy) > 0 {
 		setupProxy(h.mux, cfg.API.Proxy)
 	}
@@ -112,6 +114,10 @@ func (h *hostApp) loadFile(path string) error {
 	html, err := renderer.Render(pres)
 	if err != nil {
 		return err
+	}
+
+	if h.cfg != nil && len(h.cfg.Theme.Overrides) > 0 {
+		html = injectThemeOverrides(html, h.cfg.Theme.Overrides)
 	}
 
 	name := strings.TrimSuffix(filepath.Base(path), ".md")

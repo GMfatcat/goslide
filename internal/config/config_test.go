@@ -95,3 +95,19 @@ api:
 	require.NoError(t, err)
 	require.Len(t, cfg.API.Proxy, 2)
 }
+
+func TestLoad_ThemeOverrides(t *testing.T) {
+	dir := t.TempDir()
+	content := `
+theme:
+  overrides:
+    slide-bg: "#1e1e2e"
+    slide-accent: "#f38ba8"
+`
+	os.WriteFile(filepath.Join(dir, "goslide.yaml"), []byte(content), 0644)
+
+	cfg, err := Load(dir)
+	require.NoError(t, err)
+	require.Equal(t, "#1e1e2e", cfg.Theme.Overrides["slide-bg"])
+	require.Equal(t, "#f38ba8", cfg.Theme.Overrides["slide-accent"])
+}
