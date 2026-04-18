@@ -48,7 +48,7 @@ goslide build talk.md
 | 功能 | 說明 |
 |------|------|
 | 📝 **Markdown 撰寫** | 用 `.md` 寫投影片 — frontmatter 設定、`---` 分頁 |
-| 🎨 **14 種主題** | default、dark、corporate、minimal、hacker、dracula、midnight、gruvbox、solarized、catppuccin-mocha、ink-wash、instagram、western、pixel |
+| 🎨 **22 種主題** | default、dark、corporate、minimal、hacker、dracula、midnight、gruvbox、solarized、catppuccin-mocha、ink-wash、instagram、western、pixel、nord-light、paper、catppuccin-latte、chalk、synthwave、forest、rose、amoled |
 | 📊 **圖表** | 長條圖、折線圖、圓餅圖、雷達圖、迷你折線圖（Chart.js） |
 | 🔀 **流程圖** | Mermaid.js 流程圖、序列圖、ER 圖 |
 | 📋 **表格** | 可排序表格，點擊欄位標題排序 |
@@ -65,7 +65,7 @@ goslide build talk.md
 
 ## 🎨 主題
 
-14 種內建主題 × 8 種強調色 = **112 種視覺組合**。
+22 種內建主題 × 8 種強調色 = **176 種視覺組合**。
 
 ```yaml
 ---

@@ -1,6 +1,6 @@
 # 🎨 GoSlide Theme Catalog
 
-GoSlide ships with **14 built-in themes** across 4 categories. Set via frontmatter `theme:` or CLI `--theme`.
+GoSlide ships with **22 built-in themes** across 5 categories. Set via frontmatter `theme:` or CLI `--theme`.
 
 ## Basic
 
@@ -26,6 +26,19 @@ GoSlide ships with **14 built-in themes** across 4 categories. Set via frontmatt
 | `gruvbox` | Warm dark `#282828` | Cream `#EBDBB2` | amber | [Gruvbox](https://github.com/morhetz/gruvbox) |
 | `solarized` | Cream `#FDF6E3` | Slate `#657B83` | teal | [Solarized](https://ethanschoonover.com/solarized/) |
 | `catppuccin-mocha` | Dark coffee `#1E1E2E` | Lavender `#CDD6F4` | pink | [Catppuccin](https://github.com/catppuccin/catppuccin) |
+
+## Community Favorites
+
+| Theme | Background | Text | Default Accent | Inspiration |
+|-------|-----------|------|----------------|-------------|
+| `nord-light` | Arctic white `#ECEFF4` | Polar `#2E3440` | teal | [Nord](https://www.nordtheme.com/) |
+| `catppuccin-latte` | Pastel `#EFF1F5` | Ink `#4C4F69` | pink | [Catppuccin Latte](https://github.com/catppuccin/catppuccin) |
+| `paper` | Warm paper `#F7F3EE` | Espresso `#3C3530` | amber | iA Writer / Bear.app |
+| `chalk` | Blue-grey `#E8EAF0` | Navy `#2D3142` | purple | Tailwind Slate |
+| `synthwave` | Deep purple `#241734` | Lavender `#F0E6FF` | pink | [Synthwave '84](https://github.com/robb0wen/synthwave-vscode) |
+| `forest` | Forest `#1C2B1A` | Leaf `#D4E8C2` | green | Nature / biophilic design |
+| `rose` | Blush `#FDF0F0` | Warm dark `#3D2B2B` | pink | Catppuccin Rosewater |
+| `amoled` | True black `#000000` | Near-white `#EEEEEE` | blue | OLED dark themes |
 
 ## Creative
 

@@ -48,7 +48,7 @@ goslide build talk.md
 | Feature | Description |
 |---------|-------------|
 | 📝 **Markdown authoring** | Write slides in plain `.md` — frontmatter for config, `---` for slide breaks |
-| 🎨 **14 themes** | default, dark, corporate, minimal, hacker, dracula, midnight, gruvbox, solarized, catppuccin-mocha, ink-wash, instagram, western, pixel |
+| 🎨 **22 themes** | default, dark, corporate, minimal, hacker, dracula, midnight, gruvbox, solarized, catppuccin-mocha, ink-wash, instagram, western, pixel, nord-light, paper, catppuccin-latte, chalk, synthwave, forest, rose, amoled |
 | 📊 **Charts** | Bar, line, pie, radar, sparkline via Chart.js |
 | 🔀 **Diagrams** | Mermaid.js flowcharts, sequence diagrams, ERD |
 | 📋 **Tables** | Sortable tables with click-to-sort headers |
@@ -65,7 +65,7 @@ goslide build talk.md
 
 ## 🎨 Themes
 
-14 built-in themes × 8 accent colors = **112 visual combinations**.
+22 built-in themes × 8 accent colors = **176 visual combinations**.
 
 ```yaml
 ---
