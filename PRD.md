@@ -954,37 +954,37 @@ Deliver a working `goslide serve` with basic Markdown → Reveal.js rendering.
 
 Add the interactive component layer.
 
-- [ ] Component code block parser (fenced blocks with custom language tags)
-- [ ] L1 components: `chart:bar`, `chart:line`, `chart:pie`, `mermaid`, `table`
-- [ ] L2 components: `tabs` + `panel`, `slider`, `toggle`
-- [ ] Reactive runtime (`$variable` binding)
-- [ ] Remaining layouts: `three-column`, `image-left`, `image-right`, `quote`, `split-heading`, `top-bottom`, `grid-cards`, `blank`
-- [ ] Expandable detail-on-demand pattern
-- [ ] Remaining themes: `corporate`, `minimal`, `hacker`
+- [x] Component code block parser (fenced blocks with custom language tags)
+- [x] L1 components: `chart:bar`, `chart:line`, `chart:pie`, `mermaid`, `table`
+- [x] L2 components: `tabs` + `panel`, `slider`, `toggle`
+- [x] Reactive runtime (`$variable` binding)
+- [x] Remaining layouts: `three-column`, `image-left`, `image-right`, `quote`, `split-heading`, `top-bottom`, `grid-cards`, `blank`
+- [x] Expandable detail-on-demand pattern
+- [x] Remaining themes: `corporate`, `minimal`, `hacker`
 
 ### Phase 3 — API integration
 
 Connect slides to live backend services.
 
-- [ ] API proxy in Go server
-- [ ] `api` component with render types: `metric`, `chart:*`, `table`, `json`, `log`, `image`, `markdown`
-- [ ] Dashboard layout for multi-render-item arrangement
-- [ ] `chat` render type for LLM integration
-- [ ] `embed:html` and `embed:iframe` components
-- [ ] `goslide.yaml` config file parsing with proxy settings
-- [ ] Polling / refresh support
+- [x] API proxy in Go server
+- [x] `api` component with render types: `metric`, `chart:*`, `table`, `json`, `log`, `image`, `markdown`
+- [x] Dashboard layout for multi-render-item arrangement
+- [ ] `chat` render type for LLM integration (deferred to Phase 5)
+- [x] `embed:html` and `embed:iframe` components
+- [x] `goslide.yaml` config file parsing with proxy settings
+- [x] Polling / refresh support
 
 ### Phase 4 — Host mode and collaboration
 
 Multi-presentation hosting and presenter sync.
 
-- [ ] CLI: `goslide host` with directory watching
-- [ ] Index page generation (list all presentations)
-- [ ] Presenter sync via WebSocket (session management, follow/unfollow)
-- [ ] CLI: `goslide init` with templates
-- [ ] CLI: `goslide list`
-- [ ] Progress bar with click-to-jump
-- [ ] Speaker view (timer, notes, next slide preview)
+- [x] CLI: `goslide host` with directory watching
+- [x] Index page generation (list all presentations)
+- [x] Presenter sync via WebSocket (lightweight: broadcast + jump button)
+- [x] CLI: `goslide init` with templates
+- [x] CLI: `goslide list`
+- [x] Progress bar with click-to-jump
+- [ ] Speaker view (timer, notes, next slide preview) (moved to Phase 5)
 
 ### Phase 5 — Polish and export
 
