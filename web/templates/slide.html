@@ -18,7 +18,8 @@
         {{- if .Meta.Transition}} data-transition="{{.Meta.Transition}}"{{end}}
         {{- if .Meta.Fragments}} data-fragments="true"{{end}}
         {{- if .Meta.FragmentStyle}} data-fragment-style="{{.Meta.FragmentStyle}}"{{end}}
-        {{- if .Meta.SlideNumberHidden}} data-slide-number-hidden="true"{{end}}>
+        {{- if .Meta.SlideNumberHidden}} data-slide-number-hidden="true"{{end}}
+        {{- if .Meta.Columns}} data-columns="{{.Meta.Columns}}"{{end}}>
         {{- if .Regions}}
         <div class="slide-body">
           {{range .Regions}}
