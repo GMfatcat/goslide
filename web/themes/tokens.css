@@ -94,10 +94,6 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
   height: auto;
 }
 
-.reveal .slides section {
-  overflow-y: auto;
-}
-
 .reveal {
   font-size: 36px;
 }

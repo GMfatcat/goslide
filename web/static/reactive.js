@@ -59,11 +59,13 @@
       el.style.display = 'none';
       GoSlide.on(tabsId, function (value) {
         el.style.display = (value === panelIdx) ? '' : 'none';
+        if (typeof Reveal !== 'undefined') Reveal.layout();
       });
     } else {
       el.style.display = 'none';
       GoSlide.on(parts, function (value) {
         el.style.display = value ? '' : 'none';
+        if (typeof Reveal !== 'undefined') Reveal.layout();
       });
     }
   }
