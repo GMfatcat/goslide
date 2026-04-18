@@ -1,6 +1,12 @@
 # GoSlide Phase 2d — Expandable Cards Design Spec
 
-> **Status: DRAFT**
+> **Status: COMPLETED (2026-04-18)**
+>
+> Key learnings:
+> - Reveal.js center:true sets flex-direction:column on all sections — grid-cards needs !important override
+> - goldmark requires extension.Table for GFM table rendering
+> - .goslide-component base max-width/margin conflicts with grid layout — card elements need explicit override
+> - Card overlay polish (table spacing, emoji) deferred to later phase
 
 ## Decision Log
 
