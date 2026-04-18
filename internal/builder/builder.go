@@ -115,6 +115,7 @@ func inlineAssets(html string) string {
 		{`src="/static/chartjs/chart.min.js"`, web.StaticFS, "static/chartjs/chart.min.js"},
 		{`src="/static/mermaid/mermaid.min.js"`, web.StaticFS, "static/mermaid/mermaid.min.js"},
 		{`src="/static/reveal/reveal.js"`, web.StaticFS, "static/reveal/reveal.js"},
+		{`src="/static/reveal/plugin-notes.js"`, web.StaticFS, "static/reveal/plugin-notes.js"},
 		{`src="/static/runtime.js"`, web.StaticFS, "static/runtime.js"},
 		{`src="/static/reactive.js"`, web.StaticFS, "static/reactive.js"},
 		{`src="/static/components.js"`, web.StaticFS, "static/components.js"},

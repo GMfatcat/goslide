@@ -19,6 +19,8 @@ download "https://cdn.jsdelivr.net/npm/reveal.js@${REVEALJS_VER}/dist/reveal.js"
          "$VENDOR_DIR/reveal/reveal.js"
 download "https://cdn.jsdelivr.net/npm/reveal.js@${REVEALJS_VER}/dist/reveal.css" \
          "$VENDOR_DIR/reveal/reveal.css"
+download "https://cdn.jsdelivr.net/npm/reveal.js@${REVEALJS_VER}/plugin/notes/notes.js" \
+         "$VENDOR_DIR/reveal/plugin-notes.js"
 
 download "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-tc@latest/chinese-traditional-400-normal.woff2" \
          "$VENDOR_DIR/fonts/NotoSansTC-Regular.woff2"
