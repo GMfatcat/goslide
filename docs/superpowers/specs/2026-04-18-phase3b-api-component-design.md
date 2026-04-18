@@ -1,6 +1,10 @@
 # GoSlide Phase 3b — API Component + Render Types Design Spec
 
-> **Status: DRAFT**
+> **Status: COMPLETED (2026-04-18)**
+>
+> Key learnings:
+> - Phase 2b subagent's TrimLeft on YAML content broke nested indentation — removed
+> - Full-width render types (log/json/table) need explicit `width: 100%` to override flex centering
 
 ## Decision Log
 
