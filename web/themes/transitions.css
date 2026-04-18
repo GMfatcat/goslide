@@ -41,6 +41,7 @@
 .reveal .slides > section[data-transition="cube"] {
   backface-visibility: hidden;
   transition-duration: 0.6s;
+  overflow: hidden;
 }
 
 .reveal .slides > section[data-transition="cube"].past {

@@ -124,10 +124,10 @@ goslide list [directory]    # List presentations
 
 ## ⚙️ Configuration
 
-Optional `goslide.yaml` in the same directory:
+Optional `goslide.yaml` in the same directory as your `.md` file:
 
 ```yaml
-# API proxy
+# API proxy — routes browser requests through Go server to upstream APIs
 api:
   proxy:
     /api/backend:
@@ -141,6 +141,25 @@ theme:
     slide-bg: "#1e1e2e"
     slide-accent: "#f38ba8"
 ```
+
+> **Note:** When `goslide.yaml` has proxy config, GoSlide will attempt to connect to the upstream targets on every proxied request. If an upstream is not running, you'll see `proxy error` in the console and 502 responses in the browser — this only affects API component slides, not the rest of your presentation.
+
+### 🧪 Testing API Components with Mock Server
+
+GoSlide includes a mock API server for testing API-driven slides:
+
+```bash
+# Terminal 1: Start mock API server
+go run examples/mock-api/main.go
+# → Mock API running on http://localhost:9999
+
+# Terminal 2: Copy the example config and serve
+cp examples/goslide.yaml.example examples/goslide.yaml
+go run ./cmd/goslide serve examples/demo.md --no-open
+# → Open http://localhost:3000, navigate to API Dashboard slides
+```
+
+The example config (`goslide.yaml.example`) proxies `/api/mock` to `localhost:9999`. Rename it to `goslide.yaml` to activate. When done testing, you can remove or rename the config to avoid proxy errors when the mock server isn't running.
 
 ## 🏗️ Build from Source
 

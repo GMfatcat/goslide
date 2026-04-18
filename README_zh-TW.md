@@ -127,7 +127,7 @@ goslide list [directory]    # 列出目錄中的簡報
 在 `.md` 同目錄下建立 `goslide.yaml`（選用）：
 
 ```yaml
-# API 代理
+# API 代理 — 將瀏覽器請求透過 Go server 轉發到上游 API
 api:
   proxy:
     /api/backend:
@@ -141,6 +141,25 @@ theme:
     slide-bg: "#1e1e2e"
     slide-accent: "#f38ba8"
 ```
+
+> **注意：** 當 `goslide.yaml` 設定了 proxy，GoSlide 會在每次代理請求時嘗試連線上游。如果上游服務未啟動，console 會出現 `proxy error` 且瀏覽器顯示 502 — 這只影響 API 元件的投影片，不影響其他內容。
+
+### 🧪 使用 Mock Server 測試 API 元件
+
+GoSlide 附帶一個 mock API server 用於測試 API 驅動的投影片：
+
+```bash
+# Terminal 1：啟動 mock API server
+go run examples/mock-api/main.go
+# → Mock API running on http://localhost:9999
+
+# Terminal 2：複製範例設定檔並啟動
+cp examples/goslide.yaml.example examples/goslide.yaml
+go run ./cmd/goslide serve examples/demo.md --no-open
+# → 開啟 http://localhost:3000，翻到 API Dashboard 投影片
+```
+
+範例設定檔（`goslide.yaml.example`）將 `/api/mock` 代理到 `localhost:9999`。重新命名為 `goslide.yaml` 即可啟用。測試完成後可移除或改名，避免 mock server 未啟動時出現 proxy error。
 
 ## 🏗️ 從原始碼建置
 
