@@ -17,6 +17,8 @@ import (
 type Options struct {
 	File   string
 	Output string
+	Theme  string
+	Accent string
 }
 
 func Build(opts Options) error {
@@ -28,6 +30,13 @@ func Build(opts Options) error {
 	pres, err := parser.Parse(data, opts.File)
 	if err != nil {
 		return fmt.Errorf("parse %s: %w", opts.File, err)
+	}
+
+	if opts.Theme != "" {
+		pres.Meta.Theme = opts.Theme
+	}
+	if opts.Accent != "" {
+		pres.Meta.Accent = opts.Accent
 	}
 
 	valErrs := pres.Validate()
