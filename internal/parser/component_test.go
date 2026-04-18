@@ -87,11 +87,11 @@ func TestExtractComponents_Table(t *testing.T) {
 }
 
 func TestExtractComponents_YAMLParseError(t *testing.T) {
-	body := "~~~chart:bar\n  bad:\n    indent\n~~~\n"
+	body := "~~~chart:bar\nkey: [unclosed bracket\n~~~\n"
 	cleaned, comps := extractComponents(body)
 	require.Len(t, comps, 1)
 	require.Equal(t, "chart:bar", comps[0].Type)
 	require.Nil(t, comps[0].Params)
-	require.Contains(t, comps[0].Raw, "bad:")
+	require.Contains(t, comps[0].Raw, "unclosed")
 	require.Contains(t, cleaned, "<!--goslide:component:0-->")
 }

@@ -49,17 +49,8 @@ func extractComponents(body string) (string, []ir.Component) {
 				}
 				raw := strings.Join(contentLines, "\n")
 
-				// Trim leading indentation from each line before YAML parsing,
-				// so that indented fence content (e.g. "  bad:\n    indent") is
-				// treated as a parse error rather than valid YAML.
-				trimmedLines := make([]string, len(contentLines))
-				for j, cl := range contentLines {
-					trimmedLines[j] = strings.TrimLeft(cl, " \t")
-				}
-				trimmedRaw := strings.Join(trimmedLines, "\n")
-
 				var params map[string]any
-				if err := yaml.Unmarshal([]byte(trimmedRaw), &params); err != nil {
+				if err := yaml.Unmarshal([]byte(raw), &params); err != nil {
 					params = nil
 				}
 
