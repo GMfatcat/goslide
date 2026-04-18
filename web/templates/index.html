@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoSlide</title>
+  <link rel="stylesheet" href="/themes/tokens.css">
+  <link rel="stylesheet" href="/themes/default.css">
+  <style>
+    body {
+      font-family: var(--font-sans);
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      color: var(--slide-text);
+      background: var(--slide-bg);
+    }
+    h1 { color: var(--slide-heading); margin-bottom: 1.5rem; }
+    .talk-list { list-style: none; padding: 0; }
+    .talk-item {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background: var(--slide-card-bg);
+      border-radius: 0.5rem;
+      border: 1px solid var(--slide-border, rgba(0,0,0,0.1));
+    }
+    .talk-item a {
+      color: var(--slide-accent);
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: 700;
+    }
+    .talk-item a:hover { filter: brightness(1.2); }
+    .talk-meta {
+      color: var(--slide-muted);
+      font-size: 0.85em;
+      margin-top: 0.3rem;
+    }
+    .talk-tags { margin-top: 0.3rem; }
+    .talk-tags span {
+      background: var(--slide-accent);
+      color: white;
+      padding: 0.1em 0.5em;
+      border-radius: 0.3em;
+      font-size: 0.75em;
+      margin-right: 0.3em;
+    }
+    .empty { color: var(--slide-muted); font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Presentations</h1>
+  {{if .Pages}}
+  <ul class="talk-list">
+    {{range .Pages}}
+    <li class="talk-item">
+      <a href="/talks/{{.Name}}">{{if .Title}}{{.Title}}{{else}}{{.Name}}{{end}}</a>
+      <div class="talk-meta">
+        {{if .Author}}{{.Author}}{{end}}
+        {{if .Date}} · {{.Date}}{{end}}
+      </div>
+      {{if .Tags}}
+      <div class="talk-tags">
+        {{range .Tags}}<span>{{.}}</span>{{end}}
+      </div>
+      {{end}}
+    </li>
+    {{end}}
+  </ul>
+  {{else}}
+  <p class="empty">No presentations found. Add .md files to this directory.</p>
+  {{end}}
+</body>
+</html>
