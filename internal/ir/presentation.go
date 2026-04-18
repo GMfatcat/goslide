@@ -33,9 +33,9 @@ type Component struct {
 }
 
 type SlideMeta struct {
-	Title         string
-	Layout        string
-	Transition    string
+	Title             string
+	Layout            string
+	Transition        string
 	Fragments         bool
 	FragmentStyle     string
 	SlideNumberHidden bool
@@ -43,17 +43,17 @@ type SlideMeta struct {
 }
 
 type Frontmatter struct {
-	Title         string   `yaml:"title"`
-	Author        string   `yaml:"author"`
-	Date          string   `yaml:"date"`
-	Tags          []string `yaml:"tags"`
-	Theme         string   `yaml:"theme"`
-	Accent        string   `yaml:"accent"`
-	Transition    string   `yaml:"transition"`
-	Fragments     bool     `yaml:"fragments"`
-	FragmentStyle string   `yaml:"fragment-style"`
-	SlideNumber       string `yaml:"slide-number"`
-	SlideNumberFormat string `yaml:"slide-number-format"`
+	Title             string   `yaml:"title"`
+	Author            string   `yaml:"author"`
+	Date              string   `yaml:"date"`
+	Tags              []string `yaml:"tags"`
+	Theme             string   `yaml:"theme"`
+	Accent            string   `yaml:"accent"`
+	Transition        string   `yaml:"transition"`
+	Fragments         bool     `yaml:"fragments"`
+	FragmentStyle     string   `yaml:"fragment-style"`
+	SlideNumber       string   `yaml:"slide-number"`
+	SlideNumberFormat string   `yaml:"slide-number-format"`
 }
 
 type Error struct {

@@ -3,8 +3,8 @@ package renderer
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/GMfatcat/goslide/internal/ir"
+	"github.com/stretchr/testify/require"
 )
 
 func TestRenderComponents_BasicChart(t *testing.T) {

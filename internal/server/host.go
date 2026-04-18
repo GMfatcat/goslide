@@ -18,12 +18,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/fsnotify/fsnotify"
 	"github.com/GMfatcat/goslide/internal/config"
 	"github.com/GMfatcat/goslide/internal/ir"
 	"github.com/GMfatcat/goslide/internal/parser"
 	"github.com/GMfatcat/goslide/internal/renderer"
 	"github.com/GMfatcat/goslide/web"
+	"github.com/fsnotify/fsnotify"
 )
 
 type HostOptions struct {

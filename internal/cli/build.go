@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/GMfatcat/goslide/internal/builder"
+	"github.com/spf13/cobra"
 )
 
 var (

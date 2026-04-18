@@ -7,8 +7,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/spf13/cobra"
 	"github.com/GMfatcat/goslide/internal/parser"
+	"github.com/spf13/cobra"
 )
 
 var listCmd = &cobra.Command{

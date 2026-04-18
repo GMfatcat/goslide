@@ -21,3 +21,7 @@ coverage.txt
 # OS
 .DS_Store
 Thumbs.db
+*.stackdump
+
+# Claude
+.claude/

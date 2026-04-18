@@ -9,8 +9,8 @@ tags: [features, technical]
 
 ~~~chart:bar
 title: Demo Chart
-labels: ["A", "B", "C"]
-data: [10, 20, 30]
+labels: ["A", "B", "C", "D"]
+data: [10, 20, 30, 40]
 ~~~
 
 ---

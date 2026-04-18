@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/spf13/cobra"
 	"github.com/GMfatcat/goslide/templates"
+	"github.com/spf13/cobra"
 )
 
 var initTemplate string

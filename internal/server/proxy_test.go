@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/GMfatcat/goslide/internal/config"
+	"github.com/stretchr/testify/require"
 )
 
 func TestProxy_BasicForward(t *testing.T) {

@@ -51,7 +51,9 @@ func (b *broadcaster) handleWS(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return
 		}
-		var peek struct{ Type string `json:"type"` }
+		var peek struct {
+			Type string `json:"type"`
+		}
 		if json.Unmarshal(msg, &peek) == nil && peek.Type == "presenter-slide" {
 			b.broadcast(msg, conn)
 		}
