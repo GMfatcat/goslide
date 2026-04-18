@@ -140,11 +140,13 @@ section[data-layout="blank"] {
 
 /* Layout: grid-cards */
 section[data-layout="grid-cards"] {
-  display: flex;
-  flex-wrap: wrap;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
   gap: 1.5rem;
   justify-content: center;
   align-content: start;
+  align-items: stretch;
   padding-top: 1rem;
 }
 section[data-layout="grid-cards"] > h1,
