@@ -303,3 +303,71 @@ body[data-accent="pink"]   { --slide-accent: var(--accent-pink); }
   max-width: 100%;
   background: var(--slide-card-bg);
 }
+
+/* API component */
+.goslide-api-error {
+  color: var(--accent-red);
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+}
+.goslide-api-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Metric */
+.goslide-metric {
+  text-align: center;
+  padding: 0.8rem 1.2rem;
+  background: var(--slide-card-bg);
+  border-radius: 0.75rem;
+  border: 1px solid var(--slide-border, rgba(0,0,0,0.1));
+  min-width: 8rem;
+}
+.goslide-metric-value {
+  font-size: 2em;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+.goslide-metric-label {
+  font-size: 0.7em;
+  color: var(--slide-muted);
+  margin-top: 0.3em;
+}
+
+/* JSON viewer */
+.goslide-json {
+  background: var(--slide-code-bg);
+  color: var(--slide-code-text);
+  font-family: var(--font-mono);
+  font-size: 0.65em;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow: auto;
+  max-height: 300px;
+}
+
+/* Log viewer */
+.goslide-log {
+  background: #0a0a0a;
+  color: #00ff00;
+  font-family: var(--font-mono);
+  font-size: 0.65em;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-y: auto;
+  max-height: 300px;
+  white-space: pre-wrap;
+}
+
+/* Markdown raw */
+.goslide-markdown-raw {
+  background: var(--slide-card-bg);
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  white-space: pre-wrap;
+}
