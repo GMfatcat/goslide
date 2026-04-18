@@ -50,6 +50,11 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 	bodyLines := lines[bodyStart:]
 	bodyText := strings.Join(bodyLines, "\n")
 	cleanedBody, components := extractComponents(bodyText)
+	for i := range components {
+		if strings.HasPrefix(components[i].Type, "panel:") {
+			components[i].ContentHTML = string(renderMarkdown(components[i].Raw))
+		}
+	}
 	bodyLines = strings.Split(cleanedBody, "\n")
 
 	validRegions := layoutRegions[meta.Layout]

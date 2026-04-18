@@ -45,11 +45,12 @@ func buildComponentDiv(slideIndex int, comp ir.Component) string {
 	}
 
 	return fmt.Sprintf(
-		`<div class="goslide-component" data-type="%s" data-params="%s" data-raw="%s" data-comp-id="%s"></div>`,
+		`<div class="goslide-component" data-type="%s" data-params="%s" data-raw="%s" data-comp-id="%s">%s</div>`,
 		escapeAttr(comp.Type),
 		paramsAttr,
 		rawAttr,
 		compID,
+		comp.ContentHTML,
 	)
 }
 

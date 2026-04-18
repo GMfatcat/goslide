@@ -24,10 +24,11 @@ type Region struct {
 }
 
 type Component struct {
-	Index  int
-	Type   string
-	Raw    string
-	Params map[string]any
+	Index       int
+	Type        string
+	Raw         string
+	Params      map[string]any
+	ContentHTML string
 }
 
 type SlideMeta struct {
