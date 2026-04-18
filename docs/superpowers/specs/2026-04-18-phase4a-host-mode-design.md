@@ -1,6 +1,8 @@
 # GoSlide Phase 4a — Host Mode Design Spec
 
-> **Status: DRAFT**
+> **Status: COMPLETED (2026-04-18)**
+>
+> Post-release addition: back-to-index link (← Index) injected on talk pages in host mode
 
 ## Decision Log
 
