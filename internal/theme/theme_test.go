@@ -101,3 +101,41 @@ func TestResolveAccent_InkWashDefault(t *testing.T) {
 func TestResolveAccent_PixelDefault(t *testing.T) {
 	require.Equal(t, "green", ResolveAccent("", "pixel"))
 }
+
+func TestResolveTheme_NewThemes(t *testing.T) {
+	for _, name := range []string{"nord-light", "paper", "catppuccin-latte", "chalk", "synthwave", "forest", "rose", "amoled"} {
+		require.Equal(t, name, ResolveTheme(name))
+	}
+}
+
+func TestResolveAccent_NordLightDefault(t *testing.T) {
+	require.Equal(t, "teal", ResolveAccent("", "nord-light"))
+}
+
+func TestResolveAccent_PaperDefault(t *testing.T) {
+	require.Equal(t, "amber", ResolveAccent("", "paper"))
+}
+
+func TestResolveAccent_CatppuccinLatteDefault(t *testing.T) {
+	require.Equal(t, "pink", ResolveAccent("", "catppuccin-latte"))
+}
+
+func TestResolveAccent_ChalkDefault(t *testing.T) {
+	require.Equal(t, "purple", ResolveAccent("", "chalk"))
+}
+
+func TestResolveAccent_SynthwaveDefault(t *testing.T) {
+	require.Equal(t, "pink", ResolveAccent("", "synthwave"))
+}
+
+func TestResolveAccent_ForestDefault(t *testing.T) {
+	require.Equal(t, "green", ResolveAccent("", "forest"))
+}
+
+func TestResolveAccent_RoseDefault(t *testing.T) {
+	require.Equal(t, "pink", ResolveAccent("", "rose"))
+}
+
+func TestResolveAccent_AmoledDefault(t *testing.T) {
+	require.Equal(t, "blue", ResolveAccent("", "amoled"))
+}
