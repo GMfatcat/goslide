@@ -20,8 +20,6 @@ func init() {
 	stubs := []struct {
 		use, short string
 	}{
-		{"init", "Scaffold a new presentation"},
-		{"list [directory]", "List presentations in a directory"},
 		{"build <file.md>", "Export presentation as static HTML"},
 	}
 	for _, s := range stubs {
