@@ -95,5 +95,41 @@ func applyFrontmatterTerminator(lines *[]string, report *FixReport) {
 		Description: "frontmatter missing terminator → inserted '---'",
 	})
 }
-func applyFrontmatterUnquotedColon(lines *[]string, report *FixReport) {}
+func applyFrontmatterUnquotedColon(lines *[]string, report *FixReport) {
+	// Must start with frontmatter
+	if len(*lines) == 0 || strings.TrimSpace((*lines)[0]) != "---" {
+		return
+	}
+	for i := 1; i < len(*lines); i++ {
+		t := (*lines)[i]
+		if strings.TrimSpace(t) == "---" {
+			return // end of frontmatter
+		}
+		// "key: value" — split on first colon
+		colon := strings.Index(t, ":")
+		if colon < 0 {
+			continue
+		}
+		key := t[:colon]
+		value := strings.TrimSpace(t[colon+1:])
+		if value == "" {
+			continue
+		}
+		// Already quoted?
+		if (strings.HasPrefix(value, `"`) && strings.HasSuffix(value, `"`)) ||
+			(strings.HasPrefix(value, `'`) && strings.HasSuffix(value, `'`)) {
+			continue
+		}
+		// Value itself contains a colon → needs quoting
+		if !strings.Contains(value, ":") {
+			continue
+		}
+		(*lines)[i] = key + `: "` + strings.ReplaceAll(value, `"`, `\"`) + `"`
+		report.Fixes = append(report.Fixes, Fix{
+			Rule:        "fm-unquoted-colon",
+			Line:        i + 1,
+			Description: "frontmatter value contained ':' → added quotes",
+		})
+	}
+}
 func applyTrailingNewline(lines *[]string, report *FixReport)          {}

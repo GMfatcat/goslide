@@ -59,3 +59,26 @@ func TestApplyFrontmatterTerminator_NoopWithoutFrontmatter(t *testing.T) {
 	_, report := Try(md, nil)
 	require.Empty(t, report.Fixes)
 }
+
+func TestApplyFrontmatterUnquotedColon_Quotes(t *testing.T) {
+	md := "---\ntitle: Go: A Short Intro\ntheme: dark\n---\n\nBody\n"
+	fixed, report := Try(md, nil)
+
+	require.Contains(t, fixed, `title: "Go: A Short Intro"`)
+	found := false
+	for _, f := range report.Fixes {
+		if f.Rule == "fm-unquoted-colon" {
+			found = true
+			require.Equal(t, 2, f.Line)
+		}
+	}
+	require.True(t, found)
+}
+
+func TestApplyFrontmatterUnquotedColon_LeavesQuotedAlone(t *testing.T) {
+	md := "---\ntitle: \"Go: already quoted\"\n---\n"
+	_, report := Try(md, nil)
+	for _, f := range report.Fixes {
+		require.NotEqual(t, "fm-unquoted-colon", f.Rule)
+	}
+}
