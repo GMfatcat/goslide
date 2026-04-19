@@ -306,8 +306,8 @@ func TestValidate_ImageGridIsKnown(t *testing.T) {
 
 func TestValidate_ImageGridColumnsOutOfRange(t *testing.T) {
 	p := Presentation{Slides: []Slide{{
-		Index: 1,
-		Meta:  SlideMeta{Layout: "image-grid", Columns: 5},
+		Index:   1,
+		Meta:    SlideMeta{Layout: "image-grid", Columns: 5},
 		Regions: []Region{{Name: "cell", HTML: "x"}},
 	}}}
 	errs := p.Validate()
@@ -343,7 +343,7 @@ func TestValidate_ImageGridHappy(t *testing.T) {
 
 func TestValidate_PlaceholderMissingHint(t *testing.T) {
 	p := Presentation{Slides: []Slide{{
-		Index: 1,
+		Index:      1,
 		Components: []Component{{Index: 0, Type: "placeholder", Params: map[string]any{"icon": "🗺️"}}},
 	}}}
 	errs := p.Validate()
@@ -354,7 +354,7 @@ func TestValidate_PlaceholderMissingHint(t *testing.T) {
 
 func TestValidate_PlaceholderUnknownAspect(t *testing.T) {
 	p := Presentation{Slides: []Slide{{
-		Index: 1,
+		Index:      1,
 		Components: []Component{{Index: 0, Type: "placeholder", Params: map[string]any{"hint": "x", "aspect": "2:1"}}},
 	}}}
 	errs := p.Validate()
@@ -365,7 +365,7 @@ func TestValidate_PlaceholderUnknownAspect(t *testing.T) {
 
 func TestValidate_PlaceholderHappy(t *testing.T) {
 	p := Presentation{Slides: []Slide{{
-		Index: 1,
+		Index:      1,
 		Components: []Component{{Index: 0, Type: "placeholder", Params: map[string]any{"hint": "K8s", "aspect": "16:9", "icon": "🗺️"}}},
 	}}}
 	errs := p.Validate()
