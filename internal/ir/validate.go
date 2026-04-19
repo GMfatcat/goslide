@@ -79,6 +79,7 @@ func (p *Presentation) Validate() []Error {
 	for _, slide := range p.Slides {
 		errs = append(errs, validateSlide(slide)...)
 		errs = append(errs, validateImageGrid(slide)...)
+		errs = append(errs, validatePlaceholder(slide)...)
 	}
 
 	p.Warnings = errs
@@ -168,6 +169,33 @@ func validateImageGrid(s Slide) []Error {
 			Slide: s.Index, Severity: "warning", Code: "image-grid-empty",
 			Message: fmt.Sprintf("slide %d: image-grid layout has no cells", s.Index),
 		})
+	}
+	return errs
+}
+
+var validAspects = map[string]bool{
+	"16:9": true, "4:3": true, "1:1": true, "3:4": true, "9:16": true,
+}
+
+func validatePlaceholder(s Slide) []Error {
+	var errs []Error
+	for _, c := range s.Components {
+		if c.Type != "placeholder" {
+			continue
+		}
+		hint, _ := c.Params["hint"].(string)
+		if strings.TrimSpace(hint) == "" {
+			errs = append(errs, Error{
+				Slide: s.Index, Severity: "error", Code: "placeholder-missing-hint",
+				Message: fmt.Sprintf("slide %d: placeholder component requires 'hint' field", s.Index),
+			})
+		}
+		if aspect, ok := c.Params["aspect"].(string); ok && aspect != "" && !validAspects[aspect] {
+			errs = append(errs, Error{
+				Slide: s.Index, Severity: "warning", Code: "unknown-aspect",
+				Message: fmt.Sprintf("slide %d: aspect %q not recognized (using 16:9)", s.Index, aspect),
+			})
+		}
 	}
 	return errs
 }

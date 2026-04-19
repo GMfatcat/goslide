@@ -340,3 +340,35 @@ func TestValidate_ImageGridHappy(t *testing.T) {
 	require.Nil(t, findError(errs, "columns-out-of-range"))
 	require.Nil(t, findError(errs, "image-grid-empty"))
 }
+
+func TestValidate_PlaceholderMissingHint(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Components: []Component{{Index: 0, Type: "placeholder", Params: map[string]any{"icon": "🗺️"}}},
+	}}}
+	errs := p.Validate()
+	e := findError(errs, "placeholder-missing-hint")
+	require.NotNil(t, e)
+	require.Equal(t, "error", e.Severity)
+}
+
+func TestValidate_PlaceholderUnknownAspect(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Components: []Component{{Index: 0, Type: "placeholder", Params: map[string]any{"hint": "x", "aspect": "2:1"}}},
+	}}}
+	errs := p.Validate()
+	e := findError(errs, "unknown-aspect")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_PlaceholderHappy(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Components: []Component{{Index: 0, Type: "placeholder", Params: map[string]any{"hint": "K8s", "aspect": "16:9", "icon": "🗺️"}}},
+	}}}
+	errs := p.Validate()
+	require.Nil(t, findError(errs, "placeholder-missing-hint"))
+	require.Nil(t, findError(errs, "unknown-aspect"))
+}
