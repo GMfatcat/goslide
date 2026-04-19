@@ -161,6 +161,39 @@ go run ./cmd/goslide serve examples/demo.md --no-open
 
 範例設定檔（`goslide.yaml.example`）將 `/api/mock` 代理到 `localhost:9999`。重新命名為 `goslide.yaml` 即可啟用。測試完成後可移除或改名，避免 mock server 未啟動時出現 proxy error。
 
+## 📡 講者同步
+
+GoSlide 內建輕量級講者同步功能。講者目前的投影片頁數會即時廣播給所有觀眾。
+
+**講者** 使用 `?role=presenter` 開啟：
+```
+http://localhost:3000?role=presenter
+```
+
+**觀眾** 開啟普通 URL：
+```
+http://localhost:3000
+```
+
+當講者切換投影片時，觀眾左下角會顯示提示：
+
+```
+┌──────────────────────────┐
+│  Presenter: 5/12  [Jump] │
+└──────────────────────────┘
+```
+
+- 觀眾可以點 **Jump** 跳到講者目前的頁面
+- 觀眾可以自由瀏覽，不會被強制跟隨
+- `serve` 和 `host` 模式皆可使用
+
+### 講者檢視
+
+在任何投影片按 **S** 鍵開啟講者檢視（新視窗），顯示：
+- 目前投影片 + 下一張預覽
+- 講者筆記（來自 markdown 中的 `<!-- notes -->`）
+- 經過時間
+
 ## 🏗️ 從原始碼建置
 
 ```bash

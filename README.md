@@ -161,6 +161,39 @@ go run ./cmd/goslide serve examples/demo.md --no-open
 
 The example config (`goslide.yaml.example`) proxies `/api/mock` to `localhost:9999`. Rename it to `goslide.yaml` to activate. When done testing, you can remove or rename the config to avoid proxy errors when the mock server isn't running.
 
+## 📡 Presenter Sync
+
+GoSlide has a lightweight presenter sync feature. The presenter's current slide is broadcast to all viewers in real-time.
+
+**Presenter** opens with `?role=presenter`:
+```
+http://localhost:3000?role=presenter
+```
+
+**Viewers** open the normal URL:
+```
+http://localhost:3000
+```
+
+When the presenter navigates slides, viewers see a small indicator at the bottom-left:
+
+```
+┌──────────────────────────┐
+│  Presenter: 5/12  [Jump] │
+└──────────────────────────┘
+```
+
+- Viewers can click **Jump** to go to the presenter's current slide
+- Viewers can freely browse on their own — they are never forced to follow
+- Works in both `serve` and `host` mode
+
+### Speaker View
+
+Press **S** on any slide to open the speaker view in a new window. It shows:
+- Current slide + next slide preview
+- Speaker notes (from `<!-- notes -->` in your markdown)
+- Elapsed time
+
 ## 🏗️ Build from Source
 
 ```bash
