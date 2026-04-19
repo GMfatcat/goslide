@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -78,4 +79,41 @@ func TestRun_ForceOverwrites(t *testing.T) {
 
 	got, _ := os.ReadFile(outPath)
 	require.Equal(t, string(good), string(got))
+}
+
+func TestRun_FixupRecovers(t *testing.T) {
+	dir := t.TempDir()
+	outPath := filepath.Join(dir, "out.md")
+
+	broken, _ := os.ReadFile("testdata/responses/unclosed_fence.md")
+
+	opts := Options{Model: "m", APIKey: "k", Input: Input{Topic: "t"}, Output: outPath}
+	var stderr strings.Builder
+	err := runWith(context.Background(), opts, &fakeCompleter{content: string(broken)}, &stderr)
+	require.NoError(t, err)
+
+	_, statErr := os.Stat(outPath)
+	require.NoError(t, statErr)
+	require.Contains(t, stderr.String(), "fence-close")
+}
+
+func TestRun_UnrecoverableWritesArtefacts(t *testing.T) {
+	dir := t.TempDir()
+	outPath := filepath.Join(dir, "out.md")
+
+	garbage, _ := os.ReadFile("testdata/responses/broken_unfixable.md")
+
+	opts := Options{Model: "m", APIKey: "k", Input: Input{Topic: "t"}, Output: outPath}
+	var stderr strings.Builder
+	err := runWith(context.Background(), opts, &fakeCompleter{content: string(garbage)}, &stderr)
+	require.Error(t, err)
+
+	_, rawErr := os.Stat(outPath + ".raw.md")
+	require.NoError(t, rawErr, ".raw.md should have been written")
+	_, fixedErr := os.Stat(outPath + ".fixed.md")
+	require.NoError(t, fixedErr, ".fixed.md should have been written")
+
+	// primary output should NOT exist
+	_, outErr := os.Stat(outPath)
+	require.True(t, os.IsNotExist(outErr))
 }
