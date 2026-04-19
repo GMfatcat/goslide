@@ -296,3 +296,10 @@ func TestValidate_TopBottomComplete(t *testing.T) {
 	e := findError(errs, "missing-region")
 	require.Nil(t, e)
 }
+
+func TestValidate_ImageGridIsKnown(t *testing.T) {
+	p := Presentation{Slides: []Slide{{Index: 1, Meta: SlideMeta{Layout: "image-grid"}}}}
+	errs := p.Validate()
+	require.Nil(t, findError(errs, "unknown-layout"))
+	require.Nil(t, findError(errs, "future-layout"))
+}

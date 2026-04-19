@@ -18,7 +18,7 @@ var (
 		"two-column": true, "code-preview": true,
 		"three-column": true, "image-left": true, "image-right": true,
 		"quote": true, "split-heading": true, "top-bottom": true, "blank": true,
-		"grid-cards": true,
+		"grid-cards": true, "image-grid": true,
 	}
 	futureLayouts = map[string]bool{}
 
