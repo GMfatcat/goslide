@@ -32,7 +32,34 @@ func Try(md string, parseErr error) (string, FixReport) {
 
 // --- rule stubs (filled in by later tasks) ---
 
-func applyFenceClose(lines *[]string, report *FixReport)               {}
+func applyFenceClose(lines *[]string, report *FixReport) {
+	openLine := -1
+	for i, ln := range *lines {
+		t := strings.TrimSpace(ln)
+		if strings.HasPrefix(t, "```") {
+			if openLine == -1 {
+				openLine = i
+			} else {
+				openLine = -1
+			}
+		}
+	}
+	if openLine == -1 {
+		return
+	}
+	// If the last element is an empty string (trailing newline), insert before it.
+	ls := *lines
+	if len(ls) > 0 && ls[len(ls)-1] == "" {
+		*lines = append(ls[:len(ls)-1], "```", "")
+	} else {
+		*lines = append(ls, "```")
+	}
+	report.Fixes = append(report.Fixes, Fix{
+		Rule:        "fence-close",
+		Line:        openLine + 1,
+		Description: "unclosed ``` block → appended closing fence",
+	})
+}
 func applyFrontmatterTerminator(lines *[]string, report *FixReport)    {}
 func applyFrontmatterUnquotedColon(lines *[]string, report *FixReport) {}
 func applyTrailingNewline(lines *[]string, report *FixReport)          {}
