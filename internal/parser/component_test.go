@@ -95,3 +95,13 @@ func TestExtractComponents_YAMLParseError(t *testing.T) {
 	require.Contains(t, comps[0].Raw, "unclosed")
 	require.Contains(t, cleaned, "<!--goslide:component:0-->")
 }
+
+func TestExtractComponents_Placeholder(t *testing.T) {
+	body := "~~~placeholder\nhint: K8s architecture\nicon: 🗺️\naspect: 16:9\n~~~\n"
+	_, comps := extractComponents(body)
+	require.Len(t, comps, 1)
+	require.Equal(t, "placeholder", comps[0].Type)
+	require.Equal(t, "K8s architecture", comps[0].Params["hint"])
+	require.Equal(t, "🗺️", comps[0].Params["icon"])
+	require.Equal(t, "16:9", comps[0].Params["aspect"])
+}

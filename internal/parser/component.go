@@ -12,6 +12,7 @@ var knownComponentPrefixes = map[string]bool{
 	"chart": true, "mermaid": true, "table": true,
 	"tabs": true, "panel": true, "slider": true,
 	"toggle": true, "api": true, "embed": true, "card": true,
+	"placeholder": true,
 }
 
 func isComponentFence(lang string) bool {
