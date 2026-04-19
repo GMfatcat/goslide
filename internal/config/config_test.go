@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -110,4 +111,23 @@ theme:
 	require.NoError(t, err)
 	require.Equal(t, "#1e1e2e", cfg.Theme.Overrides["slide-bg"])
 	require.Equal(t, "#f38ba8", cfg.Theme.Overrides["slide-accent"])
+}
+
+func TestLoad_GenerateSection(t *testing.T) {
+	dir := t.TempDir()
+	content := `
+generate:
+  base_url: https://api.openai.com/v1
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+  timeout: 90s
+`
+	os.WriteFile(filepath.Join(dir, "goslide.yaml"), []byte(content), 0644)
+
+	cfg, err := Load(dir)
+	require.NoError(t, err)
+	require.Equal(t, "https://api.openai.com/v1", cfg.Generate.BaseURL)
+	require.Equal(t, "gpt-4o", cfg.Generate.Model)
+	require.Equal(t, "OPENAI_API_KEY", cfg.Generate.APIKeyEnv)
+	require.Equal(t, 90*time.Second, cfg.Generate.Timeout)
 }

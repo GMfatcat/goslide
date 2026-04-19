@@ -5,13 +5,22 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Theme ThemeConfig `yaml:"theme"`
-	API   APIConfig   `yaml:"api"`
+	Theme    ThemeConfig    `yaml:"theme"`
+	API      APIConfig      `yaml:"api"`
+	Generate GenerateConfig `yaml:"generate"`
+}
+
+type GenerateConfig struct {
+	BaseURL   string        `yaml:"base_url"`
+	Model     string        `yaml:"model"`
+	APIKeyEnv string        `yaml:"api_key_env"`
+	Timeout   time.Duration `yaml:"timeout"`
 }
 
 type ThemeConfig struct {
