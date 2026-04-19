@@ -60,6 +60,40 @@ func applyFenceClose(lines *[]string, report *FixReport) {
 		Description: "unclosed ``` block → appended closing fence",
 	})
 }
-func applyFrontmatterTerminator(lines *[]string, report *FixReport)    {}
+func applyFrontmatterTerminator(lines *[]string, report *FixReport) {
+	if len(*lines) == 0 || strings.TrimSpace((*lines)[0]) != "---" {
+		return
+	}
+	// Look for a closing --- anywhere in the first ~40 lines (frontmatter
+	// is short in practice).
+	limit := 40
+	if limit > len(*lines) {
+		limit = len(*lines)
+	}
+	for i := 1; i < limit; i++ {
+		if strings.TrimSpace((*lines)[i]) == "---" {
+			return // balanced
+		}
+	}
+	// Insert a terminator after the last non-blank key:value line in the
+	// first few lines (scan until first blank line).
+	insertAt := 1
+	for i := 1; i < len(*lines); i++ {
+		if strings.TrimSpace((*lines)[i]) == "" {
+			insertAt = i
+			break
+		}
+		insertAt = i + 1
+	}
+	newLines := append([]string{}, (*lines)[:insertAt]...)
+	newLines = append(newLines, "---")
+	newLines = append(newLines, (*lines)[insertAt:]...)
+	*lines = newLines
+	report.Fixes = append(report.Fixes, Fix{
+		Rule:        "fm-terminator",
+		Line:        1,
+		Description: "frontmatter missing terminator → inserted '---'",
+	})
+}
 func applyFrontmatterUnquotedColon(lines *[]string, report *FixReport) {}
 func applyTrailingNewline(lines *[]string, report *FixReport)          {}
