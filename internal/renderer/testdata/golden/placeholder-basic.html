@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placeholder Demo</title>
+  <link rel="stylesheet" href="/static/reveal/reveal.css">
+  <link rel="stylesheet" href="/themes/tokens.css">
+  <link rel="stylesheet" href="/themes/dark.css">
+  <link rel="stylesheet" href="/themes/layouts.css">
+  <link rel="stylesheet" href="/themes/transitions.css">
+</head>
+<body data-accent="blue" data-slide-number="" data-slide-number-format="total">
+  <div class="reveal">
+    <div class="slides">
+      
+      <section
+        data-layout="default">
+        <h1>Placeholder Demo</h1>
+<div class="goslide-component" data-type="placeholder" data-params="{&quot;aspect&quot;:&quot;16:9&quot;,&quot;hint&quot;:&quot;K8s architecture&quot;,&quot;icon&quot;:&quot;🗺️&quot;}" data-raw="" data-comp-id="s1-c0"><p>Control plane + worker interaction</p>
+</div>
+
+      </section>
+      
+    </div>
+  </div>
+
+  <div id="goslide-page-num"></div>
+  <div id="goslide-toast" hidden></div>
+
+  <script src="/static/chartjs/chart.min.js"></script>
+  <script src="/static/mermaid/mermaid.min.js"></script>
+  <script src="/static/reveal/reveal.js"></script>
+  <script src="/static/reveal/plugin-notes.js"></script>
+  <script src="/static/runtime.js"></script>
+  <script src="/static/reactive.js"></script>
+  <script src="/static/components.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: false,
+      controls: true,
+      progress: true,
+      keyboard: {
+        13: 'next',
+        8: 'prev'
+      },
+      overview: true,
+      center: true,
+      transition: 'slide',
+      plugins: [RevealNotes]
+    });
+  </script>
+</body>
+</html>
