@@ -104,3 +104,18 @@ func TestApplyTrailingNewline_NoopWhenPresent(t *testing.T) {
 		require.NotEqual(t, "trailing-newline", f.Rule)
 	}
 }
+
+func TestTry_MultipleRulesFireTogether(t *testing.T) {
+	// Unquoted colon + missing fm terminator + unclosed fence + no trailing newline
+	md := "---\ntitle: Go: Intro\n\n```\ncode"
+	_, report := Try(md, nil)
+
+	rules := map[string]bool{}
+	for _, f := range report.Fixes {
+		rules[f.Rule] = true
+	}
+	require.True(t, rules["fence-close"], "fence-close should fire")
+	require.True(t, rules["fm-terminator"], "fm-terminator should fire")
+	require.True(t, rules["fm-unquoted-colon"], "fm-unquoted-colon should fire")
+	require.True(t, rules["trailing-newline"], "trailing-newline should fire")
+}

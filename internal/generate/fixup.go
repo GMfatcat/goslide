@@ -30,7 +30,7 @@ func Try(md string, parseErr error) (string, FixReport) {
 	return strings.Join(lines, "\n"), report
 }
 
-// --- rule stubs (filled in by later tasks) ---
+// --- rule implementations ---
 
 func applyFenceClose(lines *[]string, report *FixReport) {
 	openLine := -1
