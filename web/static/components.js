@@ -388,6 +388,33 @@
     }
   }
 
+  function escapeText(s) {
+    var div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function initPlaceholder(el) {
+    var params = {};
+    try { params = JSON.parse(el.getAttribute('data-params') || '{}'); } catch (e) {}
+    var hint = params.hint || 'Image placeholder';
+    var icon = params.icon || '🖼️';
+    var aspect = params.aspect || '16:9';
+    var bodyHTML = el.innerHTML; // rendered Markdown from the fence body, may be empty
+    var body = bodyHTML && bodyHTML.trim() ? bodyHTML : '<em>Replace with actual content</em>';
+
+    var aspectParts = aspect.split(':');
+    var aspectCSS = (aspectParts.length === 2) ? (aspectParts[0] + '/' + aspectParts[1]) : '16/9';
+
+    el.classList.add('gs-placeholder');
+    el.setAttribute('data-aspect', aspect);
+    el.style.aspectRatio = aspectCSS;
+    el.innerHTML =
+      '<div class="gs-placeholder-icon">' + icon + '</div>' +
+      '<div class="gs-placeholder-hint">' + escapeText(hint) + '</div>' +
+      '<div class="gs-placeholder-body">' + body + '</div>';
+  }
+
   function initAllComponents() {
     document.querySelectorAll('.goslide-component').forEach(function (el) {
       var id = el.getAttribute('data-comp-id');
@@ -396,6 +423,7 @@
       if (type.indexOf('chart') === 0) initChart(el);
       else if (type === 'table') initTable(el);
       else if (type === 'embed:iframe') initIframe(el);
+      else if (type === 'placeholder') initPlaceholder(el);
       else if (type === 'api') {
         if (isStatic) {
           el.innerHTML = '<div style="color:var(--slide-muted);font-size:0.75em;text-align:center;padding:1rem;">API data requires goslide serve</div>';
