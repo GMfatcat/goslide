@@ -195,3 +195,14 @@ func TestParseSlide_PlaceholderBodySplit(t *testing.T) {
 	require.Equal(t, "K8s", c.Params["hint"])
 	require.Contains(t, string(c.ContentHTML), "Control plane detail")
 }
+
+func TestParseSlide_ImageGridCells(t *testing.T) {
+	raw := "<!-- layout: image-grid -->\n<!-- columns: 2 -->\n\n<!-- cell -->\n\n~~~placeholder\nhint: A\n~~~\n\n<!-- cell -->\n\n~~~placeholder\nhint: B\n~~~\n\n<!-- cell -->\n\nplain text\n\n<!-- cell -->\n\n![alt](./img.png)\n"
+	slide := parseSlide(0, raw, ir.Frontmatter{})
+	require.Equal(t, "image-grid", slide.Meta.Layout)
+	require.Equal(t, 2, slide.Meta.Columns)
+	require.Len(t, slide.Regions, 4, "four cells expected, got %d", len(slide.Regions))
+	for _, r := range slide.Regions {
+		require.Equal(t, "cell", r.Name)
+	}
+}

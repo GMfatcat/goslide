@@ -27,6 +27,7 @@ var layoutRegions = map[string][]string{
 	"image-right":   {"text", "image"},
 	"split-heading": {"heading", "body"},
 	"top-bottom":    {"top", "bottom"},
+	"image-grid":    {"cell"},
 }
 
 func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
@@ -100,40 +101,40 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 		validSet[r] = true
 	}
 
+	type regionCursor struct {
+		name  string
+		lines []string
+	}
+	var cursors []regionCursor
+	currentIdx := -1
+
 	var regions []ir.Region
 	var mainLines []string
-	currentRegion := ""
-	regionContent := map[string][]string{}
-	var regionOrder []string
 
 	for _, line := range bodyLines {
 		trimmed := strings.TrimSpace(line)
 		if m := regionRe.FindStringSubmatch(trimmed); m != nil {
 			name := strings.ToLower(m[1])
 			if validSet[name] {
-				currentRegion = name
-				if _, exists := regionContent[name]; !exists {
-					regionOrder = append(regionOrder, name)
-					regionContent[name] = []string{}
-				}
+				cursors = append(cursors, regionCursor{name: name})
+				currentIdx = len(cursors) - 1
 				continue
 			}
 		}
-		if currentRegion == "" {
+		if currentIdx == -1 {
 			mainLines = append(mainLines, line)
 		} else {
-			regionContent[currentRegion] = append(regionContent[currentRegion], line)
+			cursors[currentIdx].lines = append(cursors[currentIdx].lines, line)
 		}
 	}
 
 	mainBody := strings.Join(mainLines, "\n")
 	bodyHTML := renderMarkdown(mainBody)
 
-	for _, name := range regionOrder {
-		regionText := strings.Join(regionContent[name], "\n")
+	for _, c := range cursors {
 		regions = append(regions, ir.Region{
-			Name: name,
-			HTML: renderMarkdown(regionText),
+			Name: c.name,
+			HTML: renderMarkdown(strings.Join(c.lines, "\n")),
 		})
 	}
 
