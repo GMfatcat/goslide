@@ -159,3 +159,42 @@ func TestRender_ComponentInRegion(t *testing.T) {
 	require.Contains(t, html, `data-type="chart:pie"`)
 	require.NotContains(t, html, "<!--goslide:component:0-->")
 }
+
+func TestRender_Placeholder(t *testing.T) {
+	pres := &ir.Presentation{
+		Meta: ir.Frontmatter{Theme: "dark"},
+		Slides: []ir.Slide{{
+			Index: 0,
+			Meta:  ir.SlideMeta{Layout: "default"},
+			Components: []ir.Component{{
+				Index:  0,
+				Type:   "placeholder",
+				Params: map[string]any{"hint": "K8s architecture", "icon": "🗺️", "aspect": "16:9"},
+			}},
+			BodyHTML: template.HTML(`<!--goslide:component:0-->`),
+		}},
+	}
+	html, err := Render(pres)
+	require.NoError(t, err)
+	require.Contains(t, html, `data-type="placeholder"`)
+	require.Contains(t, html, `K8s architecture`)
+}
+
+func TestRender_ImageGrid(t *testing.T) {
+	pres := &ir.Presentation{
+		Meta: ir.Frontmatter{Theme: "dark"},
+		Slides: []ir.Slide{{
+			Index: 0,
+			Meta:  ir.SlideMeta{Layout: "image-grid", Columns: 2},
+			Regions: []ir.Region{
+				{Name: "cell", HTML: template.HTML("<p>A</p>")},
+				{Name: "cell", HTML: template.HTML("<p>B</p>")},
+			},
+		}},
+	}
+	html, err := Render(pres)
+	require.NoError(t, err)
+	require.Contains(t, html, `data-layout="image-grid"`)
+	require.Contains(t, html, `data-columns="2"`)
+	require.Equal(t, 2, strings.Count(html, `class="region-cell"`))
+}
