@@ -994,6 +994,7 @@ Multi-presentation hosting and presenter sync.
 - [x] `goslide generate` command (LLM-powered slide generation)
 - [ ] Per-slide speaker notes (`<!-- notes: ... -->`)
 - [ ] PDF export (via headless browser)
+- [x] Multi-image layout + placeholder component (Phase 6b, v1.3.0)
 
 ---
 

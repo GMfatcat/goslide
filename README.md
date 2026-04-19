@@ -174,6 +174,54 @@ for real outputs (English + 繁體中文, simple + advanced modes) produced by
 `openai/gpt-oss-120b:free` on OpenRouter. Both parse on first pass. The
 `scripts/test-generate-llm.ps1` helper reproduces them.
 
+### Image placeholders and multi-image slides
+
+When you don't have an image URL yet — either while drafting, or when a
+presentation is produced by `goslide generate` — use the `placeholder`
+component:
+
+```
+~~~placeholder
+hint: K8s architecture
+icon: 🗺️
+aspect: 16:9
+---
+Control plane + worker node interaction
+~~~
+```
+
+Combine several placeholders (or real images, charts, cards) with the
+`image-grid` layout:
+
+```
+<!-- layout: image-grid -->
+<!-- columns: 2 -->
+
+<!-- cell -->
+~~~placeholder
+hint: Architecture
+icon: 🗺️
+~~~
+
+<!-- cell -->
+![Dashboard](./dashboard.png)
+
+<!-- cell -->
+~~~placeholder
+hint: Trends
+icon: 📈
+~~~
+
+<!-- cell -->
+~~~chart
+type: bar
+...
+~~~
+```
+
+Columns accept `2`, `3`, or `4`. Each `<!-- cell -->` marks a new cell;
+cells may hold any content.
+
 ## ⚙️ Configuration
 
 Optional `goslide.yaml` in the same directory as your `.md` file:

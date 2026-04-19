@@ -164,6 +164,50 @@ language: zh-TW
 
 **驗證範例。** 參見 [`examples/ai-generated/`](examples/ai-generated/) — 用 OpenRouter 的 `openai/gpt-oss-120b:free` 實際生成的英文與繁體中文簡報（simple + advanced mode），均於首次 parse 通過。`scripts/test-generate-llm.ps1` 可重現。
 
+### 圖片佔位符與多圖投影片
+
+尚未準備好實際圖檔（或用 `goslide generate` 生成時），可用 `placeholder` component：
+
+```
+~~~placeholder
+hint: K8s 架構圖
+icon: 🗺️
+aspect: 16:9
+---
+Control plane 與 worker 互動示意
+~~~
+```
+
+搭配 `image-grid` layout 可在同一張投影片並排多個 placeholder、真實圖片、圖表、卡片：
+
+```
+<!-- layout: image-grid -->
+<!-- columns: 2 -->
+
+<!-- cell -->
+~~~placeholder
+hint: 架構圖
+icon: 🗺️
+~~~
+
+<!-- cell -->
+![Dashboard](./dashboard.png)
+
+<!-- cell -->
+~~~placeholder
+hint: 趨勢分析
+icon: 📈
+~~~
+
+<!-- cell -->
+~~~chart
+type: bar
+...
+~~~
+```
+
+`columns` 可設 `2`、`3` 或 `4`。每個 `<!-- cell -->` 代表一格；格內可放任何內容。
+
 ## ⚙️ 設定檔
 
 在 `.md` 同目錄下建立 `goslide.yaml`（選用）：
