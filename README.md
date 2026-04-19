@@ -122,6 +122,48 @@ goslide list [directory]    # List presentations
 
 👉 [Full CLI Reference](docs/CLI.md)
 
+### AI slide generation
+
+Generate a full presentation from a topic using any OpenAI-compatible LLM
+endpoint (OpenAI, OpenRouter, Ollama, vllm, sglang, etc.).
+
+Add a `generate:` section to `goslide.yaml`:
+
+```yaml
+generate:
+  base_url: https://api.openai.com/v1
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+  timeout: 120s
+```
+
+Export the API key, then run:
+
+```bash
+export OPENAI_API_KEY=sk-...
+goslide generate "Introduction to Kubernetes"            # simple mode
+goslide generate my-prompt.md -o talk.md                 # advanced mode
+goslide generate --dump-prompt > system.txt              # inspect prompt
+```
+
+Advanced mode reads a `prompt.md` file:
+
+```markdown
+---
+topic: Kubernetes Architecture
+audience: Backend engineers
+slides: 15
+theme: dark
+language: en
+---
+Emphasize Pod/Service/Ingress. End with a Q&A slide.
+```
+
+The command refuses to overwrite an existing output file unless `--force` is
+passed. Generated Markdown is sanity-checked against the parser; common
+issues (unclosed code fences, missing frontmatter terminator) are auto-fixed
+with a transparent report.
+
 ## ⚙️ Configuration
 
 Optional `goslide.yaml` in the same directory as your `.md` file:

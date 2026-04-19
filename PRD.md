@@ -991,7 +991,7 @@ Multi-presentation hosting and presenter sync.
 - [ ] CLI: `goslide build` (static HTML export)
 - [ ] Single-file export (all assets inlined)
 - [ ] Custom theme overrides via config
-- [ ] `goslide generate` command (LLM-powered slide generation)
+- [x] `goslide generate` command (LLM-powered slide generation)
 - [ ] Per-slide speaker notes (`<!-- notes: ... -->`)
 - [ ] PDF export (via headless browser)
 

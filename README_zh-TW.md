@@ -122,6 +122,44 @@ goslide list [directory]    # 列出目錄中的簡報
 
 👉 [完整 CLI 參考](docs/CLI.md)
 
+### AI 投影片生成
+
+透過任何 OpenAI-compatible 的 LLM endpoint（OpenAI、OpenRouter、Ollama、vllm、sglang 等）從主題生成完整簡報。
+
+在 `goslide.yaml` 加入 `generate:` 區段：
+
+```yaml
+generate:
+  base_url: https://api.openai.com/v1
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+  timeout: 120s
+```
+
+設定 API key 後執行：
+
+```bash
+export OPENAI_API_KEY=sk-...
+goslide generate "Kubernetes 架構介紹"                    # 簡易模式
+goslide generate my-prompt.md -o talk.md                 # 進階模式
+goslide generate --dump-prompt > system.txt              # 檢視內建 prompt
+```
+
+進階模式讀取 `prompt.md` 檔：
+
+```markdown
+---
+topic: Kubernetes 架構
+audience: Backend engineers
+slides: 15
+theme: dark
+language: zh-TW
+---
+強調 Pod/Service/Ingress，最後放 Q&A slide。
+```
+
+除非加 `--force`，否則不會覆寫既有檔案。生成的 Markdown 會用 parser 做一次 sanity check；常見錯誤（未閉合 code fence、frontmatter 缺結尾 `---`）會自動修復並印出透明報告。
+
 ## ⚙️ 設定檔
 
 在 `.md` 同目錄下建立 `goslide.yaml`（選用）：
