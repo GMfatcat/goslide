@@ -1,41 +1,72 @@
-# 🎉 GoSlide v1.1.0
+# 🎉 GoSlide v1.2.0
 
 ## What's New
 
-### 🎨 22 Themes (8 new)
+### 🤖 AI Slide Generation (experimental)
 
-Added 8 community-favorite themes, bringing the total to **22 themes × 8 accent colors = 176 visual combinations**:
+New `goslide generate` command produces a full GoSlide presentation by
+calling any OpenAI-compatible LLM endpoint — OpenAI, OpenRouter, Ollama,
+vllm, sglang, and others.
 
-| New Theme | Style | Default Accent |
-|-----------|-------|----------------|
-| `nord-light` | Arctic cool blue-grays | teal |
-| `catppuccin-latte` | Soft warm pastels | pink |
-| `paper` | Warm off-white, editorial | amber |
-| `chalk` | Cool blue-grey, educational | purple |
-| `synthwave` | Neon pink/cyan on deep purple | pink |
-| `forest` | Deep forest greens, earthy | green |
-| `rose` | Warm blush pink | pink |
-| `amoled` | True black OLED, max contrast | blue |
+```bash
+export OPENAI_API_KEY=sk-...
+goslide generate "Introduction to Kubernetes"            # simple mode
+goslide generate my-prompt.md -o talk.md                 # advanced mode
+goslide generate --dump-prompt > system.txt              # inspect prompt
+```
 
-### 🃏 Card Overlay Polish
+**Highlights**
 
-- Larger emoji icons (2em) for better visibility
-- Proper table spacing with accent-colored borders
-- Improved heading, paragraph, and list margins
-- Inline code gets background + border-radius styling
+- **Two modes.** Single-topic strings for quick drafts; `prompt.md` files
+  with YAML frontmatter (`topic` / `audience` / `slides` / `theme` /
+  `language`) plus free-text body for controlled generation.
+- **Embedded system prompt.** Ships inside the binary, describes the
+  AI-facing GoSlide subset (frontmatter, layouts, card/chart components).
+  Dump it with `--dump-prompt` to feed any chat UI manually.
+- **Heuristic auto-fix.** Four local rules recover the most common LLM
+  syntax slips (unclosed code fences, missing frontmatter terminator,
+  unquoted YAML values with colons, missing trailing newline). Fixes are
+  reported transparently on stderr.
+- **Safe defaults.** Refuses to overwrite existing output unless `--force`
+  is passed. On unrecoverable parse failure, writes `<output>.raw.md` and
+  `<output>.fixed.md` next to the target for diagnosis instead of
+  clobbering your work.
+- **API keys never touch disk.** Read from an environment variable named
+  by `generate.api_key_env`.
 
-### 🎬 3D Transitions
+**Configuration** (`goslide.yaml`):
 
-- `perspective` — Y-axis 3D rotation
-- `flip` — X-axis 3D rotation
-- `cube` — cube-face rotation (experimental)
+```yaml
+generate:
+  base_url: https://api.openai.com/v1   # or https://openrouter.ai/api/v1, http://localhost:11434/v1, etc.
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+  timeout: 120s
+```
+
+**Experimental notice.** Output quality depends on the chosen model and
+prompt wording; semantic quality (flow, accuracy, style) is not guaranteed.
+CLI flags and API may change. Review generated slides before presenting.
+
+### ✅ Validated Examples
+
+See [`examples/ai-generated/`](examples/ai-generated/) for real outputs
+produced by `openai/gpt-oss-120b:free` on OpenRouter — English simple mode
+and 繁體中文 advanced mode (high-school audience, 快餐廚房 metaphor). Both
+parsed on first pass with no fixup needed. `scripts/test-generate-llm.ps1`
+reproduces the test interactively.
 
 ### 📝 Documentation
 
-- Mock API testing workflow documented in README
-- `goslide.yaml` vs `goslide.yaml.example` usage clarified
-- Theme catalog updated with all 22 themes
+- `PRD.md` §13 reflects the implemented state
+- Both English and 繁體中文 READMEs get a new **AI slide generation**
+  section with an experimental warning
+
+## No Breaking Changes
+
+v1.1.0 projects work unchanged. The `generate:` config section is optional
+— absent when not using `goslide generate`.
 
 ## Full Changelog
 
-See [v1.0.0...v1.1.0](https://github.com/GMfatcat/goslide/compare/v1.0.0...v1.1.0) for all changes.
+See [v1.1.0...v1.2.0](https://github.com/GMfatcat/goslide/compare/v1.1.0...v1.2.0) for all changes.
