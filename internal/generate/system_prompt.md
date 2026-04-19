@@ -30,6 +30,9 @@ Omit fields you do not need. The very first slide typically sets `theme`.
 - `default` — single column (omit `layout:` for this).
 - `two-column` — left/right regions split by `<!-- col -->` on its own line.
 - `dashboard` — grid of cards/charts; one component per cell.
+- `image-grid` — grid of images, placeholders, or components. Use
+  `columns: 2|3|4` and `<!-- cell -->` before each item. Cells may contain
+  a `placeholder`, a Markdown image, a chart, or any other component.
 
 # Components
 
@@ -53,6 +56,31 @@ data:
   values: [12, 19, 7, 15]
 ```
 
+## Placeholder (for image-heavy slides without URLs)
+
+When a slide should show a diagram, chart, photo, map, or screenshot but
+you do not have an image URL, emit a `placeholder` component instead of
+leaving the slide empty or skipping it:
+
+~~~placeholder
+hint: K8s cluster architecture
+icon: 🗺️
+aspect: 16:9
+---
+Control plane + worker node interaction
+~~~
+
+- `hint` (required): short title the author will later replace with a
+  real image matching this description.
+- `icon` (optional): a single emoji hinting at content type.
+  Suggestions: 📊 charts, 🗺️ architecture diagrams, 📷 photos, 📈 trends,
+  🖼️ generic image, 📐 schematics.
+- `aspect` (optional): 16:9 (default) | 4:3 | 1:1 | 3:4 | 9:16.
+- Body (between `---` and closing fence): optional subtitle/description.
+
+Use `placeholder` freely wherever a real image would belong — a single
+cover slide, an image-left/right region, or inside an `image-grid` cell.
+
 # Rules
 
 - Produce 8–15 slides unless the user asks for a different count.
@@ -64,3 +92,6 @@ data:
 - Use the user's requested language; default to English.
 - Return ONLY the Markdown document. No JSON, no wrapping fences, no prose
   around it.
+- When the slide is primarily visual (diagram, chart, screenshot) and you
+  have no image URL, use `placeholder` with a descriptive `hint` and a
+  fitting `icon`. Do not skip the slide and do not invent fake image URLs.

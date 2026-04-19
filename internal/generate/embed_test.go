@@ -18,3 +18,10 @@ func TestSystemPrompt_ContainsCoreKeywords(t *testing.T) {
 		require.Truef(t, strings.Contains(p, kw), "system prompt missing keyword %q", kw)
 	}
 }
+
+func TestSystemPrompt_PlaceholderAndImageGrid(t *testing.T) {
+	p := SystemPrompt()
+	for _, kw := range []string{"placeholder", "image-grid", "hint:", "<!-- cell -->"} {
+		require.Truef(t, strings.Contains(p, kw), "system prompt missing keyword %q", kw)
+	}
+}
