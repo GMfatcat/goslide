@@ -122,7 +122,9 @@ goslide list [directory]    # 列出目錄中的簡報
 
 👉 [完整 CLI 參考](docs/CLI.md)
 
-### AI 投影片生成
+### AI 投影片生成（experimental）
+
+> ⚠️ **實驗性功能。** 產出品質高度取決於所選模型與 prompt。生成的 Markdown 會經過 parser sanity check 並自動修復常見語法錯誤，但語意品質（投影片流程、正確性、風格）無保證，簡報前請人工審閱。API 行為與 CLI flag 可能在沒有預告下變動。
 
 透過任何 OpenAI-compatible 的 LLM endpoint（OpenAI、OpenRouter、Ollama、vllm、sglang 等）從主題生成完整簡報。
 

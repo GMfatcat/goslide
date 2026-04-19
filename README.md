@@ -122,7 +122,12 @@ goslide list [directory]    # List presentations
 
 👉 [Full CLI Reference](docs/CLI.md)
 
-### AI slide generation
+### AI slide generation (experimental)
+
+> ⚠️ **Experimental.** Output quality depends heavily on the chosen model and prompt.
+> The generated Markdown is sanity-checked and auto-fixed for common syntax issues,
+> but semantic quality (slide flow, accuracy, style) is not guaranteed. Review before
+> presenting. API behavior and CLI flags may change without notice.
 
 Generate a full presentation from a topic using any OpenAI-compatible LLM
 endpoint (OpenAI, OpenRouter, Ollama, vllm, sglang, etc.).
