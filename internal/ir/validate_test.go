@@ -303,3 +303,40 @@ func TestValidate_ImageGridIsKnown(t *testing.T) {
 	require.Nil(t, findError(errs, "unknown-layout"))
 	require.Nil(t, findError(errs, "future-layout"))
 }
+
+func TestValidate_ImageGridColumnsOutOfRange(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Meta:  SlideMeta{Layout: "image-grid", Columns: 5},
+		Regions: []Region{{Name: "cell", HTML: "x"}},
+	}}}
+	errs := p.Validate()
+	e := findError(errs, "columns-out-of-range")
+	require.NotNil(t, e, "expected columns-out-of-range warning")
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_ImageGridEmpty(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Meta:  SlideMeta{Layout: "image-grid", Columns: 2},
+	}}}
+	errs := p.Validate()
+	e := findError(errs, "image-grid-empty")
+	require.NotNil(t, e)
+	require.Equal(t, "warning", e.Severity)
+}
+
+func TestValidate_ImageGridHappy(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Meta:  SlideMeta{Layout: "image-grid", Columns: 2},
+		Regions: []Region{
+			{Name: "cell", HTML: "a"},
+			{Name: "cell", HTML: "b"},
+		},
+	}}}
+	errs := p.Validate()
+	require.Nil(t, findError(errs, "columns-out-of-range"))
+	require.Nil(t, findError(errs, "image-grid-empty"))
+}

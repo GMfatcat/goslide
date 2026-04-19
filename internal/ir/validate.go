@@ -78,6 +78,7 @@ func (p *Presentation) Validate() []Error {
 
 	for _, slide := range p.Slides {
 		errs = append(errs, validateSlide(slide)...)
+		errs = append(errs, validateImageGrid(slide)...)
 	}
 
 	p.Warnings = errs
@@ -142,6 +143,32 @@ func validateSlide(s Slide) []Error {
 		}
 	}
 
+	return errs
+}
+
+func validateImageGrid(s Slide) []Error {
+	if s.Meta.Layout != "image-grid" {
+		return nil
+	}
+	var errs []Error
+	if s.Meta.Columns != 0 && (s.Meta.Columns < 2 || s.Meta.Columns > 4) {
+		errs = append(errs, Error{
+			Slide: s.Index, Severity: "warning", Code: "columns-out-of-range",
+			Message: fmt.Sprintf("slide %d: columns %d out of range (2-4); clamping to 2", s.Index, s.Meta.Columns),
+		})
+	}
+	cellCount := 0
+	for _, r := range s.Regions {
+		if r.Name == "cell" {
+			cellCount++
+		}
+	}
+	if cellCount == 0 {
+		errs = append(errs, Error{
+			Slide: s.Index, Severity: "warning", Code: "image-grid-empty",
+			Message: fmt.Sprintf("slide %d: image-grid layout has no cells", s.Index),
+		})
+	}
 	return errs
 }
 
