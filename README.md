@@ -169,6 +169,11 @@ passed. Generated Markdown is sanity-checked against the parser; common
 issues (unclosed code fences, missing frontmatter terminator) are auto-fixed
 with a transparent report.
 
+**Validated examples.** See [`examples/ai-generated/`](examples/ai-generated/)
+for real outputs (English + 繁體中文, simple + advanced modes) produced by
+`openai/gpt-oss-120b:free` on OpenRouter. Both parse on first pass. The
+`scripts/test-generate-llm.ps1` helper reproduces them.
+
 ## ⚙️ Configuration
 
 Optional `goslide.yaml` in the same directory as your `.md` file:

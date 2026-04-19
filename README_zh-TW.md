@@ -162,6 +162,8 @@ language: zh-TW
 
 除非加 `--force`，否則不會覆寫既有檔案。生成的 Markdown 會用 parser 做一次 sanity check；常見錯誤（未閉合 code fence、frontmatter 缺結尾 `---`）會自動修復並印出透明報告。
 
+**驗證範例。** 參見 [`examples/ai-generated/`](examples/ai-generated/) — 用 OpenRouter 的 `openai/gpt-oss-120b:free` 實際生成的英文與繁體中文簡報（simple + advanced mode），均於首次 parse 通過。`scripts/test-generate-llm.ps1` 可重現。
+
 ## ⚙️ 設定檔
 
 在 `.md` 同目錄下建立 `goslide.yaml`（選用）：
