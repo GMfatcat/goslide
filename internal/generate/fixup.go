@@ -132,4 +132,18 @@ func applyFrontmatterUnquotedColon(lines *[]string, report *FixReport) {
 		})
 	}
 }
-func applyTrailingNewline(lines *[]string, report *FixReport)          {}
+func applyTrailingNewline(lines *[]string, report *FixReport) {
+	if len(*lines) == 0 {
+		return
+	}
+	last := (*lines)[len(*lines)-1]
+	if last == "" {
+		return // final "" from trailing \n
+	}
+	*lines = append(*lines, "")
+	report.Fixes = append(report.Fixes, Fix{
+		Rule:        "trailing-newline",
+		Line:        len(*lines),
+		Description: "file did not end with newline → appended",
+	})
+}

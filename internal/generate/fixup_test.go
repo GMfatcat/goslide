@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -80,5 +81,26 @@ func TestApplyFrontmatterUnquotedColon_LeavesQuotedAlone(t *testing.T) {
 	_, report := Try(md, nil)
 	for _, f := range report.Fixes {
 		require.NotEqual(t, "fm-unquoted-colon", f.Rule)
+	}
+}
+
+func TestApplyTrailingNewline_Adds(t *testing.T) {
+	md := "# Heading\n\nBody"
+	fixed, report := Try(md, nil)
+	require.True(t, strings.HasSuffix(fixed, "\n"))
+	found := false
+	for _, f := range report.Fixes {
+		if f.Rule == "trailing-newline" {
+			found = true
+		}
+	}
+	require.True(t, found)
+}
+
+func TestApplyTrailingNewline_NoopWhenPresent(t *testing.T) {
+	md := "# Heading\n\nBody\n"
+	_, report := Try(md, nil)
+	for _, f := range report.Fixes {
+		require.NotEqual(t, "trailing-newline", f.Rule)
 	}
 }
