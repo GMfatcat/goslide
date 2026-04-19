@@ -185,3 +185,13 @@ func TestParseSlide_NoNotes(t *testing.T) {
 	require.Empty(t, slide.Notes)
 	require.Contains(t, string(slide.BodyHTML), "Content only")
 }
+
+func TestParseSlide_PlaceholderBodySplit(t *testing.T) {
+	raw := "~~~placeholder\nhint: K8s\nicon: 🗺️\n---\nControl plane detail\n~~~\n"
+	slide := parseSlide(0, raw, ir.Frontmatter{})
+	require.Len(t, slide.Components, 1)
+	c := slide.Components[0]
+	require.Equal(t, "placeholder", c.Type)
+	require.Equal(t, "K8s", c.Params["hint"])
+	require.Contains(t, string(c.ContentHTML), "Control plane detail")
+}

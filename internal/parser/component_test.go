@@ -105,3 +105,12 @@ func TestExtractComponents_Placeholder(t *testing.T) {
 	require.Equal(t, "🗺️", comps[0].Params["icon"])
 	require.Equal(t, "16:9", comps[0].Params["aspect"])
 }
+
+func TestExtractComponents_PlaceholderWithBody(t *testing.T) {
+	// Actual splitting happens in slide.parseSlide, not extractComponents.
+	// Here we just verify the raw body is captured; Task 5 verifies the split.
+	body := "~~~placeholder\nhint: Cluster\n---\nsubtitle text\n~~~\n"
+	_, comps := extractComponents(body)
+	require.Len(t, comps, 1)
+	require.Contains(t, comps[0].Raw, "subtitle text")
+}

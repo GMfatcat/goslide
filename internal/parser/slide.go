@@ -77,6 +77,17 @@ func parseSlide(index int, raw string, defaults ir.Frontmatter) ir.Slide {
 				}
 				components[i].ContentHTML = string(renderMarkdown(parts[1]))
 			}
+		} else if components[i].Type == "placeholder" {
+			parts := strings.SplitN(components[i].Raw, "---\n", 2)
+			if len(parts) == 2 {
+				var ph map[string]any
+				if err := yaml.Unmarshal([]byte(parts[0]), &ph); err == nil {
+					components[i].Params = ph
+				}
+				components[i].ContentHTML = string(renderMarkdown(parts[1]))
+			}
+			// If no `---` body separator, Params is already set by extractComponents
+			// and ContentHTML remains empty (renderer substitutes default text).
 		} else if components[i].Type == "embed:html" {
 			components[i].ContentHTML = components[i].Raw
 		}
