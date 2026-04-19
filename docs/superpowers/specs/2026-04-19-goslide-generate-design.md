@@ -10,7 +10,7 @@
 
 Add a new CLI subcommand `goslide generate` that produces a valid GoSlide `.md`
 file by calling an OpenAI-compatible LLM endpoint. One implementation covers
-cloud OpenAI, local vllm, sglang, and Ollama (all expose the
+cloud OpenAI, OpenRouter, local vllm, sglang, and Ollama (all expose the
 `/v1/chat/completions` contract).
 
 Two usage modes:
@@ -55,7 +55,7 @@ New top-level section:
 
 ```yaml
 generate:
-  base_url: https://api.openai.com/v1   # or http://localhost:11434/v1 for Ollama
+  base_url: https://api.openai.com/v1   # or https://openrouter.ai/api/v1, http://localhost:11434/v1 (Ollama), etc.
   model: gpt-4o
   api_key_env: OPENAI_API_KEY
   timeout: 120s                          # optional, default 120s
