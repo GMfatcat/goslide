@@ -372,3 +372,41 @@ func TestValidate_PlaceholderHappy(t *testing.T) {
 	require.Nil(t, findError(errs, "placeholder-missing-hint"))
 	require.Nil(t, findError(errs, "unknown-aspect"))
 }
+
+func TestValidate_LLMRenderItemMissingPrompt(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Components: []Component{{
+			Index: 0,
+			Type:  "api",
+			Params: map[string]any{
+				"endpoint": "/api/sales",
+				"render": []any{
+					map[string]any{"type": "chart:bar"},
+					map[string]any{"type": "llm"}, // no prompt
+				},
+			},
+		}},
+	}}}
+	errs := p.Validate()
+	e := findError(errs, "llm-missing-prompt")
+	require.NotNil(t, e, "expected llm-missing-prompt error")
+	require.Equal(t, "error", e.Severity)
+}
+
+func TestValidate_LLMRenderItemHappy(t *testing.T) {
+	p := Presentation{Slides: []Slide{{
+		Index: 1,
+		Components: []Component{{
+			Index: 0,
+			Type:  "api",
+			Params: map[string]any{
+				"render": []any{
+					map[string]any{"type": "llm", "prompt": "summarise {{data}}"},
+				},
+			},
+		}},
+	}}}
+	errs := p.Validate()
+	require.Nil(t, findError(errs, "llm-missing-prompt"))
+}

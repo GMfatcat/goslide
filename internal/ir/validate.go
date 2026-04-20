@@ -80,6 +80,7 @@ func (p *Presentation) Validate() []Error {
 		errs = append(errs, validateSlide(slide)...)
 		errs = append(errs, validateImageGrid(slide)...)
 		errs = append(errs, validatePlaceholder(slide)...)
+		errs = append(errs, validateLLMRenderItems(slide)...)
 	}
 
 	p.Warnings = errs
@@ -195,6 +196,36 @@ func validatePlaceholder(s Slide) []Error {
 				Slide: s.Index, Severity: "warning", Code: "unknown-aspect",
 				Message: fmt.Sprintf("slide %d: aspect %q not recognized (using 16:9)", s.Index, aspect),
 			})
+		}
+	}
+	return errs
+}
+
+func validateLLMRenderItems(s Slide) []Error {
+	var errs []Error
+	for _, c := range s.Components {
+		if c.Type != "api" {
+			continue
+		}
+		render, ok := c.Params["render"].([]any)
+		if !ok {
+			continue
+		}
+		for _, raw := range render {
+			item, ok := raw.(map[string]any)
+			if !ok {
+				continue
+			}
+			if item["type"] != "llm" {
+				continue
+			}
+			prompt, _ := item["prompt"].(string)
+			if strings.TrimSpace(prompt) == "" {
+				errs = append(errs, Error{
+					Slide: s.Index, Severity: "error", Code: "llm-missing-prompt",
+					Message: fmt.Sprintf("slide %d: llm render item requires 'prompt' field", s.Index),
+				})
+			}
 		}
 	}
 	return errs
