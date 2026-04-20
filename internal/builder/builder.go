@@ -1,25 +1,30 @@
 package builder
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/GMfatcat/goslide/internal/config"
+	"github.com/GMfatcat/goslide/internal/generate"
 	"github.com/GMfatcat/goslide/internal/ir"
+	"github.com/GMfatcat/goslide/internal/llm"
 	"github.com/GMfatcat/goslide/internal/parser"
 	"github.com/GMfatcat/goslide/internal/renderer"
 	"github.com/GMfatcat/goslide/web"
 )
 
 type Options struct {
-	File   string
-	Output string
-	Theme  string
-	Accent string
+	File       string
+	Output     string
+	Theme      string
+	Accent     string
+	LLMRefresh bool
 }
 
 func Build(opts Options) error {
@@ -48,12 +53,25 @@ func Build(opts Options) error {
 		return fmt.Errorf("validation failed for %s", opts.File)
 	}
 
+	cfg, _ := config.Load(filepath.Dir(opts.File))
+
+	// BakeLLM — skip when there's no generate config. Note BakeLLM walks
+	// the full presentation and no-ops on slides/components without llm
+	// render items, so it's safe to always call when generate is set.
+	if cfg != nil && cfg.Generate.BaseURL != "" && cfg.Generate.Model != "" {
+		mdDir := filepath.Dir(opts.File)
+		cache := llm.NewDiskCache(filepath.Join(mdDir, ".goslide-cache"))
+		completer := buildLLMCompleter(cfg)
+		if err := BakeLLM(pres, cache, completer, cfg.Generate.Model, mdDir, opts.LLMRefresh); err != nil {
+			return err
+		}
+	}
+
 	html, err := renderer.Render(pres)
 	if err != nil {
 		return fmt.Errorf("render %s: %w", opts.File, err)
 	}
 
-	cfg, _ := config.Load(filepath.Dir(opts.File))
 	if cfg != nil && len(cfg.Theme.Overrides) > 0 {
 		html = injectThemeOverrides(html, cfg.Theme.Overrides)
 	}
@@ -152,6 +170,36 @@ func inlineAssets(html string) string {
 	}
 
 	return html
+}
+
+func buildLLMCompleter(cfg *config.Config) llm.Completer {
+	apiKey := os.Getenv(firstNonEmpty(cfg.Generate.APIKeyEnv, "OPENAI_API_KEY"))
+	timeout := cfg.Generate.Timeout
+	if timeout == 0 {
+		timeout = 120 * time.Second
+	}
+	client := generate.NewClient(cfg.Generate.BaseURL, apiKey, timeout)
+	return completerAdapter{client}
+}
+
+type completerAdapter struct{ c *generate.Client }
+
+func (a completerAdapter) Complete(ctx context.Context, model string, msgs []llm.Message) (string, llm.Usage, error) {
+	gmsgs := make([]generate.Message, len(msgs))
+	for i, m := range msgs {
+		gmsgs[i] = generate.Message{Role: m.Role, Content: m.Content}
+	}
+	content, usage, err := a.c.Complete(ctx, model, gmsgs)
+	return content, llm.Usage(usage), err
+}
+
+func firstNonEmpty(vals ...string) string {
+	for _, v := range vals {
+		if v != "" {
+			return v
+		}
+	}
+	return ""
 }
 
 func inlineFonts(css string) string {
