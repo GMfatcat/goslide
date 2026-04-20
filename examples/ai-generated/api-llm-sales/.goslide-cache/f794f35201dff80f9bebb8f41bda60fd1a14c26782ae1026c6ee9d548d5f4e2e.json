@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "created": "2026-04-20T13:48:00Z",
+  "model": "openai/gpt-oss-120b:free",
+  "prompt": "Using the provided sales data, write exactly 2 analyst-style bullet\nobservations. Be concrete: name the best and worst quarter with\ntheir revenue numbers, and note the growth trajectory. Format as a\nMarkdown list, no preamble, no closing remarks.\n\nData:\n{{data}}\n",
+  "data_hash": "sha256:placeholder-regenerate-with-build",
+  "content": "- Q4 was the best quarter with $172 revenue and a 25% growth rate, while Q3 was the worst with $138 revenue and a -5% decline.  \n- Overall revenue shows an upward trajectory, rising from $120 in Q1 to $172 in Q4, despite a dip in Q3.",
+  "usage": {
+    "prompt_tokens": 192,
+    "completion_tokens": 110,
+    "total_tokens": 302
+  }
+}

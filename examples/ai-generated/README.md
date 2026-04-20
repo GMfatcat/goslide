@@ -1,12 +1,13 @@
 # AI-Generated Examples
 
-Real outputs from `goslide generate` used to validate the end-to-end pipeline.
+Real outputs used to validate GoSlide's AI pipelines end-to-end.
 
-| File | Mode | Topic | Audience | Language | Phase |
-|------|------|-------|----------|----------|-------|
-| `k8s-en.md` | simple | Kubernetes | general | English | 6a (v1.2.0) |
-| `k8s-zh-TW.md` | advanced (`prompt.md`) | Kubernetes | 高中學生 | 繁體中文 | 6a (v1.2.0) |
-| `k8s-visual.md` | advanced (`prompt.md`) | Kubernetes architecture — diagram-heavy | Backend engineers | English | 6b (v1.3.0) |
+| File | Feature | Phase |
+|------|---------|-------|
+| `k8s-en.md` | `goslide generate` — simple mode | 6a (v1.2.0) |
+| `k8s-zh-TW.md` | `goslide generate` — advanced (zh-TW HS audience) | 6a (v1.2.0) |
+| `k8s-visual.md` | `goslide generate` — image placeholders + image-grid | 6b (v1.3.0) |
+| `api-llm-sales/` | `api` component + `llm` render item (build-bake) | 7a (v1.4.0) |
 
 **Phase 6a examples (`k8s-en.md`, `k8s-zh-TW.md`)**
 
@@ -31,6 +32,22 @@ Real outputs from `goslide generate` used to validate the end-to-end pipeline.
   slide) rendered after `goslide build`.
 - One warning: the LLM emitted `aspect: 3:2` on one slide, which falls
   back to 16:9 via the validator — the pipeline degrades gracefully.
+
+**Phase 7a example (`api-llm-sales/`)**
+
+- Model: `openai/gpt-oss-120b:free` on OpenRouter
+- Date: 2026-04-20
+- GoSlide version: Phase 7a (`api` component with new `type: llm` render item)
+- Self-contained directory with `demo.md`, `sales.json` (fixture), `goslide.yaml`
+  (generate config), and a committed `.goslide-cache/` entry. Running
+  `goslide build demo.md` inside the directory reproduces the deck
+  offline — no LLM call, no API key required, thanks to the build-lock
+  model.
+- To regenerate the cache entry against a live model, delete
+  `.goslide-cache/` and run `OPENROUTER_API_KEY=... goslide build demo.md
+  --llm-refresh`. The LLM received the fixture JSON via the `{{data}}`
+  placeholder and returned a 2-bullet analyst summary naming the best and
+  worst quarters with their revenue figures. Total tokens: 302.
 
 ## Model sweep (Phase 6b, 2026-04-19)
 

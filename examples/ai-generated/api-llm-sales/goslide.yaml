@@ -1,0 +1,5 @@
+generate:
+  base_url: https://openrouter.ai/api/v1
+  model: openai/gpt-oss-120b:free
+  api_key_env: OPENROUTER_API_KEY
+  timeout: 180s

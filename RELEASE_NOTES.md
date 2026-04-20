@@ -1,107 +1,95 @@
-# 🎉 GoSlide v1.3.0
+# 🎉 GoSlide v1.4.0
 
 ## What's New
 
-### 🖼️ Image Placeholder Component
+### 🧠 LLM transformer inside `api` components (experimental)
 
-A new `placeholder` component — a styled dashed-rectangle "image
-stand-in" with an icon, title, and optional description. Drop one
-wherever a real image will eventually go, then replace it with the
-actual asset when ready.
+The `api` component accepts a new render item of type `llm`. Fetched
+JSON is substituted into a user-authored prompt via `{{data}}` and the
+model's reply renders inline alongside the chart, table, or metric.
 
 ```
-~~~placeholder
-hint: K8s cluster architecture
-icon: 🗺️
-aspect: 16:9
----
-Control plane + worker node interaction
+~~~api
+endpoint: /api/sales
+fixture: sales.json           # optional; used by goslide build
+render:
+  - type: chart:bar
+    label-key: quarter
+    data-key: revenue
+  - type: llm
+    prompt: |
+      Write 2 analyst bullets on these numbers:
+      {{data}}
 ~~~
 ```
 
-- `hint` (required) — title text describing what the image will show
-- `icon` (optional) — single emoji cue (📊 charts, 🗺️ diagrams, 📷 photos, 📈 trends, 🖼️ generic)
-- `aspect` (optional) — `16:9` (default), `4:3`, `1:1`, `3:4`, or `9:16`
-- Body (between `---` and closing fence) — optional subtitle
+**Control model** (three layers, not configurable — that's the point):
 
-Placeholders work in any layout: as a full-slide cover diagram, inside
-an `image-left`/`image-right` region, or combined with the new
-`image-grid` below.
+- **Cache-first** — identical `(model, prompt, data)` triples call the
+  LLM at most once. Results land in `.goslide-cache/<sha256>.json`
+  (human-readable, commit-safe). Canonical JSON keying means logically
+  equal data (different key order, whitespace) hits the same entry.
+- **Click-to-call** — `goslide serve` shows a `Generate ✨` button on
+  cache miss. Page load never triggers an LLM call automatically.
+  Localstorage caches per-browser.
+- **Build-lock** — `goslide build` inlines cached results as a
+  `data-llm-bakes` attribute on the api component. The exported HTML
+  never contacts an LLM at view time.
 
-### 🧩 `image-grid` Layout
+```bash
+# Warm cache via the dev loop:
+goslide serve talk.md        # click Generate to populate .goslide-cache/
 
-A new CSS-grid slide layout that packs multiple cells (placeholders,
-real images, charts, or any other component) into 2, 3, or 4 columns.
+# Export to static HTML (reads cache only, zero network):
+goslide build talk.md
 
-```
-<!-- layout: image-grid -->
-<!-- columns: 2 -->
-
-<!-- cell -->
-~~~placeholder
-hint: Architecture
-icon: 🗺️
-~~~
-
-<!-- cell -->
-![Dashboard](./dashboard.png)
-
-<!-- cell -->
-~~~chart
-type: bar
-title: Sales
-data:
-  labels: [Q1, Q2, Q3]
-  values: [10, 12, 15]
-~~~
-
-<!-- cell -->
-~~~placeholder
-hint: Trends
-icon: 📈
-~~~
+# Or refresh cache during build (the one place we call LLM non-interactively):
+goslide build talk.md --llm-refresh
 ```
 
-`<!-- cell -->` before each item marks a new grid cell; cells can hold
-any content.
+Cache miss during `goslide build` is a hard error by default, listing
+every affected `slide / component / render-item`. Pass `--llm-refresh`
+to opt in to filling the cache during the build.
 
-### 🤖 Smarter `goslide generate`
+**Offline build with a fixture file** — `fixture: ./sales.json` on the
+api component lets `goslide build` read static data instead of calling
+a live endpoint. Great for committing a reproducible snapshot.
 
-The AI-generation command (Phase 6a) now knows about the new features.
-The system prompt has been tightened so LLM output consistently uses the
-correct fence and comment syntax:
-
-- All component fences are `~~~` (triple tilde). Triple-backtick blocks
-  are plain code and will not render as components.
-- Per-slide layout settings use HTML comments
-  (`<!-- layout: image-grid -->`, `<!-- columns: 2 -->`), never a
-  YAML `---` block mid-document.
-- Explicit "wrong vs right" examples and a new `image-grid` example in
-  the prompt.
-
-On OpenRouter free tier, 5 of 6 models tested after this iteration
-produce valid, first-pass-parseable output. See
-[`examples/ai-generated/k8s-visual.md`](examples/ai-generated/k8s-visual.md)
-for a real generation (`openai/gpt-oss-20b:free`, 13 placeholders + one
-4-cell image-grid slide).
+**Reuses existing `generate:` config** — no new YAML keys; the same
+OpenAI-compatible endpoint that powers `goslide generate` powers the
+LLM transformer. Works with any compatible provider (OpenAI,
+OpenRouter, Ollama, vllm, sglang, etc.).
 
 ### ✅ Validation
 
-`goslide validate` / `goslide build` emit:
+The IR validator rejects `llm` render items missing `prompt` with code
+`llm-missing-prompt` — `goslide build` / `goslide serve` won't start
+against a broken deck.
 
-- **Error** `placeholder-missing-hint` when a placeholder lacks `hint`
-- **Warning** `unknown-aspect` when `aspect` isn't on the whitelist (falls back to 16:9)
-- **Warning** `columns-out-of-range` when `image-grid` columns fall outside 2-4
-- **Warning** `image-grid-empty` when an image-grid layout contains no cells
+### 📦 Validated example
+
+[`examples/ai-generated/api-llm-sales/`](examples/ai-generated/api-llm-sales/)
+is a fully self-contained directory. Clone this repo, `cd` into the
+directory, run `goslide build demo.md`, and you'll see an LLM-written
+analyst summary render in the output HTML without ever touching an LLM
+— the committed `.goslide-cache/` entry satisfies the bake. Real-LLM
+regeneration requires `OPENROUTER_API_KEY` and `--llm-refresh`.
 
 ## Compatibility
 
-No breaking changes. v1.2.0 decks work unchanged. The internal region
-parser was refactored from a name-keyed map to an ordered slice so that
-repeatable markers (`<!-- cell -->`) produce distinct regions —
-transparent to existing layouts (two-column, three-column, etc.) since
-none of them used repeated markers.
+No breaking changes. v1.3.0 decks build unchanged; the new `llm` render
+type is additive and only exercises the new code path when present.
+The internal change to `builder.Build` (moving `config.Load` earlier so
+the bake can mutate the IR before render) is invisible to callers.
+
+## Out of scope (future work)
+
+- Streaming LLM responses (SSE). Current MVP buffers the full reply.
+- JSONPath-style `{{field.x}}` expressions in the prompt. Current MVP
+  injects the whole response as `{{data}}`.
+- `goslide generate` emitting `llm` render items. Manual-author-only in
+  v1.4.0.
 
 ## Full Changelog
 
-See [v1.2.0...v1.3.0](https://github.com/GMfatcat/goslide/compare/v1.2.0...v1.3.0) for all changes.
+See [v1.3.0...v1.4.0](https://github.com/GMfatcat/goslide/compare/v1.3.0...v1.4.0) for all changes.
