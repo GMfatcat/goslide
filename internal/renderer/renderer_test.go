@@ -198,3 +198,26 @@ func TestRender_ImageGrid(t *testing.T) {
 	require.Contains(t, html, `data-columns="2"`)
 	require.Equal(t, 2, strings.Count(html, `class="region-cell"`))
 }
+
+func TestRender_EmitsLLMBakes(t *testing.T) {
+	pres := &ir.Presentation{
+		Meta: ir.Frontmatter{Theme: "dark"},
+		Slides: []ir.Slide{{
+			Index: 0,
+			Meta:  ir.SlideMeta{Layout: "default"},
+			Components: []ir.Component{{
+				Index: 0,
+				Type:  "api",
+				Params: map[string]any{
+					"endpoint":   "/api/x",
+					"_llm_bakes": map[string]any{"1": "## Insights"},
+				},
+			}},
+			BodyHTML: `<!--goslide:component:0-->`,
+		}},
+	}
+	html, err := Render(pres)
+	require.NoError(t, err)
+	require.Contains(t, html, `data-llm-bakes=`)
+	require.Contains(t, html, `Insights`)
+}

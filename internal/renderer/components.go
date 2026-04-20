@@ -36,7 +36,17 @@ func buildComponentDiv(slideIndex int, comp ir.Component) string {
 		var buf bytes.Buffer
 		enc := json.NewEncoder(&buf)
 		enc.SetEscapeHTML(false)
-		if err := enc.Encode(comp.Params); err != nil {
+		paramsForAttr := comp.Params
+		if _, has := comp.Params["_llm_bakes"]; has {
+			paramsForAttr = make(map[string]any, len(comp.Params)-1)
+			for k, v := range comp.Params {
+				if k == "_llm_bakes" {
+					continue
+				}
+				paramsForAttr[k] = v
+			}
+		}
+		if err := enc.Encode(paramsForAttr); err != nil {
 			buf.Reset()
 			buf.WriteString("{}")
 		}
@@ -44,12 +54,25 @@ func buildComponentDiv(slideIndex int, comp ir.Component) string {
 		rawAttr = ""
 	}
 
+	bakesAttr := ""
+	if comp.Params != nil {
+		if bakes, ok := comp.Params["_llm_bakes"]; ok {
+			var buf bytes.Buffer
+			enc := json.NewEncoder(&buf)
+			enc.SetEscapeHTML(false)
+			if err := enc.Encode(bakes); err == nil {
+				bakesAttr = fmt.Sprintf(` data-llm-bakes="%s"`, escapeAttr(strings.TrimRight(buf.String(), "\n")))
+			}
+		}
+	}
+
 	return fmt.Sprintf(
-		`<div class="goslide-component" data-type="%s" data-params="%s" data-raw="%s" data-comp-id="%s">%s</div>`,
+		`<div class="goslide-component" data-type="%s" data-params="%s" data-raw="%s" data-comp-id="%s"%s>%s</div>`,
 		escapeAttr(comp.Type),
 		paramsAttr,
 		rawAttr,
 		compID,
+		bakesAttr,
 		comp.ContentHTML,
 	)
 }
