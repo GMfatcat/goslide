@@ -208,6 +208,37 @@ type: bar
 
 `columns` 可設 `2`、`3` 或 `4`。每個 `<!-- cell -->` 代表一格；格內可放任何內容。
 
+### api component 的 LLM 轉換器（experimental）
+
+`api` component 新增一種 render item：`type: llm`。它把 fetch 到的 JSON 透過 `{{data}}` 代入作者寫的 prompt，再把 LLM 回應渲染在該位置：
+
+```
+~~~api
+endpoint: /api/sales
+render:
+  - type: chart:bar
+    label-key: quarter
+    data-key: revenue
+  - type: llm
+    prompt: |
+      用 3 個分析師觀點摘要以下數字：
+      {{data}}
+    model: openai/gpt-oss-120b:free   # 可選；未設則用 generate.model
+~~~
+```
+
+- **Cache-first。** 相同 `(model, prompt, data)` 組合最多呼叫 LLM 一次，後續從 `.goslide-cache/` 讀。
+- **Click-to-call。** `goslide serve` 遇到 cache miss 時顯示 `Generate ✨` 按鈕；頁面開啟本身不會自動呼叫 LLM。
+- **Build-lock。** `goslide build` 會把 cache 內容烘進靜態 HTML；匯出後的簡報絕不會在觀看時對外呼叫。
+
+直接重用 `goslide.yaml` 的 `generate:` 區段，不需新增設定。
+
+離線 build workflow：在 `api` component 加 `fixture: ./data.json`，`goslide build` 就會用 fixture 當資料來源，不會呼叫實際 endpoint。
+
+`goslide build --llm-refresh` 會在 cache miss 時真的打 LLM 補 cache。沒加這個 flag 的話，cache miss 會讓 build 失敗並列出缺的 slide。
+
+v1.4.0 的版本只支援手寫 `llm` render item；`goslide generate` 還不會自動生成這類 render item。
+
 ## ⚙️ 設定檔
 
 在 `.md` 同目錄下建立 `goslide.yaml`（選用）：

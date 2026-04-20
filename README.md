@@ -222,6 +222,47 @@ type: bar
 Columns accept `2`, `3`, or `4`. Each `<!-- cell -->` marks a new cell;
 cells may hold any content.
 
+### LLM transformer inside api components (experimental)
+
+The `api` component accepts a new render item of type `llm`. Fetched
+JSON is substituted into a user-authored prompt via `{{data}}` and the
+result renders inline:
+
+```
+~~~api
+endpoint: /api/sales
+render:
+  - type: chart:bar
+    label-key: quarter
+    data-key: revenue
+  - type: llm
+    prompt: |
+      Summarise these figures as 3 analyst bullets:
+      {{data}}
+    model: openai/gpt-oss-120b:free   # optional; defaults to generate.model
+~~~
+```
+
+- **Cache-first.** Same `(model, prompt, data)` triplet only calls the
+  LLM once; subsequent renders read from `.goslide-cache/`.
+- **Click-to-call.** On a cache miss in `goslide serve`, viewers see a
+  `Generate ✨` button. No automatic LLM calls on page load.
+- **Build-lock.** `goslide build` inlines cached results into the
+  static HTML. The exported deck never reaches an LLM at view time.
+
+Reuses the `generate:` section of `goslide.yaml` — no new configuration.
+
+For an offline build workflow, add `fixture: ./data.json` to the `api`
+component; `goslide build` uses the fixture as the input data source
+instead of calling the live endpoint.
+
+`goslide build --llm-refresh` calls the LLM to populate missing cache
+entries during the build. Without the flag, cache misses fail the
+build and list the offending slides.
+
+This feature is manual-author-only in v1.4.0. `goslide generate` does
+not emit `llm` render items yet.
+
 ## ⚙️ Configuration
 
 Optional `goslide.yaml` in the same directory as your `.md` file:
