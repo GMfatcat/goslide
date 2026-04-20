@@ -57,6 +57,9 @@ func newApp(opts Options) (*app, error) {
 	if len(cfg.API.Proxy) > 0 {
 		setupProxy(a.mux, cfg.API.Proxy)
 	}
+	if cfg.Generate.BaseURL != "" && cfg.Generate.Model != "" {
+		a.mux.Handle("/api/llm", newLLMHandler(newLLMTransformerAdapter(cfg, opts.File)))
+	}
 
 	if err := a.loadAndRender(); err != nil {
 		return nil, err
