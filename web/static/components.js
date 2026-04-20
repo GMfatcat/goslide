@@ -358,12 +358,18 @@
         if (!Array.isArray(renderList)) {
           renderList = [renderList || { type: 'json' }];
         }
-        renderList.forEach(function(item) {
+        renderList.forEach(function(item, idx) {
+          item._index = idx;
           var data = extractPath(json, item.path);
           var wrapper = document.createElement('div');
           wrapper.className = 'goslide-api-item';
           if (item.span && item.span > 1) {
             wrapper.style.gridColumn = 'span ' + item.span;
+          }
+          if (item.type === 'llm') {
+            renderLLMItem(el, item, json, wrapper);
+            items.appendChild(wrapper);
+            return;
           }
           renderItem(wrapper, item, data);
           items.appendChild(wrapper);
@@ -392,6 +398,83 @@
     var div = document.createElement('div');
     div.textContent = s;
     return div.innerHTML;
+  }
+
+  function llmCacheKey(model, prompt, data) {
+    return (model || '') + '|' + prompt + '|' + JSON.stringify(data);
+  }
+
+  function simpleMarkdown(s) {
+    if (!s) return '';
+    var out = s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    out = out.replace(/`([^`]+)`/g, '<code>$1</code>');
+    out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    out = out.replace(/(^|\W)\*([^*]+)\*(\W|$)/g, '$1<em>$2</em>$3');
+    out = out.replace(/^- (.+)$/gm, '<li>$1</li>');
+    out = out.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+    out = out.split(/\n\n+/).map(function (p) {
+      if (p.indexOf('<ul>') === 0) return p;
+      return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+    }).join('\n');
+    return out;
+  }
+
+  function renderLLMItem(compEl, item, apiData, container) {
+    // 1. Build-baked result takes precedence (static export path).
+    try {
+      var bakes = compEl.dataset.llmBakes ? JSON.parse(compEl.dataset.llmBakes) : null;
+      if (bakes && bakes[String(item._index)] != null) {
+        container.innerHTML = simpleMarkdown(bakes[String(item._index)]);
+        return;
+      }
+    } catch (e) { /* fall through */ }
+
+    // 2. localStorage cache
+    var key = 'goslide-llm:' + llmCacheKey(item.model, item.prompt, apiData);
+    var cached = null;
+    try { cached = localStorage.getItem(key); } catch (e) {}
+    if (cached) {
+      container.innerHTML = simpleMarkdown(cached);
+      return;
+    }
+
+    // 3. Click-to-call button
+    var btn = document.createElement('button');
+    btn.className = 'gs-llm-generate';
+    btn.textContent = '\u2728 Generate';
+    btn.onclick = function () {
+      btn.disabled = true;
+      btn.textContent = '\u23f3 Generating\u2026';
+      fetch('/api/llm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: item.model || '',
+          prompt: item.prompt,
+          data: apiData,
+          max_tokens: item.max_tokens || 1024
+        })
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function (res) {
+          try { localStorage.setItem(key, res.content); } catch (e) {}
+          container.innerHTML = simpleMarkdown(res.content);
+        })
+        .catch(function (err) {
+          container.innerHTML = '';
+          var msg = document.createElement('div');
+          msg.className = 'gs-llm-error';
+          msg.textContent = 'LLM call failed: ' + err.message;
+          container.appendChild(msg);
+          btn.disabled = false;
+          btn.textContent = '\u2728 Retry';
+          container.appendChild(btn);
+        });
+    };
+    container.appendChild(btn);
   }
 
   function initPlaceholder(el) {
