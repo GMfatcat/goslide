@@ -221,3 +221,28 @@ section[data-layout="image-grid"] .region-cell img {
   margin-top: 4px;
   font-style: italic;
 }
+
+/* Component: LLM render item inside api component */
+.gs-llm-generate {
+  padding: 8px 16px;
+  border: 1px dashed var(--slide-accent, #8888aa);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--slide-text, inherit);
+  cursor: pointer;
+  font-size: 0.9em;
+  font-family: inherit;
+}
+.gs-llm-generate:hover {
+  background: rgba(136, 136, 170, 0.1);
+}
+.gs-llm-generate:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.gs-llm-error {
+  color: #c66;
+  font-size: 0.85em;
+  font-style: italic;
+  margin-bottom: 8px;
+}
