@@ -263,6 +263,30 @@ build and list the offending slides.
 This feature is manual-author-only in v1.4.0. `goslide generate` does
 not emit `llm` render items yet.
 
+### PDF export
+
+Export your deck as a PDF via headless Chrome:
+
+```bash
+goslide export-pdf talk.md
+goslide export-pdf talk.md -o handout.pdf
+goslide export-pdf talk.md --notes              # include speaker notes
+goslide export-pdf talk.md --paper-size a4-landscape
+```
+
+Paper sizes: `slide-16x9` (default), `slide-4x3`, `a4-landscape`,
+`letter-landscape`.
+
+Requires a locally-installed Chrome / Edge / Chromium (discovered via
+PATH and standard install locations). Set `GOSLIDE_CHROME_PATH` to
+point at a specific binary. No bundled Chromium — GoSlide stays a
+single ~8MB binary.
+
+Under the hood, `export-pdf` runs `goslide build` to produce a static
+HTML, then drives Chrome's `Page.printToPDF`. Charts, Mermaid, themes,
+and LLM-baked API results all render exactly as you see them in the
+browser.
+
 ## ⚙️ Configuration
 
 Optional `goslide.yaml` in the same directory as your `.md` file:

@@ -239,6 +239,23 @@ render:
 
 v1.4.0 的版本只支援手寫 `llm` render item；`goslide generate` 還不會自動生成這類 render item。
 
+### PDF 匯出
+
+用 headless Chrome 把簡報匯出為 PDF：
+
+```bash
+goslide export-pdf talk.md
+goslide export-pdf talk.md -o handout.pdf
+goslide export-pdf talk.md --notes              # 包含講者筆記
+goslide export-pdf talk.md --paper-size a4-landscape
+```
+
+Paper size：`slide-16x9`（預設）、`slide-4x3`、`a4-landscape`、`letter-landscape`。
+
+需要本機已安裝 Chrome / Edge / Chromium（會從 PATH 與標準安裝位置自動尋找）。可用 `GOSLIDE_CHROME_PATH` 環境變數指定特定 binary。不會內建 Chromium，GoSlide 仍是單一 ~8MB binary。
+
+實作上 `export-pdf` 先跑 `goslide build` 產出靜態 HTML，再透過 Chrome 的 `Page.printToPDF` 匯出。圖表、Mermaid、主題、甚至烘焙好的 LLM 結果都會跟瀏覽器看到的一致。
+
 ## ⚙️ 設定檔
 
 在 `.md` 同目錄下建立 `goslide.yaml`（選用）：
