@@ -1,95 +1,88 @@
-# 🎉 GoSlide v1.4.0
+# 🎉 GoSlide v1.5.0
 
 ## What's New
 
-### 🧠 LLM transformer inside `api` components (experimental)
+### 📄 PDF export
 
-The `api` component accepts a new render item of type `llm`. Fetched
-JSON is substituted into a user-authored prompt via `{{data}}` and the
-model's reply renders inline alongside the chart, table, or metric.
-
-```
-~~~api
-endpoint: /api/sales
-fixture: sales.json           # optional; used by goslide build
-render:
-  - type: chart:bar
-    label-key: quarter
-    data-key: revenue
-  - type: llm
-    prompt: |
-      Write 2 analyst bullets on these numbers:
-      {{data}}
-~~~
-```
-
-**Control model** (three layers, not configurable — that's the point):
-
-- **Cache-first** — identical `(model, prompt, data)` triples call the
-  LLM at most once. Results land in `.goslide-cache/<sha256>.json`
-  (human-readable, commit-safe). Canonical JSON keying means logically
-  equal data (different key order, whitespace) hits the same entry.
-- **Click-to-call** — `goslide serve` shows a `Generate ✨` button on
-  cache miss. Page load never triggers an LLM call automatically.
-  Localstorage caches per-browser.
-- **Build-lock** — `goslide build` inlines cached results as a
-  `data-llm-bakes` attribute on the api component. The exported HTML
-  never contacts an LLM at view time.
+New `goslide export-pdf <file.md>` command renders your deck to a PDF
+via headless Chrome. Whatever you see in `goslide serve` — fonts,
+themes, Chart.js, Mermaid diagrams, LLM-baked API results — renders
+in the PDF, because the renderer is literally a real browser.
 
 ```bash
-# Warm cache via the dev loop:
-goslide serve talk.md        # click Generate to populate .goslide-cache/
-
-# Export to static HTML (reads cache only, zero network):
-goslide build talk.md
-
-# Or refresh cache during build (the one place we call LLM non-interactively):
-goslide build talk.md --llm-refresh
+goslide export-pdf talk.md
+goslide export-pdf talk.md -o handout.pdf
+goslide export-pdf talk.md --notes                 # include speaker notes
+goslide export-pdf talk.md --paper-size a4-landscape
 ```
 
-Cache miss during `goslide build` is a hard error by default, listing
-every affected `slide / component / render-item`. Pass `--llm-refresh`
-to opt in to filling the cache during the build.
+**Paper sizes** (default `slide-16x9`):
 
-**Offline build with a fixture file** — `fixture: ./sales.json` on the
-api component lets `goslide build` read static data instead of calling
-a live endpoint. Great for committing a reproducible snapshot.
+| Preset | Dimensions | Intended use |
+|--------|-----------|--------------|
+| `slide-16x9` | 1920 × 1080 px | On-screen presentation look (default) |
+| `slide-4x3`  | 1600 × 1200 px | Legacy projector aspect |
+| `a4-landscape` | 297 × 210 mm | Print-friendly handout |
+| `letter-landscape` | 11 × 8.5 in | US letter handout |
 
-**Reuses existing `generate:` config** — no new YAML keys; the same
-OpenAI-compatible endpoint that powers `goslide generate` powers the
-LLM transformer. Works with any compatible provider (OpenAI,
-OpenRouter, Ollama, vllm, sglang, etc.).
+**Fragment animations** are collapsed to their final state — one slide,
+one PDF page.
 
-### ✅ Validation
+### 🧭 Chrome discovery: install-once, no bundled chromium
 
-The IR validator rejects `llm` render items missing `prompt` with code
-`llm-missing-prompt` — `goslide build` / `goslide serve` won't start
-against a broken deck.
+GoSlide stays a single ~8MB binary. `export-pdf` locates Chrome in
+this order:
 
-### 📦 Validated example
+1. `GOSLIDE_CHROME_PATH` env var (explicit override)
+2. PATH — searches `chrome`, `chromium`, `chromium-browser`,
+   `google-chrome`, `microsoft-edge`
+3. Platform-specific known install locations
+   (`C:\Program Files\Google\Chrome\Application\chrome.exe`,
+   `/Applications/Google Chrome.app/...`, etc.)
 
-[`examples/ai-generated/api-llm-sales/`](examples/ai-generated/api-llm-sales/)
-is a fully self-contained directory. Clone this repo, `cd` into the
-directory, run `goslide build demo.md`, and you'll see an LLM-written
-analyst summary render in the output HTML without ever touching an LLM
-— the committed `.goslide-cache/` entry satisfies the bake. Real-LLM
-regeneration requires `OPENROUTER_API_KEY` and `--llm-refresh`.
+If nothing is found, the command exits non-zero with an actionable
+message listing every location it checked. No auto-download.
+
+### 🧩 How it works
+
+Under the hood `export-pdf` is a thin wrapper:
+
+1. Runs the existing `goslide build` to produce static HTML with
+   everything (LLM bakes included) already inlined.
+2. Launches Chrome headless against that HTML with reveal.js's
+   `?print-pdf` mode.
+3. Waits for `window.__goslideReady` (new front-end marker that fires
+   once Mermaid promises settle — async-safe rendering).
+4. Calls Chrome DevTools `Page.printToPDF` with the resolved paper
+   dimensions and writes the bytes to the output path.
+
+The `Launcher` interface keeps unit tests deterministic (fake launcher
+for orchestrator tests) and the real `ChromedpLauncher` only runs when
+Chrome is actually present. The integration test auto-skips when
+`FindChrome()` errors, so CI without Chrome stays green.
 
 ## Compatibility
 
-No breaking changes. v1.3.0 decks build unchanged; the new `llm` render
-type is additive and only exercises the new code path when present.
-The internal change to `builder.Build` (moving `config.Load` earlier so
-the bake can mutate the IR before render) is invisible to callers.
+No breaking changes. v1.4.0 decks export unchanged; the new command is
+additive. Existing `goslide build` / `serve` / `generate` / `host` are
+untouched.
+
+**Go version:** still 1.21.6. Chromedp is pinned to v0.10.0 — the last
+release compatible with Go 1.21.
+
+## Requirements
+
+- **Chrome / Edge / Chromium installed locally.** Developers typically
+  have one of these; if not, any distribution works. Set
+  `GOSLIDE_CHROME_PATH` if you want to pick a specific binary.
 
 ## Out of scope (future work)
 
-- Streaming LLM responses (SSE). Current MVP buffers the full reply.
-- JSONPath-style `{{field.x}}` expressions in the prompt. Current MVP
-  injects the whole response as `{{data}}`.
-- `goslide generate` emitting `llm` render items. Manual-author-only in
-  v1.4.0.
+- Fragment-per-page mode.
+- Custom header/footer, page numbers, bookmarks.
+- Password-protected PDFs.
+- Auto-downloading or bundling Chromium.
 
 ## Full Changelog
 
-See [v1.3.0...v1.4.0](https://github.com/GMfatcat/goslide/compare/v1.3.0...v1.4.0) for all changes.
+See [v1.4.0...v1.5.0](https://github.com/GMfatcat/goslide/compare/v1.4.0...v1.5.0) for all changes.
