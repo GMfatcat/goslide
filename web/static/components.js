@@ -552,8 +552,44 @@
   }
 
   Reveal.on('ready', function () {
+    // Count mermaid diagrams before init so we know when all have rendered.
+    var mermaidCount = document.querySelectorAll('.goslide-component[data-type="mermaid"]').length;
+    var mermaidDone = 0;
+    window.__goslideReady = false;
+
+    function markReadyIfSettled() {
+      if (mermaidDone >= mermaidCount) {
+        // One animation frame after last paint to be safe.
+        requestAnimationFrame(function () {
+          window.__goslideReady = true;
+        });
+      }
+    }
+
+    // Hook mermaid promise resolution: wrap mermaid.render to
+    // increment mermaidDone on every settle.
+    if (typeof mermaid !== 'undefined' && mermaid.render) {
+      var origRender = mermaid.render.bind(mermaid);
+      mermaid.render = function (id, text) {
+        return origRender(id, text).then(function (r) {
+          mermaidDone++;
+          markReadyIfSettled();
+          return r;
+        }, function (err) {
+          mermaidDone++;
+          markReadyIfSettled();
+          throw err;
+        });
+      };
+    }
+
     initAllMermaid();
     initAllComponents();
+
+    // If there were no mermaid diagrams, signal ready immediately.
+    if (mermaidCount === 0) {
+      markReadyIfSettled();
+    }
   });
   if (!isStatic) {
     Reveal.on('slidechanged', function() {
