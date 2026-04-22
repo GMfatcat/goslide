@@ -993,7 +993,6 @@ Multi-presentation hosting and presenter sync.
 - [ ] Custom theme overrides via config
 - [x] `goslide generate` command (LLM-powered slide generation)
 - [ ] Per-slide speaker notes (`<!-- notes: ... -->`)
-- [ ] PDF export (via headless browser)
 - [x] Multi-image layout + placeholder component (Phase 6b, v1.3.0)
 - [x] LLM transformer render type for api components (Phase 7a, v1.4.0)
 - [x] PDF export via headless Chrome (Phase 7b, v1.5.0)
