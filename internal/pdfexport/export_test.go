@@ -131,3 +131,28 @@ func TestExport_EmptyPDFIsError(t *testing.T) {
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "empty PDF")
 }
+
+func TestExport_Integration_RealChrome(t *testing.T) {
+	chromePath, err := FindChrome()
+	if err != nil {
+		t.Skipf("Chrome not available: %v", err)
+	}
+
+	dir := t.TempDir()
+	outPath := filepath.Join(dir, "fixture.pdf")
+
+	err = Export(Options{
+		File:       "testdata/fixture.md",
+		Output:     outPath,
+		PaperSize:  "slide-16x9",
+		ChromePath: chromePath,
+		Launcher:   NewChromedpLauncher(),
+	})
+	require.NoError(t, err)
+
+	data, err := os.ReadFile(outPath)
+	require.NoError(t, err)
+	require.True(t, len(data) > 10*1024, "expected PDF > 10KB, got %d bytes", len(data))
+	require.True(t, len(data) < 50*1024*1024, "expected PDF < 50MB, got %d bytes", len(data))
+	require.Equal(t, "%PDF-", string(data[:5]), "output is not a PDF")
+}
